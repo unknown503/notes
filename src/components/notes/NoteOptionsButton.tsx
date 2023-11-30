@@ -7,17 +7,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MoreHorizontal } from "lucide-react"
-import { DeleteNote, UpdateNote } from "@/lib/db"
-import { customToast } from "@/lib/utils"
-import { useToast } from "../ui/use-toast"
-import { ToastAction } from "../ui/toast"
-import { Dialog, DialogTrigger } from "../ui/dialog"
-import { useState } from "react"
-import { UpdateNoteModal } from "./UpdateNoteModal"
-import { CopyButton } from "../common"
-import Link from "next/link"
 import { isLocal } from "@/lib/config"
+import { DeleteNote, UpdateNote } from "@/lib/db"
+import { SaveOnLocalStorage, customToast } from "@/lib/utils"
+import { MoreHorizontal } from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
+import { CopyButton } from "../common"
+import { Dialog, DialogTrigger } from "../ui/dialog"
+import { ToastAction } from "../ui/toast"
+import { useToast } from "../ui/use-toast"
+import { UpdateNoteModal } from "./UpdateNoteModal"
 
 
 interface NoteOptionsButtonProps {
@@ -64,6 +64,13 @@ export function NoteOptionsButton({ isPublic, files, id, content, setHide }: Not
     toast(customToast(`Note changed to ${!isPublic ? "public" : "private"}.`))
   }
 
+  const SaveNoteContent = () => {
+    const res = SaveOnLocalStorage("note", content)
+    if (res !== true) {
+      toast(customToast(res, true))
+    }
+  }
+
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
       <DropdownMenu modal={false}>
@@ -91,7 +98,10 @@ export function NoteOptionsButton({ isPublic, files, id, content, setHide }: Not
           {content !== "" &&
             <>
               <DropdownMenuCheckboxItem className="cursor-pointer">
-                <Link href={`/case?text=${content}`}>
+                <Link
+                  href={`/case`}
+                  onClick={SaveNoteContent}
+                >
                   Convert content
                 </Link>
               </DropdownMenuCheckboxItem>

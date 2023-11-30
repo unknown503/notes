@@ -1,8 +1,8 @@
-import { deleteDoc, doc, getDocs, onSnapshot, orderBy, query, updateDoc, where } from 'firebase/firestore'
-import { collection, addDoc } from 'firebase/firestore'
-import { db, storage } from "./firebase"
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { isLocal } from './config'
+import { auth, db, storage } from "./firebase"
 
 const NOTES = "notes"
 
@@ -135,3 +135,10 @@ export const SubscribeToNotes = (callback: (docs: NoteDoc[]) => void, isPublic?:
   })
   return unsubscribe
 }
+
+export const SignInUser = async (email: string, password: string) => {
+  const credentials = await signInWithEmailAndPassword(auth, email, password)
+  return credentials.user
+}
+
+export const SignOutUser = async () => await signOut(auth)

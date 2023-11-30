@@ -7,17 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Loader2, Plus } from "lucide-react"
-import { Textarea } from "../ui/textarea"
-import Dropzone from "./Dropzone"
-import { useState } from "react"
 import { AddNote } from "@/lib/db"
-import { Form, FormControl, FormField, FormItem } from "../ui/form"
+import { customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2, Plus } from "lucide-react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { Form, FormControl, FormField, FormItem } from "../ui/form"
+import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
-import { customToast } from "@/lib/utils"
+import Dropzone from "./Dropzone"
 
 const FormSchema = z.object({
   content: z.string().default(""),

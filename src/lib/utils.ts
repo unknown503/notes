@@ -1,5 +1,5 @@
 import { ToasterToast } from "@/components/ui/use-toast"
-import { type ClassValue, clsx } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -31,9 +31,9 @@ export function getDate(unix: number, showTime = false) {
   return fullDate.replace(",", " ·")
 }
 
-export function convertToRichtext(content: string) {
+export function convertToRichtext(content: string | null) {
   const urlRegex = /(?:https?|ftp):\/\/[^\s]+/g
-  return content.replace(urlRegex, (url) => `<a href="${url}" target="_blank">${url}</a>`)
+  return content?.replace(urlRegex, (url) => `<a href="${url}" target="_blank">${url}</a>`) ?? ""
 }
 
 export function IsAnImage(url: string) {
@@ -50,20 +50,28 @@ export function SentenceCase(text: string) {
 }
 
 export function WordCount(text: string) {
-  const words = text.trim().split(/\s+/);
-  return words.length;
+  const words = text.trim().split(/\s+/)
+  return words.length
 }
 
-// function unsecuredCopyToClipboard(text) {
-//   const textArea = document.createElement("textarea");
-//   textArea.value = text;
-//   document.body.appendChild(textArea);
-//   textArea.focus();
-//   textArea.select();
-//   try {
-//     document.execCommand('copy');
-//   } catch (err) {
-//     console.error('Unable to copy to clipboard', err);
-//   }
-//   document.body.removeChild(textArea);
-// }
+export function DecodeHtml(html: string | null) {
+  return html?.replace(/</g, "&lt;").replace(/>/g, "&gt;") || ""
+}
+
+export function SaveOnLocalStorage(key: string, content: string) {
+  try {
+    localStorage.setItem(key, content)
+    return true
+  } catch (e) {
+    const quotaError = e instanceof DOMException && e.name === "QuotaExceededError"
+    return quotaError ?
+      "Could not add item to local storage due to content size."
+      : (e as Error).message
+  }
+}
+
+export function LoadAndDeleteLocalStorage(key: string) {
+  const data = localStorage.getItem(key)
+  data !== null && localStorage.removeItem(key)
+  return data || ""
+}

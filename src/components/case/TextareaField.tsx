@@ -1,17 +1,15 @@
 "use client"
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Button, ButtonProps } from '../ui/button'
+import { CapitalizedCase, LoadAndDeleteLocalStorage, SentenceCase, WordCount } from '@/lib/utils'
 import { Baseline, CaseLower, CaseSensitive, CaseUpper, Clipboard, Copy, Eraser, LucideIcon, Scissors } from 'lucide-react'
-import { CopyButton } from '../common'
 import { useState } from 'react'
-import { CapitalizedCase, SentenceCase, WordCount } from '@/lib/utils'
-import { useSearchParams } from 'next/navigation'
+import { CopyButton } from '../common'
+import { Button, ButtonProps } from '../ui/button'
 
 export default function TextareaField() {
-  const searchParams = useSearchParams()
-  const paramsText = searchParams.get('text')
-  const [Text, setText] = useState(paramsText || "")
+  const note = LoadAndDeleteLocalStorage("note")
+  const [Text, setText] = useState(note)
 
   return (
     <div className="container py-4 lg:py-6 w-full gap-x-4 lg:gap-x-8 gap-y-4 grid grid-cols-12">

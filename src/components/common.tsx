@@ -1,9 +1,13 @@
 "use client"
+import { auth } from "@/lib/firebase"
 import { customToast } from "@/lib/utils"
+import { Slot } from "@radix-ui/react-slot"
+import { User, onAuthStateChanged } from 'firebase/auth'
+import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { ButtonHTMLAttributes, ReactNode, createContext, useContext, useEffect, useState } from "react"
 import { Button, ButtonProps } from "./ui/button"
 import { useToast } from "./ui/use-toast"
-import { ButtonHTMLAttributes } from "react"
-import { Slot } from "@radix-ui/react-slot"
 
 type ButtonType = {
   kind: "button"
@@ -25,7 +29,7 @@ export function CopyButton({ textToCopy, children, kind, onClick, ...props }: Co
     navigator.clipboard.writeText(textToCopy)
     toast(customToast("Content copied."))
   }
-  
+
   const Comp = kind === "button" ? Button : Slot
 
   return (
@@ -38,5 +42,73 @@ export function CopyButton({ textToCopy, children, kind, onClick, ...props }: Co
     >
       {children}
     </Comp>
+  )
+}
+
+type UserType = {
+  user: User | null | false,
+  isLoggedIn: boolean
+}
+
+const initial: UserType = {
+  user: false,
+  isLoggedIn: false
+}
+
+const UserContext = createContext<UserType>(initial)
+export function UserProvider({ children }: { children: ReactNode }) {
+  const [User, setUser] = useState<UserType>(initial)
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => setUser({
+      user,
+      isLoggedIn: user !== null
+    }))
+    return () => unsubscribe()
+  }, [])
+
+  return (
+    <UserContext.Provider value={User}>
+      {children}
+    </UserContext.Provider>
+  )
+}
+
+export function useUser() {
+  return useContext(UserContext);
+}
+
+type AuthWrapperProps = { children: ReactNode, onlyAuth: boolean }
+
+export function AuthCheckWrapper({ children, onlyAuth }: AuthWrapperProps) {
+  const { user, isLoggedIn } = useUser()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (onlyAuth) {
+      if (user === null && isLoggedIn === false) {
+        router.replace("/auth")
+      }
+    } else {
+      if (user !== null && isLoggedIn === true) {
+        router.replace("/")
+      }
+    }
+  }, [user, isLoggedIn, onlyAuth])
+
+
+  const shouldShowSpinner = (user === null || user === false) && !isLoggedIn && onlyAuth ? true :
+    (user !== null || isLoggedIn) && !onlyAuth ? true : false
+
+  return (
+    <>
+      {shouldShowSpinner ?
+        <div className="h-screen w-full flex items-center justify-center">
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        </div>
+        :
+        children
+      }
+    </>
   )
 }

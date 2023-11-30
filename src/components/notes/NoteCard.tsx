@@ -6,19 +6,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Badge } from "../ui/badge"
-import { NoteOptionsButton } from "./NoteOptionsButton"
-import { SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription, Sheet } from "../ui/sheet"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Copy, Download, File, Image } from "lucide-react"
-import Indicator from "../Indicator"
-import { IsAnImage, convertToRichtext, customToast, getDate } from "@/lib/utils"
-import { Button } from "../ui/button"
 import { DownloadFile, GetFileName } from "@/lib/db"
-import { useToast } from "../ui/use-toast"
-import { useState } from "react"
+import { DecodeHtml, IsAnImage, convertToRichtext, customToast, getDate } from "@/lib/utils"
+import { Copy, Download, File, Image } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import Indicator from "../Indicator"
 import { CopyButton } from "../common"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Badge } from "../ui/badge"
+import { Button } from "../ui/button"
+import { ScrollArea } from "../ui/scroll-area"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
+import { useToast } from "../ui/use-toast"
+import { NoteOptionsButton } from "./NoteOptionsButton"
 
 export default function NoteCard({ id, content, files, isPublic, timestamp }: NoteDoc) {
   const [Hide, setHide] = useState(false)
@@ -57,7 +58,7 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
               {content !== "" ?
                 <span
                   className="rich-text"
-                  dangerouslySetInnerHTML={{ __html: convertToRichtext(content) }}
+                  dangerouslySetInnerHTML={{ __html: convertToRichtext(DecodeHtml(content)) }}
                 />
                 :
                 files.map(file => GetFileName(file)).join(", ")
@@ -106,13 +107,15 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
           </SheetDescription>
           <div className="flex flex-col gap-5">
             <p className="word-break pt-4">
-              {content !== "" ?
-                <span
-                  className="rich-text"
-                  dangerouslySetInnerHTML={{ __html: convertToRichtext(content) }}
-                />
-                : files.map(file => GetFileName(file)).join(", ")
-              }
+              <ScrollArea customClass="max-h-[400px]">
+                {content !== "" ?
+                  <span
+                    className="rich-text"
+                    dangerouslySetInnerHTML={{ __html: convertToRichtext(DecodeHtml(content)) }}
+                  />
+                  : files.map(file => GetFileName(file)).join(", ")
+                }
+              </ScrollArea>
             </p>
 
             <div className="flex gap-4 justify-end">

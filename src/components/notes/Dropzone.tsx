@@ -1,11 +1,10 @@
-import { useDropzone } from 'react-dropzone';
-import { Card, CardContent } from '../ui/card';
-import { FileUp, XCircle } from 'lucide-react';
-import { Button } from '../ui/button';
-import { useToast } from "@/components/ui/use-toast"
-import { ReactNode, useCallback } from 'react';
-import { GetFileName } from '@/lib/db';
+import { useToast } from "@/components/ui/use-toast";
 import { customToast } from '@/lib/utils';
+import { FileUp, XCircle } from 'lucide-react';
+import { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { Button } from '../ui/button';
+import { Card, CardContent } from '../ui/card';
 
 interface DropzoneProps {
   Files: File[],

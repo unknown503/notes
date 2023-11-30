@@ -1,17 +1,15 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import {
-  Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
-import { Loader2, Plus, Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import Dropzone from "./Dropzone";
 import { useEffect, useState } from "react";
-import { AddNote, GetFileName, UpdateCompleteNote } from "@/lib/db";
+import { GetFileName, UpdateCompleteNote } from "@/lib/db";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"

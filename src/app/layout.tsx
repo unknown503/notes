@@ -1,10 +1,11 @@
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { UserProvider } from '@/components/common'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { Toaster } from '@/components/ui/toaster'
+import { AppConfig } from '@/lib/config'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Sidebar } from '@/components/layout/Sidebar'
-import { ThemeProvider } from '@/components/ThemeProvider'
-import { Toaster } from '@/components/ui/toaster'
-import { AppConfig } from '@/lib/config'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,12 +29,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          <div className="grid grid-rows-[50px_1fr] lg:grid-rows-1 grid-cols-5 xl:grid-cols-6 h-screen">
-            <Sidebar className="col-span-5 lg:col-span-1" />
-            <div className="col-span-5 lg:col-span-4 xl:col-span-5 lg:border-l border-gray-700 py-4 lg:py-6">
-              {children}
+          <UserProvider>
+            <div className="grid grid-rows-[50px_1fr] lg:grid-rows-1 grid-cols-5 xl:grid-cols-6 h-screen">
+              <Sidebar className="col-span-5 lg:col-span-1" />
+              <div className="col-span-5 lg:col-span-4 xl:col-span-5 lg:border-l border-gray-700 py-4 lg:py-6">
+                {children}
+              </div>
             </div>
-          </div>
+          </UserProvider>
           <Toaster />
         </ThemeProvider>
       </body>

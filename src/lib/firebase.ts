@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
+import { getAuth } from "firebase/auth"
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_APIKEY,
@@ -9,11 +10,12 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_STORAGEBUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGINGSENDERID,
   appId: process.env.NEXT_PUBLIC_APPID,
-};
+}
 
 const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig)
 
 const db = getFirestore(app)
 const storage = getStorage(app)
+const auth = getAuth(app)
 
-export { app, db, storage }
+export { app, db, storage, auth }

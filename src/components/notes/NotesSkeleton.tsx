@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { Skeleton } from "../ui/skeleton"
 
 interface NotesSkeletonProps {
