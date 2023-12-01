@@ -37,8 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <UserProvider>
             <div className="grid grid-rows-[50px_1fr] lg:grid-rows-1 grid-cols-5 xl:grid-cols-6">
-              <Sidebar className="col-span-5 lg:col-span-1 sticky" />
-              <div className="col-span-5 lg:col-span-4 xl:col-span-5 lg:border-l border-gray-700 py-4 lg:py-6 h-screen">
+              <Sidebar className="col-span-5 lg:col-span-1 h-screen block lg:sticky top-0" />
+              <div className="col-span-5 lg:col-span-4 xl:col-span-5 lg:border-l border-gray-700 py-4 lg:py-6">
                 {children}
               </div>
             </div>
