@@ -17,8 +17,7 @@ import { CopyButton } from "../common"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
-import { UpdateNoteModal } from "./UpdateNoteModal"
-
+import dynamic from "next/dynamic"
 
 interface NoteOptionsButtonProps {
   isPublic: boolean
@@ -30,7 +29,9 @@ interface NoteOptionsButtonProps {
 
 const DELAY = 5000
 
-export function NoteOptionsButton({ isPublic, files, id, content, setHide }: NoteOptionsButtonProps) {
+const UpdateNoteModal = dynamic(() => import('@/components/notes/UpdateNoteModal'))
+
+export default function NoteOptionsButton({ isPublic, files, id, content, setHide }: NoteOptionsButtonProps) {
   const [Open, setOpen] = useState(false);
   const { toast, dismiss } = useToast()
 
@@ -75,7 +76,12 @@ export function NoteOptionsButton({ isPublic, files, id, content, setHide }: Not
     <Dialog open={Open} onOpenChange={setOpen}>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="h-[30px]">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-[30px]"
+            aria-label="Note Options"
+          >
             <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>

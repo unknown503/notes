@@ -23,7 +23,7 @@ const FormSchema = z.object({
   content: z.string().default(""),
 })
 
-export function NewNoteModal() {
+export default function NewNoteModal() {
   const [Files, setFiles] = useState<File[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
   const [Open, setOpen] = useState(false)
@@ -54,7 +54,7 @@ export function NewNoteModal() {
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">
+        <Button variant="default" aria-label="Create note">
           <Plus size={20} className="mr-2" />
           Create note
         </Button>

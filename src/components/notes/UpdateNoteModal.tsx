@@ -28,7 +28,7 @@ interface UpdateNoteModalProps {
   setOpen: (v: boolean) => void
 }
 
-export function UpdateNoteModal({ content, files: prevFiles, id, setOpen }: UpdateNoteModalProps) {
+export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen }: UpdateNoteModalProps) {
   const [Files, setFiles] = useState<File[]>([])
   const [RemovedFiles, setRemovedFiles] = useState<string[]>([])
   const [Saving, setSaving] = useState<boolean>(false)

@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/card"
 import { DownloadFile, GetFileName } from "@/lib/db"
 import { DecodeHtml, IsAnImage, convertToRichtext, customToast, getDate } from "@/lib/utils"
-import { Copy, Download, File, Image } from "lucide-react"
+import { Copy, Download, File, Image as ImageIcon } from "lucide-react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useState } from "react"
 import Indicator from "../Indicator"
@@ -19,7 +20,9 @@ import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { useToast } from "../ui/use-toast"
-import { NoteOptionsButton } from "./NoteOptionsButton"
+import Image from "next/image"
+
+const NoteOptionsButton = dynamic(() => import('@/components/notes/NoteOptionsButton'))
 
 export default function NoteCard({ id, content, files, isPublic, timestamp }: NoteDoc) {
   const [Hide, setHide] = useState(false)
@@ -70,7 +73,18 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
               {files.length !== 0 &&
                 <Indicator text={files.length}>
                   <Avatar className="w-[30px] h-[30px]">
-                    <AvatarImage src={files[0]} className="object-cover" loading="lazy" />
+
+                    <AvatarImage asChild src={files[0]}>
+                      <Image
+                        src={files[0]}
+                        width="30"
+                        height="30"
+                        className="object-cover"
+                        loading="lazy"
+                        alt=""
+                        role="presentation"
+                      />
+                    </AvatarImage>
                     <AvatarFallback>
                       <File />
                     </AvatarFallback>
@@ -191,13 +205,14 @@ const Files = ({ files, onFileClick }: FilesProps) => {
                 variant="secondary"
                 size="icon"
                 asChild
+                aria-label="View image"
               >
                 <Link
                   href={file}
                   className="min-w-[1.125rem]"
                   target="_blank"
                 >
-                  <Image size={16} />
+                  <ImageIcon size={16} />
                 </Link>
               </Button>
             }

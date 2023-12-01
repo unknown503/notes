@@ -1,14 +1,16 @@
 import { AuthCheckWrapper } from '@/components/common'
 import Heading from '@/components/notes/Heading'
-import { NewNoteModal } from '@/components/notes/NewNoteModal'
-import NotesWrapper from '@/components/notes/NotesWrapper'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { GenericTitle, availableTabs } from '@/lib/config'
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 
 export const metadata: Metadata = {
   title: GenericTitle("Notes")
 }
+
+const NotesWrapper = dynamic(() => import('@/components/notes/NotesWrapper'))
+const NewNoteModal = dynamic(() => import('@/components/notes/NewNoteModal'))
 
 export default async function Home() {
   const { tabs } = availableTabs()

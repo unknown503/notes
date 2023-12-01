@@ -1,9 +1,9 @@
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { UserProvider } from '@/components/common'
-import { Sidebar } from '@/components/layout/Sidebar'
 import { Toaster } from '@/components/ui/toaster'
 import { AppConfig } from '@/lib/config'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
@@ -19,6 +19,12 @@ export const metadata: Metadata = {
   manifest: 'favicon/site.webmanifest',
 }
 
+export const viewport: Viewport = {
+  themeColor: "#020817",
+}
+
+const Sidebar = dynamic(() => import('../components/layout/Sidebar'))
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -30,9 +36,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <UserProvider>
-            <div className="grid grid-rows-[50px_1fr] lg:grid-rows-1 grid-cols-5 xl:grid-cols-6 h-screen">
-              <Sidebar className="col-span-5 lg:col-span-1" />
-              <div className="col-span-5 lg:col-span-4 xl:col-span-5 lg:border-l border-gray-700 py-4 lg:py-6">
+            <div className="grid grid-rows-[50px_1fr] lg:grid-rows-1 grid-cols-5 xl:grid-cols-6">
+              <Sidebar className="col-span-5 lg:col-span-1 sticky" />
+              <div className="col-span-5 lg:col-span-4 xl:col-span-5 lg:border-l border-gray-700 py-4 lg:py-6 h-screen">
                 {children}
               </div>
             </div>

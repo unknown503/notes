@@ -1,14 +1,17 @@
 "use client"
-import NoteCard from '@/components/notes/NoteCard'
 import { SubscribeToNotes } from '@/lib/db'
 import { useEffect, useState } from 'react'
 import NotesSkeleton from './NotesSkeleton'
+import dynamic from 'next/dynamic'
 
 type NotesWrapperProps = {
   filter: string,
 }
 
 const visibilityFilter = (filter: string) => filter === "all" ? undefined : filter === "public"
+const NoteCard = dynamic(() => import('@/components/notes/NoteCard'), {
+  loading: () => <NotesSkeleton count={1} />
+})
 
 export default function NotesWrapper({ filter }: NotesWrapperProps) {
   const [Notes, setNotes] = useState<NoteDoc[] | null>(null)
@@ -27,7 +30,7 @@ export default function NotesWrapper({ filter }: NotesWrapperProps) {
         :
         <>
           {Notes.length === 0 ?
-            <h3>No notes here...</h3>
+            <span className='font-bold text-lg'>No notes here...</span>
             : Notes.map(note =>
               <NoteCard
                 key={note.id}

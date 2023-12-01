@@ -1,11 +1,13 @@
-import TextareaField from '@/components/case/TextareaField'
 import Heading from '@/components/notes/Heading'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 
 export const metadata: Metadata = {
   title: GenericTitle("Convert Case")
 }
+
+const TextareaField = dynamic(() => import('@/components/case/TextareaField'))
 
 export default async function Home() {
 

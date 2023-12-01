@@ -3,13 +3,16 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { CapitalizedCase, LoadAndDeleteLocalStorage, SentenceCase, WordCount } from '@/lib/utils'
 import { Baseline, CaseLower, CaseSensitive, CaseUpper, Clipboard, Copy, Eraser, LucideIcon, Scissors } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CopyButton } from '../common'
 import { Button, ButtonProps } from '../ui/button'
 
 export default function TextareaField() {
-  const note = LoadAndDeleteLocalStorage("note")
-  const [Text, setText] = useState(note)
+  const [Text, setText] = useState("")
+
+  useEffect(() => {
+    setText(LoadAndDeleteLocalStorage("note"))
+  }, [])
 
   return (
     <div className="container py-4 lg:py-6 w-full gap-x-4 lg:gap-x-8 gap-y-4 grid grid-cols-12">

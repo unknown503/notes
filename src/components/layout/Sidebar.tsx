@@ -41,6 +41,7 @@ function MobileSidebar() {
         <Button
           variant="secondary"
           size="icon"
+          aria-label="Menu icon"
         >
           <Menu />
         </Button>
@@ -115,7 +116,6 @@ function SidebarItems({ setOpen }: { setOpen?: (v: boolean) => void }) {
   )
 }
 
-
 const SidebarLoadingItems = ({ count }: { count: number }) => (
   <>
     {new Array(count).fill(0).map((_, i) =>
@@ -126,3 +126,5 @@ const SidebarLoadingItems = ({ count }: { count: number }) => (
     )}
   </>
 )
+
+export default Sidebar
