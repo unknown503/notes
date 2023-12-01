@@ -5,8 +5,8 @@ export const isLocal = Boolean(process.env.NEXT_PUBLIC_LOCAL_ENV === "true")
 export const GenericTitle = (generic: string) => `${generic} - ${AppConfig.title}`
 
 export const AppConfig = {
-  title: "Notes",
-  description: "Notes"
+  title: "Notiz",
+  description: "Notiz"
 }
 
 export const sidebarItems = [
