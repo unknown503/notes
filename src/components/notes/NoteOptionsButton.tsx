@@ -12,18 +12,19 @@ import { DeleteNote, UpdateNote } from "@/lib/db"
 import { SaveOnLocalStorage, customToast } from "@/lib/utils"
 import { MoreHorizontal } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CopyButton } from "../common"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
 import dynamic from "next/dynamic"
 
-interface NoteOptionsButtonProps {
+export type NoteOptionsButtonProps = {
   isPublic: boolean
   id: string
   content: string
   files: string[]
+  Hide: boolean
   setHide: (v: boolean) => void
 }
 
@@ -31,8 +32,8 @@ const DELAY = 5000
 
 const UpdateNoteModal = dynamic(() => import('@/components/notes/UpdateNoteModal'))
 
-export default function NoteOptionsButton({ isPublic, files, id, content, setHide }: NoteOptionsButtonProps) {
-  const [Open, setOpen] = useState(false);
+export default function NoteOptionsButton({ isPublic, files, id, content, setHide, Hide }: NoteOptionsButtonProps) {
+  const [Open, setOpen] = useState(false)
   const { toast, dismiss } = useToast()
 
   const RemoveNote = () => {
@@ -40,7 +41,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
     const timeout = setTimeout(async () => {
       await DeleteNote(id, files)
       dismiss()
-    }, DELAY);
+    }, DELAY)
 
     toast({
       ...customToast("Note removed."),
@@ -85,7 +86,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
             <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
+        <DropdownMenuContent className={`w-56 ${Hide ? "hidden" : ""}`}>
           <DropdownMenuLabel>Options</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DialogTrigger asChild>

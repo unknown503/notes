@@ -1,12 +1,12 @@
-import { BookText, CaseSensitive, Home, KeyRound } from "lucide-react";
+import { BookText, CaseSensitive, Home, KeyRound, ScrollText } from "lucide-react";
 
 export const isLocal = Boolean(process.env.NEXT_PUBLIC_LOCAL_ENV === "true")
 
-export const GenericTitle = (generic: string) => `${generic} - ${AppConfig.title}`
+export const GenericTitle = (generic: string) => `${generic} | ${AppConfig.title}`
 
 export const AppConfig = {
-  title: "Notiz",
-  description: "Notiz"
+  title: process.env.NEXT_PUBLIC_TITLE,
+  description: process.env.DESCRIPTION,
 }
 
 export const sidebarItems = [
@@ -34,6 +34,12 @@ export const sidebarItems = [
     path: "/auth",
     authRelated: true,
     authRequired: false
+  },
+  {
+    label: "Notepad",
+    icon: ScrollText,
+    path: "/notepad",
+    authRequired: true
   },
 ]
 

@@ -19,7 +19,7 @@ import { useToast } from "../ui/use-toast"
 
 const formSchema = z.object({
   email: z.string().email("Invalid email.").min(10, {
-    message: "Invalid password."
+    message: "Invalid email."
   }),
   password: z.string().min(9, {
     message: "Invalid password."
@@ -33,8 +33,8 @@ export default function AuthForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: ""
+      email: "super@user.com",
+      password: "nK8dvX5byqDJNDPcnN4oQrcX"
     },
   })
 

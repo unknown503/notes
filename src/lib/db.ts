@@ -1,12 +1,37 @@
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { isLocal } from './config'
 import { auth, db, storage } from "./firebase"
 
 const NOTES = "notes"
+const NOTEPAD = "notepad"
 
 const notesCollection = collection(db, NOTES)
+const notepadDoc = doc(db, NOTEPAD, "content")
+
+export const GetNotepadContent = async () => {
+  const notepadContent = await getDoc(notepadDoc)
+  const exists = notepadContent.exists()
+
+  if (exists) {
+    return notepadContent.data() as NotepadDoc
+  } else {
+    const data: NotepadDoc = {
+      content: "",
+      timestamp: Date.now(),
+    }
+    await setDoc(notepadDoc, data)
+    return data
+  }
+}
+
+export const UpdateNotepad = async (content: string) => {
+  await updateDoc(notepadDoc, {
+    content,
+    timestamp: Date.now(),
+  });
+}
 
 export const UploadFile = async (file: File) => {
   const array = file.name.split(".")
@@ -108,7 +133,6 @@ export const GetNotesByFilter = async (isPublic?: boolean) => {
   })
   return notes
 }
-
 
 export const DeleteNote = async (id: string, files: string[]) => {
   const noteRef = doc(db, NOTES, id)

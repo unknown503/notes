@@ -1,4 +1,4 @@
-interface NoteDoc {
+type NoteDoc = {
   id: string
   content: string,
   files: string[]
@@ -6,7 +6,7 @@ interface NoteDoc {
   timestamp: number
 }
 
-interface UpdateNoteFields {
+type UpdateNoteFields = {
   content?: string,
   files?: string[]
   isPublic?: boolean

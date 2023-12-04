@@ -1,4 +1,5 @@
 "use client"
+import { NoteOptionsButtonProps } from "@/components/notes/NoteOptionsButton"
 import {
   Card,
   CardContent,
@@ -10,6 +11,7 @@ import { DownloadFile, GetFileName } from "@/lib/db"
 import { DecodeHtml, IsAnImage, convertToRichtext, customToast, getDate } from "@/lib/utils"
 import { Copy, Download, File, Image as ImageIcon } from "lucide-react"
 import dynamic from "next/dynamic"
+import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import Indicator from "../Indicator"
@@ -20,7 +22,6 @@ import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { useToast } from "../ui/use-toast"
-import Image from "next/image"
 
 const NoteOptionsButton = dynamic(() => import('@/components/notes/NoteOptionsButton'))
 
@@ -51,6 +52,7 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
               setHide={setHide}
               isPublic={isPublic}
               files={files}
+              Hide={Hide}
               id={id}
             />
           </CardTitle>
@@ -73,7 +75,6 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
               {files.length !== 0 &&
                 <Indicator text={files.length}>
                   <Avatar className="w-[30px] h-[30px]">
-
                     <AvatarImage asChild src={files[0]}>
                       <Image
                         src={files[0]}
@@ -106,6 +107,7 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
             isPublic={isPublic}
             setHide={setHide}
             files={files}
+            Hide={Hide}
             id={id}
           />
         }
@@ -178,7 +180,7 @@ const Files = ({ files, onFileClick }: FilesProps) => {
 
   const DownloadSingleFile = (file: string, name: string) => {
     onFileClick(file, name)
-    toast(customToast(`File ${name} downlaoded.`))
+    toast(customToast("File downloaded."))
   }
 
   return (
@@ -224,22 +226,11 @@ const Files = ({ files, onFileClick }: FilesProps) => {
   )
 }
 
-interface RightSideComponentProps {
-  isPublic: boolean
-  id: string
-  files: string[]
-  content: string
-  setHide: (v: boolean) => void
-}
-
-function RightSideComponent(props: RightSideComponentProps) {
-  const { isPublic } = props
-  return (
-    <div className="flex items-center gap-2">
-      <Badge variant={isPublic ? "destructive" : "secondary"}>
-        {isPublic ? "Public" : "Private"}
-      </Badge>
-      <NoteOptionsButton {...props} />
-    </div>
-  )
-}
+const RightSideComponent = (props: NoteOptionsButtonProps) => (
+  <div className="flex items-center gap-2">
+    <Badge variant={props.isPublic ? "destructive" : "secondary"}>
+      {props.isPublic ? "Public" : "Private"}
+    </Badge>
+    <NoteOptionsButton {...props} />
+  </div>
+)

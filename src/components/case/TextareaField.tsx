@@ -95,7 +95,6 @@ type VerticalButtonsProps = {
 function VerticalButtons({ Text, setText }: VerticalButtonsProps) {
   const Paste = async () => {
     const text = await navigator.clipboard.readText();
-    console.log({ text })
     setText(text)
   }
 
