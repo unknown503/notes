@@ -16,7 +16,7 @@ export default function TextareaField() {
   }, [])
 
   useEffect(() => {
-    if (!Notepad || Notepad.content === "" || !Saving) return
+    if (!Notepad || !Saving) return
     let timeoutId: NodeJS.Timeout
 
     const delayedCallback = async () => {
