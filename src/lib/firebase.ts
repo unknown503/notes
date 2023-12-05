@@ -12,7 +12,9 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_APPID,
 }
 
-const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig)
+const app = getApps.length > 0 ?
+  getApp() :
+  initializeApp(firebaseConfig)
 
 const db = getFirestore(app)
 const storage = getStorage(app)

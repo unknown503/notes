@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { isLocal } from './config'
 import { auth, db, storage } from "./firebase"
@@ -76,14 +76,13 @@ export const AddNote = async (content: string, files: File[]) => {
     })
   )
 
-  const res = await addDoc(notesCollection, {
+  await addDoc(notesCollection, {
     content,
     files: fileUrls,
+    timestamp: Date.now(),
     isPublic: !isLocal,
-    timestamp: Date.now()
-  })
-
-  return res
+    isCritical: false
+  } as NoteDoc)
 }
 
 export const UpdateNote = async (noteId: string, updatedNote: UpdateNoteFields) => {
@@ -120,20 +119,6 @@ export const UpdateCompleteNote = async (noteId: string, content: string, filesT
   })
 }
 
-export const GetNotesByFilter = async (isPublic?: boolean) => {
-  const q = isPublic === undefined ?
-    query(notesCollection, orderBy("timestamp", "desc")) :
-    query(notesCollection, where("isPublic", "==", isPublic), orderBy("timestamp", "desc"))
-
-  const docs = await getDocs(q)
-  const notes: NoteDoc[] = []
-  docs.docs.map(doc => {
-    const data = doc.data()
-    notes.push({ ...data, id: doc.id } as NoteDoc)
-  })
-  return notes
-}
-
 export const DeleteNote = async (id: string, files: string[]) => {
   const noteRef = doc(db, NOTES, id)
 
@@ -147,8 +132,8 @@ export const DeleteNote = async (id: string, files: string[]) => {
 
 export const SubscribeToNotes = (callback: (docs: NoteDoc[]) => void, isPublic?: boolean) => {
   const q = isPublic === undefined ?
-    query(notesCollection, orderBy("timestamp", "desc")) :
-    query(notesCollection, where("isPublic", "==", isPublic), orderBy("timestamp", "desc"))
+    query(notesCollection, orderBy("isCritical", "desc"), orderBy("timestamp", "desc")) :
+    query(notesCollection, where("isPublic", "==", isPublic), orderBy("isCritical", "desc"), orderBy("timestamp", "desc"))
 
   const unsubscribe = onSnapshot(q, (snapshot) => {
     const changes = snapshot.docs.map(doc => {

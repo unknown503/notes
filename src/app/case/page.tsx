@@ -1,4 +1,4 @@
-import Heading from '@/components/notes/Heading'
+import Heading from '@/components/Heading'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
 import dynamic from 'next/dynamic'

@@ -72,6 +72,6 @@ export function SaveOnLocalStorage(key: string, content: string) {
 
 export function LoadAndDeleteLocalStorage(key: string) {
   const data = localStorage.getItem(key)
-  data !== null && localStorage.removeItem(key)
+  data && localStorage.removeItem(key)
   return data || ""
 }

@@ -1,4 +1,4 @@
-import Heading from '@/components/notes/Heading'
+import Heading from '@/components/Heading'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
 
@@ -6,11 +6,10 @@ export const metadata: Metadata = {
   title: GenericTitle("Home")
 }
 
-export default async function Home() {
+import React from 'react'
 
-  return (
-    <>
-      <Heading title="Home" />
-    </>
-  )
-}
+const Home = () => (
+  <Heading title="Home" />
+)
+
+export default Home

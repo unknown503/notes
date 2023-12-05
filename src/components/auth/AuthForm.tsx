@@ -33,8 +33,8 @@ export default function AuthForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "super@user.com",
-      password: "nK8dvX5byqDJNDPcnN4oQrcX"
+      email: "",
+      password: ""
     },
   })
 
@@ -42,10 +42,10 @@ export default function AuthForm() {
     try {
       await SignInUser(email, password)
       toast(customToast("Auth successful."))
-      router.push("/notes")
+      setTimeout(() => router.push("/notes"), 50)
 
     } catch (error: any) {
-      const errorCode = error.code;
+      const errorCode = error.code
       console.error(errorCode)
 
       if (errorCode === "auth/invalid-login-credentials") {

@@ -44,8 +44,8 @@ export default function NewNoteModal() {
 
     setSaving(true)
     await AddNote(content, Files)
-    toast(customToast("Note was saved."))
     setOpen(false)
+    toast(customToast("Note was saved."))
     form.reset()
     setFiles([])
     setSaving(false)

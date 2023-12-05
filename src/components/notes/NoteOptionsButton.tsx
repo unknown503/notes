@@ -11,19 +11,15 @@ import { isLocal } from "@/lib/config"
 import { DeleteNote, UpdateNote } from "@/lib/db"
 import { SaveOnLocalStorage, customToast } from "@/lib/utils"
 import { MoreHorizontal } from "lucide-react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CopyButton } from "../common"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
-import dynamic from "next/dynamic"
 
-export type NoteOptionsButtonProps = {
-  isPublic: boolean
-  id: string
-  content: string
-  files: string[]
+export type NoteOptionsButtonProps = NoteDoc & {
   Hide: boolean
   setHide: (v: boolean) => void
 }
@@ -32,7 +28,7 @@ const DELAY = 5000
 
 const UpdateNoteModal = dynamic(() => import('@/components/notes/UpdateNoteModal'))
 
-export default function NoteOptionsButton({ isPublic, files, id, content, setHide, Hide }: NoteOptionsButtonProps) {
+export default function NoteOptionsButton({ isPublic, files, id, content, setHide, Hide, isCritical }: NoteOptionsButtonProps) {
   const [Open, setOpen] = useState(false)
   const { toast, dismiss } = useToast()
 
@@ -66,11 +62,16 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
     toast(customToast(`Note changed to ${!isPublic ? "public" : "private"}.`))
   }
 
+  const UpdateIsCritical = async () => {
+    await UpdateNote(id, {
+      isCritical: !isCritical
+    })
+    toast(customToast(`Note changed to ${isCritical ? "not " : ""}critical.`))
+  }
+
   const SaveNoteContent = () => {
     const res = SaveOnLocalStorage("note", content)
-    if (res !== true) {
-      toast(customToast(res, true))
-    }
+    if (res !== true) toast(customToast(res, true))
   }
 
   return (
@@ -95,12 +96,20 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
             </DropdownMenuCheckboxItem>
           </DialogTrigger>
           {isLocal &&
-            <DropdownMenuCheckboxItem
-              className="cursor-pointer"
-              onClick={UpdateIsPublic}
-            >
-              Set to {!isPublic ? "public" : "private"}
-            </DropdownMenuCheckboxItem>
+            <>
+              <DropdownMenuCheckboxItem
+                className="cursor-pointer"
+                onClick={UpdateIsPublic}
+              >
+                Set to {!isPublic ? "public" : "private"}
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                className="cursor-pointer"
+                onClick={UpdateIsCritical}
+              >
+                Set to {isCritical ? "not " : ""}critical
+              </DropdownMenuCheckboxItem>
+            </>
           }
           {content !== "" &&
             <>

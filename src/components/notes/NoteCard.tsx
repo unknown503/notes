@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card"
 import { DownloadFile, GetFileName } from "@/lib/db"
 import { DecodeHtml, IsAnImage, convertToRichtext, customToast, getDate } from "@/lib/utils"
-import { Copy, Download, File, Image as ImageIcon } from "lucide-react"
+import { AlertCircle, Copy, Download, File, Image as ImageIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -25,7 +25,8 @@ import { useToast } from "../ui/use-toast"
 
 const NoteOptionsButton = dynamic(() => import('@/components/notes/NoteOptionsButton'))
 
-export default function NoteCard({ id, content, files, isPublic, timestamp }: NoteDoc) {
+export default function NoteCard(props: NoteDoc) {
+  const { id, content, files, isPublic, timestamp, isCritical } = props
   const [Hide, setHide] = useState(false)
   const { toast } = useToast()
 
@@ -47,19 +48,21 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
                 {isPublic ? "Public" : "Private"}
               </Badge>
             </div>
-            <NoteOptionsButton
-              content={content}
-              setHide={setHide}
-              isPublic={isPublic}
-              files={files}
-              Hide={Hide}
-              id={id}
-            />
+            <div className="flex gap-2 items-center">
+              {isCritical &&
+                <AlertCircle color="red" size={25} />
+              }
+              <NoteOptionsButton
+                {...props}
+                setHide={setHide}
+                Hide={Hide}
+              />
+            </div>
           </CardTitle>
         </CardHeader>
         <SheetTrigger className="w-full h-[169px] flex flex-col justify-between">
           <CardContent className="word-break h-[115px]">
-            <p className="line-clamp-5 text-start text-sm">
+            <div className="line-clamp-5 text-start text-sm">
               {content !== "" ?
                 <span
                   className="rich-text"
@@ -68,7 +71,7 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
                 :
                 files.map(file => GetFileName(file)).join(", ")
               }
-            </p>
+            </div>
           </CardContent>
           <CardFooter className="flex justify-between items-center w-full">
             <div>
@@ -103,12 +106,9 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
         className={Hide ? "hidden" : ""}
         otherSide={
           <RightSideComponent
-            content={content}
-            isPublic={isPublic}
+            {...props}
             setHide={setHide}
-            files={files}
             Hide={Hide}
-            id={id}
           />
         }
       >
@@ -122,7 +122,7 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
             </span>
           </SheetDescription>
           <div className="flex flex-col gap-5">
-            <p className="word-break pt-4">
+            <div className="word-break pt-4">
               <ScrollArea customClass="max-h-[400px]">
                 {content !== "" ?
                   <span
@@ -132,7 +132,7 @@ export default function NoteCard({ id, content, files, isPublic, timestamp }: No
                   : files.map(file => GetFileName(file)).join(", ")
                 }
               </ScrollArea>
-            </p>
+            </div>
 
             <div className="flex gap-4 justify-end">
               {content !== "" &&
