@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import NotesSkeleton from './NotesSkeleton'
 import dynamic from 'next/dynamic'
 
-type NotesWrapperProps = {
+export type NotesWrapperProps = {
   filter: string,
 }
 

@@ -7,14 +7,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { isLocal } from "@/lib/config"
 import { DeleteNote, UpdateNote } from "@/lib/db"
 import { SaveOnLocalStorage, customToast } from "@/lib/utils"
 import { MoreHorizontal } from "lucide-react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useState } from "react"
-import { CopyButton } from "../common"
+import { CopyButton, useUser } from "../common"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
@@ -31,6 +30,7 @@ const UpdateNoteModal = dynamic(() => import('@/components/notes/UpdateNoteModal
 export default function NoteOptionsButton({ isPublic, files, id, content, setHide, Hide, isCritical }: NoteOptionsButtonProps) {
   const [Open, setOpen] = useState(false)
   const { toast, dismiss } = useToast()
+  const { isLoggedIn } = useUser()
 
   const RemoveNote = () => {
     setHide(true)
@@ -95,7 +95,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
               Update note
             </DropdownMenuCheckboxItem>
           </DialogTrigger>
-          {isLocal &&
+          {isLoggedIn &&
             <>
               <DropdownMenuCheckboxItem
                 className="cursor-pointer"

@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { useToast } from "../ui/use-toast";
 import { customToast } from "@/lib/utils";
+import { useUser } from "../common";
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -32,6 +33,7 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
   const [Files, setFiles] = useState<File[]>([])
   const [RemovedFiles, setRemovedFiles] = useState<string[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
+  const { isLoggedIn } = useUser()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -48,7 +50,7 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
     }
 
     setSaving(true)
-    UpdateCompleteNote(id, content, RemovedFiles, prevFiles, Files)
+    UpdateCompleteNote(id, content, RemovedFiles, prevFiles, Files, isLoggedIn)
     toast(customToast("Note was updated."))
     setOpen(false)
     form.reset()

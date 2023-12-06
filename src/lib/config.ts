@@ -1,7 +1,5 @@
 import { BookText, CaseSensitive, Home, KeyRound, ScrollText } from "lucide-react";
 
-export const isLocal = Boolean(process.env.NEXT_PUBLIC_LOCAL_ENV === "true")
-
 export const GenericTitle = (generic: string) => `${generic} | ${AppConfig.title}`
 
 export const AppConfig = {
@@ -20,7 +18,7 @@ export const sidebarItems = [
     label: "Notes",
     icon: BookText,
     path: "/notes",
-    authRequired: true,
+    authRequired: false,
   },
   {
     label: "Convert case",
@@ -60,9 +58,9 @@ const tabs = [
 
 const publicTabs = tabs.filter(tab => tab.global)
 
-export const availableTabs = () => {
-  const returnTabs = isLocal ? tabs : publicTabs
-  return { tabs: returnTabs.map(tab => tab.label) }
+export const availableTabs = (isLoggedIn: boolean) => {
+  const returnTabs = isLoggedIn ? tabs : publicTabs
+  return returnTabs.map(tab => tab.label)
 }
 
 export const availableSideItems = (isLoggedIn: boolean) =>

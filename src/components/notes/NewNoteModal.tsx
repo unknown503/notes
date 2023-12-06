@@ -18,6 +18,7 @@ import { Form, FormControl, FormField, FormItem } from "../ui/form"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
+import { useUser } from "../common"
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -27,6 +28,7 @@ export default function NewNoteModal() {
   const [Files, setFiles] = useState<File[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
   const [Open, setOpen] = useState(false)
+  const { isLoggedIn } = useUser()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -43,7 +45,7 @@ export default function NewNoteModal() {
     }
 
     setSaving(true)
-    await AddNote(content, Files)
+    await AddNote(content, Files, isLoggedIn)
     setOpen(false)
     toast(customToast("Note was saved."))
     form.reset()

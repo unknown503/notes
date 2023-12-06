@@ -114,3 +114,23 @@ export function AuthCheckWrapper({ children, onlyAuth }: AuthWrapperProps) {
     </>
   )
 }
+
+export function AuthExpecter({ children }: Omit<AuthWrapperProps, "onlyAuth">) {
+  const { user, isLoggedIn } = useUser()
+
+  const shouldShowSpinner = user === false && !isLoggedIn
+
+  return (
+    <>
+      {shouldShowSpinner ?
+        <div className="h-screen w-full flex items-center justify-center">
+          <Loader2
+            className="h-12 w-12 animate-spin"
+          />
+        </div>
+        :
+        children
+      }
+    </>
+  )
+}

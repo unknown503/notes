@@ -1,7 +1,6 @@
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
-import { isLocal } from './config'
 import { auth, db, storage } from "./firebase"
 
 const NOTES = "notes"
@@ -33,14 +32,20 @@ export const UpdateNotepad = async (content: string) => {
   });
 }
 
-export const UploadFile = async (file: File) => {
+export const UploadFile = async (file: File, isLoggedIn: boolean) => {
   const array = file.name.split(".")
   const ext = array.pop()
   const name = array.join(".")
   const fileName = array.length !== 0 ? `${name}.${ext}` : file.name
 
+  const metadata = {
+    customMetadata: {
+      "isPublic": String(!isLoggedIn),
+    }
+  }
+
   const imageRef = ref(storage, `${NOTES}/${fileName}`)
-  const res = await uploadBytes(imageRef, file)
+  const res = await uploadBytes(imageRef, file, metadata)
   const url = await getDownloadURL(res.ref)
   return url
 }
@@ -68,10 +73,10 @@ export const GetFileName = (url: string) => {
   return fileRef.name
 }
 
-export const AddNote = async (content: string, files: File[]) => {
+export const AddNote = async (content: string, files: File[], isLoggedIn: boolean) => {
   const fileUrls = await Promise.all(
     files.map(async file => {
-      const url = await UploadFile(file)
+      const url = await UploadFile(file, isLoggedIn)
       return url
     })
   )
@@ -80,7 +85,7 @@ export const AddNote = async (content: string, files: File[]) => {
     content,
     files: fileUrls,
     timestamp: Date.now(),
-    isPublic: !isLocal,
+    isPublic: !isLoggedIn,
     isCritical: false
   } as NoteDoc)
 }
@@ -94,7 +99,7 @@ export const UpdateNote = async (noteId: string, updatedNote: UpdateNoteFields) 
   });
 }
 
-export const UpdateCompleteNote = async (noteId: string, content: string, filesToRemove: string[], prevFiles: string[], filesToUpload: File[]) => {
+export const UpdateCompleteNote = async (noteId: string, content: string, filesToRemove: string[], prevFiles: string[], filesToUpload: File[], isLoggedIn: boolean) => {
   let finalFiles = []
   for (const value in prevFiles) {
     if (!filesToRemove.includes(prevFiles[value]))
@@ -108,7 +113,7 @@ export const UpdateCompleteNote = async (noteId: string, content: string, filesT
 
   const newFiles = await Promise.all(
     filesToUpload.map(async file => {
-      const url = await UploadFile(file)
+      const url = await UploadFile(file, isLoggedIn)
       return url
     })
   )
