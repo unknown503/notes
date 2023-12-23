@@ -1,9 +1,9 @@
 "use client"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import dynamic from 'next/dynamic'
+import CaseReplace from "./CaseReplace"
 
 const CaseTab = dynamic(() => import('@/components/case/CaseTab'))
-const CaseReplace = dynamic(() => import('@/components/case/CaseReplace'))
 
 const tabs = [
   {
