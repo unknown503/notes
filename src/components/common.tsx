@@ -134,3 +134,14 @@ export function AuthExpecter({ children }: Omit<AuthWrapperProps, "onlyAuth">) {
     </>
   )
 }
+
+export function AuthUserDefaultRedirect({ children }: Omit<AuthWrapperProps, "onlyAuth">) {
+  const { isLoggedIn } = useUser()
+  const router = useRouter()
+
+  useEffect(() => {
+    isLoggedIn && router.replace("/notes")
+  }, [isLoggedIn])
+
+  return children
+}

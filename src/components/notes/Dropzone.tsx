@@ -6,7 +6,7 @@ import { useDropzone } from 'react-dropzone';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
 
-interface DropzoneProps {
+type DropzoneProps = {
   Files: File[],
   setFiles: (v: File[]) => void
 }
@@ -54,7 +54,7 @@ export default function Dropzone({ Files, setFiles }: DropzoneProps) {
   );
 }
 
-interface FilesListProps {
+type FilesListProps = {
   files: File[]
   onFileClick: (v: File) => void
 }

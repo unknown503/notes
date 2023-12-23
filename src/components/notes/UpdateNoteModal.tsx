@@ -22,7 +22,7 @@ const FormSchema = z.object({
   content: z.string().default(""),
 })
 
-interface UpdateNoteModalProps {
+type UpdateNoteModalProps = {
   id: string,
   content: string,
   files: string[]
@@ -92,7 +92,7 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
                   <FormControl>
                     <Textarea
                       placeholder="Your note..."
-                      className="min-h-16 h-40 max-h-60"
+                      className="min-h-16 h-60 max-h-96"
                       value={field.value}
                       onChange={field.onChange}
                       onBlur={(e) => e.target.selectionStart = content.length}
@@ -133,7 +133,7 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
   )
 }
 
-interface ExistingFilesListProps {
+type ExistingFilesListProps = {
   files: string[]
   RemovedFiles: string[]
   onFileClick: (v: string) => void

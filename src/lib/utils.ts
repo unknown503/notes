@@ -50,8 +50,15 @@ export function SentenceCase(text: string) {
 }
 
 export function WordCount(text: string) {
+  if (text === "") return 0
   const words = text.trim().split(/\s+/)
   return words.length
+}
+
+export function LineCount(text: string) {
+  if (text === "") return 0
+  var lines = text.split('\n');
+  return lines.length;
 }
 
 export function DecodeHtml(html: string | null) {

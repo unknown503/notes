@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card"
 import { Skeleton } from "../ui/skeleton"
 
-interface NotesSkeletonProps {
+type NotesSkeletonProps = {
   count: number
 }
 export const NotesSkeleton = ({ count }: NotesSkeletonProps) => (

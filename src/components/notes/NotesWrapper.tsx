@@ -9,6 +9,7 @@ export type NotesWrapperProps = {
 }
 
 const visibilityFilter = (filter: string) => filter === "all" ? undefined : filter === "public"
+
 const NoteCard = dynamic(() => import('@/components/notes/NoteCard'), {
   loading: () => <NotesSkeleton count={1} />
 })

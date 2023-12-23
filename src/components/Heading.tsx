@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-interface HeadingProps {
+type HeadingProps = {
   title: string
   children?: ReactNode
   rightTitleSide?: ReactNode

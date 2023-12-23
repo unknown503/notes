@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 
-interface IndicatorProps {
+type IndicatorProps = {
   children: ReactNode
   text: string | number
 }

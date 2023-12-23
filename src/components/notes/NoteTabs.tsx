@@ -16,11 +16,12 @@ const NoteTabs = () => {
     <AuthExpecter>
       <Tabs defaultValue={tabs[0]}>
         <Heading title="Notes" rightTitleSide={<NewNoteModal />}>
-          <TabsList>
+          <TabsList isDefault>
             {tabs.map(tab =>
               <TabsTrigger
                 value={tab}
                 key={tab}
+                isDefault
               >
                 {tab}
               </TabsTrigger>
@@ -33,6 +34,7 @@ const NoteTabs = () => {
             <TabsContent
               value={tab}
               key={tab}
+              isDefault
             >
               <NotesWrapper
                 filter={tab}

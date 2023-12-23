@@ -1,4 +1,5 @@
 import Heading from '@/components/Heading'
+import { AuthUserDefaultRedirect } from '@/components/common'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
 
@@ -6,6 +7,10 @@ export const metadata: Metadata = {
   title: GenericTitle("Home")
 }
 
-const Home = () => <Heading title="Home" />
+const Home = () => (
+  <AuthUserDefaultRedirect>
+    <Heading title="Home" />
+  </AuthUserDefaultRedirect>
+)
 
 export default Home

@@ -123,7 +123,7 @@ export default function NoteCard(props: NoteDoc) {
           </SheetDescription>
           <div className="flex flex-col gap-5">
             <div className="word-break pt-4">
-              <ScrollArea customClass="max-h-[400px]">
+              <ScrollArea customClass="max-h-[600px]">
                 {content !== "" ?
                   <span
                     className="rich-text"
@@ -170,7 +170,7 @@ export default function NoteCard(props: NoteDoc) {
   )
 }
 
-interface FilesProps {
+type FilesProps = {
   files: string[]
   onFileClick: (url: string, name: string) => void
 }

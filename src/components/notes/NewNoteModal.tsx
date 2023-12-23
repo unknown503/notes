@@ -76,7 +76,7 @@ export default function NewNoteModal() {
                     <FormControl>
                       <Textarea
                         placeholder="Your note..."
-                        className="min-h-16 h-40 max-h-60"
+                        className="min-h-16 h-52 max-h-96"
                         value={field.value}
                         onChange={field.onChange}
                       />
