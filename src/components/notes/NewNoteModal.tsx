@@ -8,17 +8,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { AddNote } from "@/lib/db"
-import { customToast } from "@/lib/utils"
+import { SortOfflineNotes, customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2, Plus } from "lucide-react"
+import { Loader2, Plus, WifiOff } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { useIsOffline, useUser } from "../common"
 import { Form, FormControl, FormField, FormItem } from "../ui/form"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
-import { useUser } from "../common"
+import { useNotesContext } from "./NoteTabs"
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -30,6 +31,8 @@ export default function NewNoteModal() {
   const [Open, setOpen] = useState(false)
   const { isLoggedIn } = useUser()
   const { toast } = useToast()
+  const isOffline = useIsOffline()
+  const { setNotes } = useNotesContext()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -45,7 +48,14 @@ export default function NewNoteModal() {
     }
 
     setSaving(true)
-    await AddNote(content, Files, isLoggedIn)
+    const offlineData = await AddNote(content, Files, isLoggedIn, isOffline)
+    if (offlineData && isOffline) {
+      setNotes((old) => SortOfflineNotes([
+        offlineData,
+        ...(old ?? []),
+      ]))
+    }
+
     setOpen(false)
     toast(customToast("Note was saved."))
     form.reset()
@@ -63,7 +73,12 @@ export default function NewNoteModal() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>New note</DialogTitle>
+          <DialogTitle className="flex gap-2">
+            New note
+            {isOffline &&
+              <WifiOff size={20} color="red" />
+            }
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(SaveNote)} className="flex items-center space-x-2">
@@ -84,10 +99,12 @@ export default function NewNoteModal() {
                   </FormItem>
                 )}
               />
-              <Dropzone
-                Files={Files}
-                setFiles={setFiles}
-              />
+              {!isOffline &&
+                <Dropzone
+                  Files={Files}
+                  setFiles={setFiles}
+                />
+              }
               <Button
                 className="w-full"
                 type="submit"

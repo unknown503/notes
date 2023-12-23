@@ -9,14 +9,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { DeleteNote, UpdateNote } from "@/lib/db"
 import { SaveOnLocalStorage, customToast } from "@/lib/utils"
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, WifiOff } from "lucide-react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useState } from "react"
-import { CopyButton, useUser } from "../common"
+import { CopyButton, useIsOffline, useUser } from "../common"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
+import { NoteDoc } from "@/types/notes"
 
 export type NoteOptionsButtonProps = NoteDoc & {
   Hide: boolean
@@ -27,10 +28,11 @@ const DELAY = 5000
 
 const UpdateNoteModal = dynamic(() => import('@/components/notes/UpdateNoteModal'))
 
-export default function NoteOptionsButton({ isPublic, files, id, content, setHide, Hide, isCritical }: NoteOptionsButtonProps) {
+export default function NoteOptionsButton({ isPublic, files, id, content, setHide, Hide, isCritical, offlineSaving }: NoteOptionsButtonProps) {
   const [Open, setOpen] = useState(false)
   const { toast, dismiss } = useToast()
   const { isLoggedIn } = useUser()
+  const isOffline = useIsOffline()
 
   const RemoveNote = () => {
     setHide(true)
@@ -75,76 +77,84 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
   }
 
   return (
-    <Dialog open={Open} onOpenChange={setOpen}>
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-[30px]"
-            aria-label="Note Options"
-          >
-            <MoreHorizontal />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className={`w-56 ${Hide ? "hidden" : ""}`}>
-          <DropdownMenuLabel>Options</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DialogTrigger asChild>
-            <DropdownMenuCheckboxItem className="cursor-pointer">
-              Update note
-            </DropdownMenuCheckboxItem>
-          </DialogTrigger>
-          {isLoggedIn &&
-            <>
-              <DropdownMenuCheckboxItem
-                className="cursor-pointer"
-                onClick={UpdateIsPublic}
+    <>
+      {offlineSaving ?
+        <WifiOff size={20} color="red" />
+        :
+        <Dialog open={Open} onOpenChange={setOpen}>
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-[30px]"
+                aria-label="Note Options"
               >
-                Set to {!isPublic ? "public" : "private"}
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                className="cursor-pointer"
-                onClick={UpdateIsCritical}
-              >
-                Set to {isCritical ? "not " : ""}critical
-              </DropdownMenuCheckboxItem>
-            </>
-          }
-          {content !== "" &&
-            <>
-              <DropdownMenuCheckboxItem className="cursor-pointer">
-                <Link
-                  href={`/case`}
-                  onClick={SaveNoteContent}
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className={`w-56 ${Hide ? "hidden" : ""}`}>
+              <DropdownMenuLabel>Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {isLoggedIn && !isOffline &&
+                <>
+                  <DialogTrigger asChild>
+                    <DropdownMenuCheckboxItem className="cursor-pointer">
+                      Update note
+                    </DropdownMenuCheckboxItem>
+                  </DialogTrigger>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={UpdateIsPublic}
+                  >
+                    Set to {!isPublic ? "public" : "private"}
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={UpdateIsCritical}
+                  >
+                    Set to {isCritical ? "not " : ""}critical
+                  </DropdownMenuCheckboxItem>
+                </>
+              }
+              {content !== "" &&
+                <>
+                  <DropdownMenuCheckboxItem className="cursor-pointer">
+                    <Link
+                      href={`/case`}
+                      onClick={SaveNoteContent}
+                    >
+                      Convert content
+                    </Link>
+                  </DropdownMenuCheckboxItem>
+                  <CopyButton
+                    textToCopy={content}
+                    kind="generic"
+                  >
+                    <DropdownMenuCheckboxItem className="cursor-pointer">
+                      Copy note
+                    </DropdownMenuCheckboxItem>
+                  </CopyButton>
+                </>
+              }
+              {isLoggedIn && !isOffline &&
+                <DropdownMenuCheckboxItem
+                  className="cursor-pointer"
+                  onClick={RemoveNote}
                 >
-                  Convert content
-                </Link>
-              </DropdownMenuCheckboxItem>
-              <CopyButton
-                textToCopy={content}
-                kind="generic"
-              >
-                <DropdownMenuCheckboxItem className="cursor-pointer">
-                  Copy note
+                  Delete note
                 </DropdownMenuCheckboxItem>
-              </CopyButton>
-            </>
-          }
-          <DropdownMenuCheckboxItem
-            className="cursor-pointer"
-            onClick={RemoveNote}
-          >
-            Delete note
-          </DropdownMenuCheckboxItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <UpdateNoteModal
-        content={content}
-        files={files}
-        id={id}
-        setOpen={setOpen}
-      />
-    </Dialog>
+              }
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <UpdateNoteModal
+            content={content}
+            files={files}
+            id={id}
+            setOpen={setOpen}
+          />
+        </Dialog>
+      }
+    </>
   )
 }

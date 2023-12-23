@@ -2,11 +2,11 @@
 import { AppConfig, availableSideItems } from "@/lib/config"
 import { SignOutUser } from "@/lib/db"
 import { cn } from "@/lib/utils"
-import { LogOut, Menu } from "lucide-react"
+import { LogOut, Menu, WifiOff } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
-import { useUser } from "../common"
+import { useIsOffline, useUser } from "../common"
 import { Button } from "../ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { Skeleton } from "../ui/skeleton"
@@ -15,19 +15,28 @@ export const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => 
   <div className={cn("pb-6 lg:pb-10 w-full", className)}>
     <div className="hidden lg:block space-y-4 py-4 h-full">
       <div className="px-3 py-2 h-full">
-        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-          <Link href="/">
-            {AppConfig.title}
-          </Link>
-        </h2>
+        <div className="flex justify-between items-center">
+          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+            <Link href="/">
+              {AppConfig.title}
+            </Link>
+          </h2>
+          {useIsOffline() &&
+            <WifiOff size={20} color="red" />
+          }
+        </div>
+
         <div className="flex flex-col justify-between h-full">
           <SidebarItems />
         </div>
       </div>
     </div>
     <div className="block lg:hidden">
-      <div className="container pt-3">
+      <div className="container pt-3 flex justify-between items-center">
         <MobileSidebar />
+        {useIsOffline() &&
+          <WifiOff size={20} color="red" />
+        }
       </div>
     </div>
   </div>

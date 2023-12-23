@@ -145,3 +145,22 @@ export function AuthUserDefaultRedirect({ children }: Omit<AuthWrapperProps, "on
 
   return children
 }
+
+
+export const useIsOffline = () => {
+  const [Offline, setOffline] = useState(false)
+
+  useEffect(() => {
+    const handleConnection = () => setOffline(!window.navigator.onLine)
+
+    window.addEventListener("offline", handleConnection)
+    window.addEventListener("online", handleConnection)
+
+    return () => {
+      window.removeEventListener("offline", handleConnection)
+      window.removeEventListener("online", handleConnection)
+    }
+  }, [])
+
+  return Offline
+}

@@ -2,11 +2,8 @@
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { LineCount, LoadAndDeleteLocalStorage, WordCount } from '@/lib/utils'
-import { Children, Dispatch, ReactNode, SetStateAction, createContext, isValidElement, useContext, useEffect, useMemo, useState } from 'react'
-
-type ChildrenReceptor = {
-  children: ReactNode
-}
+import { ChildrenReceptor } from '@/types/notes'
+import { Children, Dispatch, SetStateAction, createContext, isValidElement, useContext, useEffect, useMemo, useState } from 'react'
 
 export default function TextareaField({ children }: ChildrenReceptor) {
   const { Text, setText } = useTextareaFieldState()

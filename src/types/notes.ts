@@ -1,15 +1,22 @@
-type NoteDoc = {
+import { ReactNode } from "react"
+
+export type NoteDoc = {
   id: string
   content: string,
   files: string[]
   isPublic: boolean
   timestamp: number
   isCritical: boolean
+  offlineSaving?: boolean
 }
 
-type UpdateNoteFields = {
+export type UpdateNoteFields = {
   content?: string,
   files?: string[]
   isPublic?: boolean
   isCritical?: boolean
+}
+
+export type ChildrenReceptor = {
+  children: ReactNode
 }
