@@ -22,7 +22,6 @@ export default function NotesWrapper({ filter }: NotesWrapperProps) {
   const { Notes, setNotes } = useNotesContext()
   const isOffline = useIsOffline()
   const { isLoggedIn } = useUser()
-  console.log({ isOffline })
 
   useEffect(() => {
     const unsubscribe = SubscribeToNotes(docs => {

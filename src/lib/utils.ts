@@ -37,8 +37,13 @@ export function convertToRichtext(content: string | null) {
   return content?.replace(urlRegex, (url) => `<a href="${url}" target="_blank">${url}</a>`) ?? ""
 }
 
-export function IsAnImage(url: string) {
+export function IsImage(url: string) {
   var exts = /\.(jpg|jpeg|png|gif|bmp|svg)$/i
+  return exts.test(url)
+}
+
+export function IsPDF(url: string) {
+  var exts = /\.(pdf)$/i
   return exts.test(url)
 }
 
@@ -128,3 +133,12 @@ export const SortOfflineNotes = (notes: NoteDoc[]) => (
     return b.timestamp - a.timestamp
   })
 )
+
+export const ViewPDF = async (file: string) => {
+  const res = await fetch(file)
+  const blob = await res.blob()
+  const pdf = new Blob([blob], { type: "application/pdf" });
+  const url = URL.createObjectURL(pdf);
+  const openedWindow = window.open();
+  if (openedWindow) openedWindow.location.href = url;
+}

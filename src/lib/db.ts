@@ -58,7 +58,7 @@ export const DownloadFile = async (url: string, name: string) => {
   xhr.responseType = 'blob'
   xhr.onload = () => {
     const blob = xhr.response
-    const file = new File([blob], "image name", { type: blob.type })
+    const file = new File([blob], name, { type: blob.type })
     const link = document.createElement('a')
     link.href = URL.createObjectURL(file)
     link.download = name

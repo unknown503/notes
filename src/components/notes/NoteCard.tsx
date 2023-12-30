@@ -8,8 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { DownloadFile, GetFileName } from "@/lib/db"
-import { DecodeHtml, IsAnImage, convertToRichtext, customToast, getDate } from "@/lib/utils"
-import { AlertCircle, Copy, Download, File, Image as ImageIcon, WifiOff } from "lucide-react"
+import { DecodeHtml, IsImage, IsPDF, ViewPDF, convertToRichtext, customToast, getDate } from "@/lib/utils"
+import { AlertCircle, Copy, Download, File, FileText, Image as ImageIcon, WifiOff } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -207,12 +207,13 @@ const Files = ({ files, onFileClick }: FilesProps) => {
                 {name}
               </span>
             </Button>
-            {IsAnImage(name) &&
+            {IsImage(name) &&
               <Button
                 variant="secondary"
                 size="icon"
                 asChild
                 aria-label="View image"
+                title="View image"
               >
                 <Link
                   href={file}
@@ -221,6 +222,17 @@ const Files = ({ files, onFileClick }: FilesProps) => {
                 >
                   <ImageIcon size={16} />
                 </Link>
+              </Button>
+            }
+            {IsPDF(name) &&
+              <Button
+                variant="secondary"
+                size="icon"
+                aria-label="View pdf file"
+                title="View pdf file"
+                onClick={() => ViewPDF(file)}
+              >
+                <FileText size={16} />
               </Button>
             }
           </div>
