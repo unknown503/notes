@@ -146,7 +146,6 @@ export function AuthUserDefaultRedirect({ children }: Omit<AuthWrapperProps, "on
   return children
 }
 
-
 export const useIsOffline = () => {
   const [Offline, setOffline] = useState(false)
 

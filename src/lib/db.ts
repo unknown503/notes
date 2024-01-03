@@ -1,16 +1,16 @@
+import { NoteDoc, UpdateNoteFields } from '@/types/notes'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { auth, db, storage } from "./firebase"
 import { SaveOnLocalStorage, prefix } from './utils'
-import { NoteDoc, UpdateNoteFields } from '@/types/notes'
-import { ref as dbRef, getDatabase, onDisconnect, onValue } from "firebase/database";
 
 const NOTES = "notes"
 const NOTEPAD = "notepad"
 
 const notesCollection = collection(db, NOTES)
 const notepadDoc = doc(db, NOTEPAD, "content")
+const historyDoc = doc(db, NOTEPAD, "history")
 
 export const GetNotepadContent = async () => {
   const notepadContent = await getDoc(notepadDoc)
@@ -28,11 +28,52 @@ export const GetNotepadContent = async () => {
   }
 }
 
-export const UpdateNotepad = async (content: string) => {
+export const SubscribeToNotepadHistory = (callback: (doc: NotepadHistoryDoc) => void) => {
+  const unsubscribe = onSnapshot(historyDoc, (doc) => {
+    callback(doc.data() as NotepadHistoryDoc)
+  })
+  return unsubscribe
+}
+
+export const DeleteHistoryRecord = async (docs: NotepadDoc[], timestamp: number) => {
+  const records = docs.filter(rec => rec.timestamp !== timestamp)
+  await updateDoc(historyDoc, { records })
+}
+
+export const RecoverContentHistory = async (docs: NotepadDoc[], toDelete: number, toReplace: NotepadDoc, newContent: string) => {
+  await UpdateNotepad(newContent, false)
+  const historyRecords = docs.map(rec => rec.timestamp === toDelete ? toReplace : rec)
+  await updateDoc(historyDoc, { records: historyRecords })
+}
+
+export const UpdateNotepad = async (content: string, updateHistory = true) => {
+  const maxHistoryRecords = 5
+  const currentContent = await GetNotepadContent()
+
   await updateDoc(notepadDoc, {
     content,
     timestamp: Date.now(),
-  });
+  })
+
+  if (!updateHistory || currentContent.content === "") return
+
+  const notepadHistory = await getDoc(historyDoc)
+  const historyExists = notepadHistory.exists()
+
+  if (historyExists) {
+    const currentHistory = notepadHistory.data() as NotepadHistoryDoc
+    const records = currentHistory.records
+
+    if (records.length >= maxHistoryRecords)
+      records.shift()
+    records.push(currentContent)
+
+    await updateDoc(historyDoc, { records } as NotepadHistoryDoc)
+  } else {
+    await setDoc(historyDoc, {
+      records: [currentContent]
+    } as NotepadHistoryDoc)
+  }
 }
 
 export const UploadFile = async (file: File, isLoggedIn: boolean) => {

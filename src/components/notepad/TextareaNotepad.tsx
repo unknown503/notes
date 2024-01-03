@@ -1,46 +1,40 @@
 "use client"
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { GetNotepadContent, UpdateNotepad } from '@/lib/db'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { GetNotepadContent } from '@/lib/db'
+import { ChangeEvent, useEffect } from 'react'
 import TimeAgo from 'react-timeago'
+import { useNotepadContext } from './NotepadContext'
 
-const DELAY = 4000
+export type DelayType = { delay: number }
 
-export default function TextareaField() {
-  const [Notepad, setNotepad] = useState<NotepadDoc | null>(null)
-  const [Saving, setSaving] = useState(false)
+export default function TextareaField({ delay }: DelayType) {
+  const { Notepad, Saving, setNotepad, setSaving, delayedCallback } = useNotepadContext()
 
   useEffect(() => {
-    GetNotepadContent().then(res => setNotepad(res))
+    GetNotepadContent().then(setNotepad)
   }, [])
 
   useEffect(() => {
     if (!Notepad || !Saving) return
     let timeoutId: NodeJS.Timeout
 
-    const delayedCallback = async () => {
-      await UpdateNotepad(Notepad.content)
-      setSaving(false)
-    }
-
-    timeoutId = setTimeout(delayedCallback, DELAY)
+    timeoutId = setTimeout(delayedCallback, delay)
     return () => clearTimeout(timeoutId)
   }, [Notepad, Saving])
 
   const TextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const time = Date.now() + delay
     setNotepad({
       content: e.currentTarget.value,
-      timestamp: Date.now()
+      timestamp: time
     })
-    setSaving(true)
+    setSaving(time)
   }
 
   return (
     <div className="container py-4 lg:py-6 flex flex-col gap-4">
-      <Label
-        htmlFor="content"
-      >
+      <Label htmlFor="content">
         Notepad content
       </Label>
       <Textarea
@@ -49,6 +43,7 @@ export default function TextareaField() {
         id='content'
         onChange={TextareaChange}
         value={Notepad?.content}
+        disabled={!Saving && !Notepad}
       />
       <div className="flex justify-between text-sm">
         <span>
@@ -56,12 +51,12 @@ export default function TextareaField() {
         </span>
         <span>
           {Saving ?
-            "Saving..."
-            :
-            Notepad ?
-              <TimeAgo date={Notepad.timestamp} />
-              :
-              "Loading..."
+            <>
+              Saving in <TimeAgo date={Saving} minPeriod={1} />
+            </>
+            : Notepad ?
+              <TimeAgo date={Notepad.timestamp} minPeriod={1} />
+              : "Loading..."
           }
         </span>
       </div>
