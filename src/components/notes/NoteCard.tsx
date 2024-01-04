@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/card"
 import { DownloadFile, GetFileName } from "@/lib/db"
 import { DecodeHtml, IsImage, IsPDF, ViewPDF, convertToRichtext, customToast, getDate } from "@/lib/utils"
-import { AlertCircle, Copy, Download, File, FileText, Image as ImageIcon, WifiOff } from "lucide-react"
+import { NoteDoc } from "@/types/notes"
+import { AlertCircle, Copy, Download, File, FileText, Image as ImageIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
@@ -22,12 +23,11 @@ import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { useToast } from "../ui/use-toast"
-import { NoteDoc } from "@/types/notes"
 
 const NoteOptionsButton = dynamic(() => import('@/components/notes/NoteOptionsButton'))
 
 export default function NoteCard(props: NoteDoc) {
-  const { content, files, isPublic, timestamp, isCritical, offlineSaving } = props
+  const { content, files, isPublic, timestamp, isCritical } = props
   const [Hide, setHide] = useState(false)
   const { toast } = useToast()
 
@@ -53,15 +53,11 @@ export default function NoteCard(props: NoteDoc) {
               {isCritical &&
                 <AlertCircle color="red" size={25} />
               }
-              {offlineSaving ?
-                <WifiOff size={20} color="red" />
-                :
-                <NoteOptionsButton
-                  {...props}
-                  setHide={setHide}
-                  Hide={Hide}
-                />
-              }
+              <NoteOptionsButton
+                {...props}
+                setHide={setHide}
+                Hide={Hide}
+              />
             </div>
           </CardTitle>
         </CardHeader>

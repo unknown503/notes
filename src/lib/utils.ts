@@ -89,51 +89,6 @@ export function LoadAndDeleteLocalStorage(key: string) {
   return data || ""
 }
 
-export const prefix = "cached-note"
-
-export function GetCachedNotes() {
-  const items = []
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i)
-    if (key && key.startsWith(prefix)) {
-      items.push(JSON.parse(localStorage.getItem(key) ?? ""))
-    }
-  }
-  return items
-}
-
-const RemoveCachedNotes = () => {
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i)
-    if (key && key.startsWith(prefix)) {
-      localStorage.removeItem(key)
-    }
-  }
-}
-
-export function ReplaceCachedNotes(notes: NoteDoc[]) {
-  RemoveCachedNotes()
-  notes.map(note => {
-    SaveOnLocalStorage(`${prefix}-${note.id}`, JSON.stringify(note))
-  })
-}
-
-export const GetCachedNotesCount = () => {
-  let count = 0
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i)
-    if (key && key.startsWith(prefix)) count++
-  }
-  return count
-}
-
-export const SortOfflineNotes = (notes: NoteDoc[]) => (
-  notes.sort((a, b) => {
-    if (b.isCritical !== a.isCritical) return b.isCritical ? 1 : -1
-    return b.timestamp - a.timestamp
-  })
-)
-
 export const ViewPDF = async (file: string) => {
   const res = await fetch(file)
   const blob = await res.blob()

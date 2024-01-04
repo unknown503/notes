@@ -92,7 +92,7 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
                   <FormControl>
                     <Textarea
                       placeholder="Your note..."
-                      className="min-h-16 h-60 max-h-96"
+                      className="min-h-16 h-52 max-h-96"
                       value={field.value}
                       onChange={field.onChange}
                       onBlur={(e) => e.target.selectionStart = content.length}

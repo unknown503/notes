@@ -3,7 +3,6 @@ import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { auth, db, storage } from "./firebase"
-import { SaveOnLocalStorage, prefix } from './utils'
 
 const NOTES = "notes"
 const NOTEPAD = "notepad"
@@ -117,38 +116,21 @@ export const GetFileName = (url: string) => {
   return fileRef.name
 }
 
-export const AddNote = async (content: string, files: File[], isLoggedIn: boolean, offline: boolean) => {
-  if (offline) {
-    const id = Date.now().toString()
+export const AddNote = async (content: string, files: File[], isLoggedIn: boolean) => {
+  const fileUrls = await Promise.all(
+    files.map(async file => {
+      const url = await UploadFile(file, isLoggedIn)
+      return url
+    })
+  )
 
-    const data: NoteDoc = {
-      id,
-      content,
-      files: [],
-      timestamp: Date.now(),
-      isPublic: !isLoggedIn,
-      isCritical: false,
-      offlineSaving: true
-    }
-
-    SaveOnLocalStorage(`${prefix}-${id}`, JSON.stringify(data))
-    return data
-  } else {
-    const fileUrls = await Promise.all(
-      files.map(async file => {
-        const url = await UploadFile(file, isLoggedIn)
-        return url
-      })
-    )
-
-    await addDoc(notesCollection, {
-      content,
-      files: fileUrls,
-      timestamp: Date.now(),
-      isPublic: !isLoggedIn,
-      isCritical: false
-    } as NoteDoc)
-  }
+  await addDoc(notesCollection, {
+    content,
+    files: fileUrls,
+    timestamp: Date.now(),
+    isPublic: !isLoggedIn,
+    isCritical: false
+  } as NoteDoc)
 }
 
 export const UpdateNote = async (noteId: string, updatedNote: UpdateNoteFields) => {

@@ -7,7 +7,6 @@ export type NoteDoc = {
   isPublic: boolean
   timestamp: number
   isCritical: boolean
-  offlineSaving?: boolean
 }
 
 export type UpdateNoteFields = {

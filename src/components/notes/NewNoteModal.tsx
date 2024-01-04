@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { AddNote } from "@/lib/db"
-import { SortOfflineNotes, customToast } from "@/lib/utils"
+import { customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, Plus, WifiOff } from "lucide-react"
 import { useState } from "react"
@@ -19,7 +19,6 @@ import { Form, FormControl, FormField, FormItem } from "../ui/form"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
-import { useNotesContext } from "./NoteTabs"
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -32,7 +31,6 @@ export default function NewNoteModal() {
   const { isLoggedIn } = useUser()
   const { toast } = useToast()
   const isOffline = useIsOffline()
-  const { setNotes } = useNotesContext()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -48,13 +46,7 @@ export default function NewNoteModal() {
     }
 
     setSaving(true)
-    const offlineData = await AddNote(content, Files, isLoggedIn, isOffline)
-    if (offlineData && isOffline) {
-      setNotes((old) => SortOfflineNotes([
-        offlineData,
-        ...(old ?? []),
-      ]))
-    }
+    await AddNote(content, Files, isLoggedIn)
 
     setOpen(false)
     toast(customToast("Note was saved."))
