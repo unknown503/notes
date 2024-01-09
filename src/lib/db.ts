@@ -4,6 +4,7 @@ import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query,
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { auth, db, storage } from "./firebase"
 
+const maxHistoryRecords = 10
 const NOTES = "notes"
 const NOTEPAD = "notepad"
 
@@ -46,7 +47,6 @@ export const RecoverContentHistory = async (docs: NotepadDoc[], toDelete: number
 }
 
 export const UpdateNotepad = async (content: string, updateHistory = true) => {
-  const maxHistoryRecords = 5
   const currentContent = await GetNotepadContent()
 
   await updateDoc(notepadDoc, {

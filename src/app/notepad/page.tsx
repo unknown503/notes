@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const TextareaNotepad = dynamic(() => import('@/components/notepad/TextareaNotepad'))
 const History = dynamic(() => import('@/components/notepad/History'))
-const DELAY = 10000
+const DELAY = 25000
 
 export default async function Home() {
 
