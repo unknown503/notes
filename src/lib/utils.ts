@@ -95,5 +95,6 @@ export const ViewPDF = async (file: string) => {
   const pdf = new Blob([blob], { type: "application/pdf" });
   const url = URL.createObjectURL(pdf);
   const openedWindow = window.open();
+  console.log({ openedWindow })
   if (openedWindow) openedWindow.location.href = url;
 }

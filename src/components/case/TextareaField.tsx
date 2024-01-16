@@ -2,7 +2,7 @@
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { LineCount, LoadAndDeleteLocalStorage, WordCount } from '@/lib/utils'
-import { ChildrenReceptor } from '@/types/notes'
+import { ChildrenReceptor } from '@/types/common'
 import { Children, Dispatch, SetStateAction, createContext, isValidElement, useContext, useEffect, useMemo, useState } from 'react'
 
 export default function TextareaField({ children }: ChildrenReceptor) {

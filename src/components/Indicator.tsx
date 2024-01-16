@@ -1,9 +1,8 @@
-import { ReactNode } from "react"
+import { ChildrenReceptor } from "@/types/common"
 
 type IndicatorProps = {
-  children: ReactNode
   text: string | number
-}
+} & ChildrenReceptor
 
 const Indicator = ({ children, text }: IndicatorProps) => (
   <div className="relative">

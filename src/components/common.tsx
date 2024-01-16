@@ -1,32 +1,21 @@
 "use client"
 import { auth } from "@/lib/firebase"
 import { customToast } from "@/lib/utils"
+import { AuthWrapperProps, ChildrenReceptor, CopyButtonProps, UserType } from "@/types/common"
 import { Slot } from "@radix-ui/react-slot"
-import { User, onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { ButtonHTMLAttributes, ReactNode, createContext, useContext, useEffect, useState } from "react"
-import { Button, ButtonProps } from "./ui/button"
+import { createContext, useContext, useEffect, useState } from "react"
+import { Button } from "./ui/button"
 import { useToast } from "./ui/use-toast"
-
-type ButtonType = {
-  kind: "button"
-} & ButtonProps
-
-type GenericType = {
-  kind: "generic"
-} & ButtonHTMLAttributes<HTMLButtonElement>
-
-type CopyButtonProps = (GenericType | ButtonType) & {
-  textToCopy: string
-}
 
 export function CopyButton({ textToCopy, children, kind, onClick, ...props }: CopyButtonProps) {
   const { toast } = useToast()
 
   const CopyToClipboard = () => {
     if (textToCopy === "") return
-    navigator.clipboard.writeText(textToCopy)
+    navigator.clipboard.writeText(textToCopy ?? "")
     toast(customToast("Content copied."))
   }
 
@@ -45,18 +34,15 @@ export function CopyButton({ textToCopy, children, kind, onClick, ...props }: Co
   )
 }
 
-type UserType = {
-  user: User | null | false,
-  isLoggedIn: boolean
-}
-
 const initial: UserType = {
   user: false,
   isLoggedIn: false
 }
 
 const UserContext = createContext<UserType>(initial)
-export function UserProvider({ children }: { children: ReactNode }) {
+export const useUser = () => useContext(UserContext)
+
+export function UserProvider({ children }: ChildrenReceptor) {
   const [User, setUser] = useState<UserType>(initial)
 
   useEffect(() => {
@@ -74,13 +60,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   )
 }
 
-export function useUser() {
-  return useContext(UserContext);
-}
-
-type AuthWrapperProps = { children: ReactNode, onlyAuth: boolean }
-
-export function AuthCheckWrapper({ children, onlyAuth }: AuthWrapperProps) {
+export function AuthCheckWrapper({ children, onlyAuth }: AuthWrapperProps & ChildrenReceptor) {
   const { user, isLoggedIn } = useUser()
   const router = useRouter()
 
@@ -115,7 +95,7 @@ export function AuthCheckWrapper({ children, onlyAuth }: AuthWrapperProps) {
   )
 }
 
-export function AuthExpecter({ children }: Omit<AuthWrapperProps, "onlyAuth">) {
+export function AuthExpecter({ children }: ChildrenReceptor) {
   const { user, isLoggedIn } = useUser()
 
   const shouldShowSpinner = user === false && !isLoggedIn
@@ -135,7 +115,7 @@ export function AuthExpecter({ children }: Omit<AuthWrapperProps, "onlyAuth">) {
   )
 }
 
-export function AuthUserDefaultRedirect({ children }: Omit<AuthWrapperProps, "onlyAuth">) {
+export function AuthUserDefaultRedirect({ children }: ChildrenReceptor) {
   const { isLoggedIn } = useUser()
   const router = useRouter()
 
@@ -162,4 +142,17 @@ export const useIsOffline = () => {
   }, [])
 
   return Offline
+}
+
+export const useIsMobile = (limit = 768) => {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIsMobile = () => setIsMobile(window.innerWidth <= limit)
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
+    return () => window.removeEventListener('resize', checkIsMobile)
+  }, [])
+
+  return isMobile
 }

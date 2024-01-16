@@ -1,6 +1,6 @@
 "use client"
 import { UpdateNotepad } from "@/lib/db"
-import { ChildrenReceptor } from "@/types/notes"
+import { ChildrenReceptor } from "@/types/common"
 import { Dispatch, SetStateAction, createContext, useCallback, useContext, useMemo, useState } from "react"
 
 type ContextType = {
@@ -46,8 +46,6 @@ function NotepadContext({ children }: ChildrenReceptor) {
   )
 }
 
-export function useNotepadContext() {
-  return useContext(Context);
-}
+export const useNotepadContext = () => useContext(Context)
 
 export default NotepadContext

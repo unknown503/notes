@@ -15,7 +15,3 @@ export type UpdateNoteFields = {
   isPublic?: boolean
   isCritical?: boolean
 }
-
-export type ChildrenReceptor = {
-  children: ReactNode
-}
