@@ -1,5 +1,6 @@
 "use client"
 import { UpdateNotepad } from "@/lib/db"
+import { RemoveLastDot } from "@/lib/utils"
 import { ChildrenReceptor } from "@/types/common"
 import { Dispatch, SetStateAction, createContext, useCallback, useContext, useMemo, useState } from "react"
 
@@ -27,7 +28,7 @@ function NotepadContext({ children }: ChildrenReceptor) {
 
   const delayedCallback = useCallback(async (shouldBeSaving = true) => {
     if (!Notepad || (shouldBeSaving && !Saving)) return
-    await UpdateNotepad(Notepad.content)
+    await UpdateNotepad(RemoveLastDot(Notepad.content))
     setSaving(false)
   }, [Notepad, Saving])
 

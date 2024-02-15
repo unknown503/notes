@@ -94,7 +94,11 @@ export const ViewPDF = async (file: string) => {
   const blob = await res.blob()
   const pdf = new Blob([blob], { type: "application/pdf" });
   const url = URL.createObjectURL(pdf);
-  const openedWindow = window.open();
-  console.log({ openedWindow })
-  if (openedWindow) openedWindow.location.href = url;
+  const openedWindow = window.open(url);
+  if (openedWindow)
+    openedWindow.location.href = url;
+}
+
+export const RemoveLastDot = (str: string) => {
+  return str.slice(-1) === '.' ? str.slice(0, -1) : str
 }

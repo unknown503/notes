@@ -1,8 +1,9 @@
 "use client"
 import { DeleteHistoryRecord, RecoverContentHistory, SubscribeToNotepadHistory } from "@/lib/db"
-import { CornerDownLeft, Trash } from "lucide-react"
+import { getDate } from "@/lib/utils"
+import { Copy, CornerDownLeft, Trash } from "lucide-react"
 import { useEffect, useState } from "react"
-import ReactTimeago from "react-timeago"
+import { CopyButton } from "../common"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
@@ -49,14 +50,17 @@ function History() {
             )}
           </div>
           : Records.length !== 0 ?
-            <Accordion type="single" defaultValue={Records.length !== 0 ? Records[0].timestamp.toString() : undefined}>
+            <Accordion
+              type="single"
+              defaultValue={Records.length !== 0 ? Records[0].timestamp.toString() : undefined}
+            >
               {Records.map(record => (
                 <AccordionItem
                   value={record.timestamp.toString()}
                   key={record.timestamp}
                 >
                   <AccordionTrigger>
-                    <ReactTimeago date={record.timestamp} minPeriod={1} />
+                    {getDate(record.timestamp)}
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="flex gap-4 justify-between">
@@ -64,6 +68,18 @@ function History() {
                         {record.content}
                       </p>
                       <div className="flex gap-2 flex-col md:flex-row">
+                        <CopyButton
+                          kind='generic'
+                          textToCopy={record.content}
+                        >
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            title="Copy content"
+                          >
+                            <Copy size={16} />
+                          </Button>
+                        </CopyButton>
                         <Button
                           variant="outline"
                           size="icon"

@@ -1,12 +1,12 @@
 "use client"
 import { Save } from "lucide-react"
+import { useIsMobile } from "../common"
 import { Button } from "../ui/button"
 import { useNotepadContext } from "./NotepadContext"
-import { useIsMobile } from "../common"
 
 function ManualSave() {
-  const { delayedCallback } = useNotepadContext()
   const isMobile = useIsMobile()
+  const { delayedCallback } = useNotepadContext()
 
   return (
     <Button

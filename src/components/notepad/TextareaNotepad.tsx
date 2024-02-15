@@ -17,9 +17,7 @@ export default function TextareaField({ delay }: DelayType) {
 
   useEffect(() => {
     if (!Notepad || !Saving) return
-    let timeoutId: NodeJS.Timeout
-
-    timeoutId = setTimeout(delayedCallback, delay)
+    const timeoutId = setTimeout(delayedCallback, delay)
     return () => clearTimeout(timeoutId)
   }, [Notepad, Saving])
 
@@ -51,12 +49,8 @@ export default function TextareaField({ delay }: DelayType) {
         </span>
         <span>
           {Saving ?
-            <>
-              Saving in <TimeAgo date={Saving} minPeriod={1} />
-            </>
-            : Notepad ?
-              <TimeAgo date={Notepad.timestamp} minPeriod={1} />
-              : "Loading..."
+            <>Saving in <TimeAgo date={Saving} minPeriod={1} /></> :
+            Notepad ? <TimeAgo date={Notepad.timestamp} minPeriod={1} /> : "Loading..."
           }
         </span>
       </div>

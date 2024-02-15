@@ -19,9 +19,7 @@ export default function Home() {
     <NotepadContext>
       <Heading
         title="Notepad"
-        rightTitleSide={
-          <CombinedButtons />
-        }
+        rightTitleSide={<CombinedButtons />}
       />
       <TextareaNotepad delay={DELAY} />
       <History />

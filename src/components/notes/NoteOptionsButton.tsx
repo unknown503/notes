@@ -83,7 +83,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
           <Button
             variant="ghost"
             size="sm"
-            className="h-[30px]"
+            className={`h-[30px] ${!isLoggedIn && content === "" ? "hidden" : ""}`}
             aria-label="Note Options"
           >
             <MoreHorizontal />
