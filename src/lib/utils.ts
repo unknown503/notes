@@ -13,6 +13,16 @@ export const customToast = (description: string, isError = false, customTitle?: 
   variant: isError ? "destructive" : "default"
 })
 
+const convertToLocalTime = (date: Date, additional?: Object) => {
+  return date.toLocaleString('es-CO', {
+    timeZone: 'America/Bogota',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    ...additional
+  })
+}
+
 export function getDate(unix: number, showTime = false) {
   const date = new Date(unix)
 
@@ -21,15 +31,22 @@ export function getDate(unix: number, showTime = false) {
     minute: '2-digit',
   } : {}
 
-  const fullDate = date.toLocaleString('es-CO', {
-    timeZone: 'America/Bogota',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    ...time
-  })
-
+  const fullDate = convertToLocalTime(date, time)
   return fullDate.replace(",", " ·")
+}
+
+export function dateToReadableRecent(unix: number) {
+  const date = new Date(unix)
+  const today = new Date()
+
+  if (date.toLocaleDateString() === today.toLocaleDateString())
+    return 'Today'
+
+  const yesterday = new Date(today)
+  yesterday.setDate(today.getDate() - 1)
+  if (date.toLocaleDateString() === yesterday.toLocaleDateString())
+    return 'Yesterday'
+  return getDate(unix)
 }
 
 export function convertToRichtext(content: string | null) {
@@ -102,3 +119,48 @@ export const ViewPDF = async (file: string) => {
 export const RemoveLastDot = (str: string) => {
   return str.slice(-1) === '.' ? str.slice(0, -1) : str
 }
+
+/* export const getCurrentWeekRange = (meinDate: number | string) => {
+  const date = new Date(meinDate)
+  const currentDay = date.getDay()
+
+  const daysUntilMonday = (currentDay + 6) % 7
+
+  const firstDayOfWeek = new Date(date)
+  firstDayOfWeek.setDate(date.getDate() - daysUntilMonday)
+
+  const lastDayOfWeek = new Date(firstDayOfWeek)
+  lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6)
+
+  return {
+    start: convertToLocalTime(firstDayOfWeek),
+    end: convertToLocalTime(lastDayOfWeek),
+    joined: convertToLocalTime(firstDayOfWeek) + " - " + convertToLocalTime(lastDayOfWeek)
+  }
+} */
+
+/* export const groupRecordsByWeek = (records: NotepadDoc[]) => {
+  const weeklyRecords: WeeklyRecordsType[] = []
+
+  records.forEach(doc => {
+    const { start, end } = getCurrentWeekRange(doc.timestamp)
+    const existingWeeklyRecord = weeklyRecords.find(weeklyRecord =>
+      weeklyRecord.range.from === start && weeklyRecord.range.to === end
+    )
+
+    if (existingWeeklyRecord) {
+      existingWeeklyRecord.records.push(doc)
+    } else {
+      weeklyRecords.unshift({
+        range: {
+          from: start,
+          to: end
+        },
+        records: [doc]
+      })
+    }
+  })
+
+  return weeklyRecords
+}
+ */

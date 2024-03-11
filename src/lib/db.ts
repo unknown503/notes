@@ -61,12 +61,22 @@ export const UpdateNotepad = async (content: string, updateHistory = true) => {
 
   if (historyExists) {
     const currentHistory = notepadHistory.data() as NotepadHistoryDoc
-    const records = currentHistory.records
+    let records = currentHistory.records
 
-    if (records.length >= maxHistoryRecords)
-      records.shift()
+    const newestRecord = records.reduce((oldest, current) =>
+      current.timestamp > oldest.timestamp ? current : oldest, records[0])
+
+    if (newestRecord && currentContent.content.includes(newestRecord.content)) {
+      records = records.filter(obj => obj !== newestRecord)
+    } else {
+      if (records.length >= maxHistoryRecords) {
+        const oldestRecord = records.reduce((oldest, current) =>
+          current.timestamp < oldest.timestamp ? current : oldest)
+        records = records.filter(obj => obj !== oldestRecord)
+      }
+    }
+
     records.push(currentContent)
-
     await updateDoc(historyDoc, { records } as NotepadHistoryDoc)
   } else {
     await setDoc(historyDoc, {

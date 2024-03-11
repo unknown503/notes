@@ -9,7 +9,7 @@ import { useNotepadContext } from './NotepadContext'
 export type DelayType = { delay: number }
 
 export default function TextareaField({ delay }: DelayType) {
-  const { Notepad, Saving, setNotepad, setSaving, delayedCallback } = useNotepadContext()
+  const { Notepad, Saving, setNotepad, setSaving, delayedCallback, AutoSave } = useNotepadContext()
 
   useEffect(() => {
     GetNotepadContent().then(setNotepad)
@@ -17,9 +17,9 @@ export default function TextareaField({ delay }: DelayType) {
 
   useEffect(() => {
     if (!Notepad || !Saving) return
-    const timeoutId = setTimeout(delayedCallback, delay)
+    const timeoutId = setTimeout(() => AutoSave && delayedCallback(), delay)
     return () => clearTimeout(timeoutId)
-  }, [Notepad, Saving])
+  }, [Notepad, Saving, AutoSave])
 
   const TextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const time = Date.now() + delay
@@ -27,7 +27,8 @@ export default function TextareaField({ delay }: DelayType) {
       content: e.currentTarget.value,
       timestamp: time
     })
-    setSaving(time)
+    if (AutoSave)
+      setSaving(time)
   }
 
   return (
@@ -48,9 +49,9 @@ export default function TextareaField({ delay }: DelayType) {
           Character Count: {Notepad?.content.length}
         </span>
         <span>
-          {Saving ?
-            <>Saving in <TimeAgo date={Saving} minPeriod={1} /></> :
-            Notepad ? <TimeAgo date={Notepad.timestamp} minPeriod={1} /> : "Loading..."
+          {!AutoSave ? "Auto-save disabled" :
+            Saving ? <>Saving in <TimeAgo date={Saving} minPeriod={1} /></> :
+              Notepad ? <TimeAgo date={Notepad.timestamp} minPeriod={1} /> : "Loading..."
           }
         </span>
       </div>

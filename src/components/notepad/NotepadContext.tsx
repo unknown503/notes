@@ -9,6 +9,8 @@ type ContextType = {
   setNotepad: Dispatch<SetStateAction<NotepadDoc | null>>,
   Saving: number | false,
   setSaving: Dispatch<SetStateAction<number | false>>,
+  AutoSave: boolean,
+  setAutoSave: Dispatch<SetStateAction<boolean>>,
   delayedCallback: (shouldBeSaving?: boolean) => Promise<void>
 }
 
@@ -17,6 +19,8 @@ const initial: ContextType = {
   setNotepad: () => { },
   Saving: false,
   setSaving: () => { },
+  AutoSave: false,
+  setAutoSave: () => { },
   delayedCallback: async () => { }
 }
 
@@ -25,9 +29,10 @@ const Context = createContext<ContextType>(initial)
 function NotepadContext({ children }: ChildrenReceptor) {
   const [Notepad, setNotepad] = useState<NotepadDoc | null>(null)
   const [Saving, setSaving] = useState<number | false>(false)
+  const [AutoSave, setAutoSave] = useState(true)
 
-  const delayedCallback = useCallback(async (shouldBeSaving = true) => {
-    if (!Notepad || (shouldBeSaving && !Saving)) return
+  const delayedCallback = useCallback(async () => {
+    if (!Notepad || !Saving) return
     await UpdateNotepad(RemoveLastDot(Notepad.content))
     setSaving(false)
   }, [Notepad, Saving])
@@ -38,7 +43,9 @@ function NotepadContext({ children }: ChildrenReceptor) {
     Saving,
     setSaving,
     delayedCallback,
-  }), [Notepad, Saving, delayedCallback]);
+    AutoSave,
+    setAutoSave
+  }), [Notepad, Saving, delayedCallback, AutoSave]);
 
   return (
     <Context.Provider value={contextValue}>

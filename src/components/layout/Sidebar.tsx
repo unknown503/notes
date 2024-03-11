@@ -11,7 +11,7 @@ import { Button } from "../ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { Skeleton } from "../ui/skeleton"
 
-export const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => (
+const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn("pb-6 lg:pb-10 w-full", className)}>
     <div className="hidden lg:block space-y-4 py-4 h-full">
       <div className="px-3 py-2 h-full">

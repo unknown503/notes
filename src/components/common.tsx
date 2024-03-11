@@ -144,7 +144,7 @@ export const useIsOffline = () => {
   return Offline
 }
 
-export const useIsMobile = (limit = 768) => {
+/* export const useIsMobile = (limit = 768) => {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -155,4 +155,4 @@ export const useIsMobile = (limit = 768) => {
   }, [])
 
   return isMobile
-}
+} */

@@ -17,7 +17,7 @@ const CaseTab = () => (
 )
 
 type CustomButtonProps = ButtonProps & { Icon: LucideIcon, isVertical?: boolean }
-export const CustomButton = ({ Icon, children, isVertical, ...props }: CustomButtonProps) => (
+const CustomButton = ({ Icon, children, isVertical, ...props }: CustomButtonProps) => (
   <Button
     className={`text-white flex ${isVertical ? "lg:w-full gap-0.5" : "gap-2"}`}
     variant="secondary"

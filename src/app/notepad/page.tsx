@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading'
-import CombinedButtons from '@/components/notepad/CombinedButtons'
+import OptionsButton from '@/components/notepad/OptionsButton'
 import NotepadContext from '@/components/notepad/NotepadContext'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const TextareaNotepad = dynamic(() => import('@/components/notepad/TextareaNotepad'))
 const History = dynamic(() => import('@/components/notepad/History'))
-const DELAY = 25000
+const DELAY = 25
 
 export default function Home() {
 
@@ -19,9 +19,9 @@ export default function Home() {
     <NotepadContext>
       <Heading
         title="Notepad"
-        rightTitleSide={<CombinedButtons />}
+        rightTitleSide={<OptionsButton />}
       />
-      <TextareaNotepad delay={DELAY} />
+      <TextareaNotepad delay={DELAY * 1000} />
       <History />
     </NotepadContext>
   )

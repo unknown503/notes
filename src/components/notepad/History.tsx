@@ -1,6 +1,6 @@
 "use client"
 import { DeleteHistoryRecord, RecoverContentHistory, SubscribeToNotepadHistory } from "@/lib/db"
-import { getDate } from "@/lib/utils"
+import { dateToReadableRecent, getDate } from "@/lib/utils"
 import { Copy, CornerDownLeft, Trash } from "lucide-react"
 import { useEffect, useState } from "react"
 import { CopyButton } from "../common"
@@ -51,55 +51,57 @@ function History() {
           </div>
           : Records.length !== 0 ?
             <Accordion
+              collapsible
               type="single"
               defaultValue={Records.length !== 0 ? Records[0].timestamp.toString() : undefined}
             >
               {Records.map(record => (
-                <AccordionItem
-                  value={record.timestamp.toString()}
-                  key={record.timestamp}
-                >
-                  <AccordionTrigger>
-                    {getDate(record.timestamp)}
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="flex gap-4 justify-between">
-                      <p className="word-break">
-                        {record.content}
-                      </p>
-                      <div className="flex gap-2 flex-col md:flex-row">
-                        <CopyButton
-                          kind='generic'
-                          textToCopy={record.content}
-                        >
+                <div key={record.timestamp}>
+                  <AccordionItem
+                    value={record.timestamp.toString()}
+                  >
+                    <AccordionTrigger title={getDate(record.timestamp, true)}>
+                      {dateToReadableRecent(record.timestamp)}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="flex gap-4 justify-between">
+                        <p className="word-break">
+                          {record.content}
+                        </p>
+                        <div className="flex gap-2 flex-col md:flex-row">
+                          <CopyButton
+                            kind='generic'
+                            textToCopy={record.content}
+                          >
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              title="Copy content"
+                            >
+                              <Copy size={16} />
+                            </Button>
+                          </CopyButton>
                           <Button
                             variant="outline"
                             size="icon"
-                            title="Copy content"
+                            title="Recover content"
+                            onClick={() => RecoverContent(record)}
                           >
-                            <Copy size={16} />
+                            <CornerDownLeft size={16} />
                           </Button>
-                        </CopyButton>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          title="Recover content"
-                          onClick={() => RecoverContent(record)}
-                        >
-                          <CornerDownLeft size={16} />
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="icon"
-                          title="Delete content"
-                          onClick={() => DeleteContent(record.timestamp)}
-                        >
-                          <Trash size={16} />
-                        </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            title="Delete content"
+                            onClick={() => DeleteContent(record.timestamp)}
+                          >
+                            <Trash size={16} />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
+                    </AccordionContent>
+                  </AccordionItem>
+                </div>
               ))}
             </Accordion>
             : <p>No records available...</p>

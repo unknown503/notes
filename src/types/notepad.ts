@@ -6,3 +6,11 @@ type NotepadDoc = {
 type NotepadHistoryDoc = {
   records: NotepadDoc[]
 }
+
+type WeeklyRecordsType = {
+  range: {
+    from: string,
+    to: string,
+  },
+  records: NotepadDoc[]
+}
