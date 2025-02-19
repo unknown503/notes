@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DeleteNote, UpdateNote } from "@/lib/db"
+import { DeleteNote, DownloadFile, GetFileName, UpdateNote } from "@/lib/db"
 import { SaveOnLocalStorage, customToast } from "@/lib/utils"
 import { NoteDoc } from "@/types/notes"
 import { MoreHorizontal } from "lucide-react"
@@ -33,6 +33,14 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
   const { toast, dismiss } = useToast()
   const { isLoggedIn } = useUser()
   const isOffline = useIsOffline()
+
+  const DownloadAll = () => {
+    files.map(file => {
+      const name = GetFileName(file)
+      DownloadFile(file, name)
+    })
+    toast(customToast("All files downloaded."))
+  }
 
   const RemoveNote = () => {
     setHide(true)
@@ -75,6 +83,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
     const res = SaveOnLocalStorage("note", content)
     if (res !== true) toast(customToast(res, true))
   }
+  console.log(files)
 
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
@@ -122,6 +131,14 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
                 Set to {isCritical ? "not " : ""}critical
               </DropdownMenuCheckboxItem>
             </>
+          }
+          {files.length !== 0 &&
+            <DropdownMenuCheckboxItem
+              className="cursor-pointer"
+              onClick={DownloadAll}
+            >
+              Download All
+            </DropdownMenuCheckboxItem>
           }
           {content !== "" &&
             <DropdownMenuCheckboxItem className="cursor-pointer">
