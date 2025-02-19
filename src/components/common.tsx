@@ -15,7 +15,7 @@ export function CopyButton({ textToCopy, children, kind, onClick, ...props }: Co
 
   const CopyToClipboard = () => {
     if (textToCopy === "") return
-    navigator.clipboard.writeText(textToCopy ?? "")
+    navigator.clipboard.writeText(textToCopy?.trim() ?? "")
     toast(customToast("Content copied."))
   }
 
@@ -143,6 +143,20 @@ export const useIsOffline = () => {
 
   return Offline
 }
+
+export const usePreventExit = (shouldWarn: boolean) => {
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (shouldWarn) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [shouldWarn]);
+};
 
 /* export const useIsMobile = (limit = 768) => {
   const [isMobile, setIsMobile] = useState(false)

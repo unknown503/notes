@@ -33,7 +33,7 @@ function NotepadContext({ children }: ChildrenReceptor) {
 
   const delayedCallback = useCallback(async () => {
     if (!Notepad || !Saving) return
-    await UpdateNotepad(RemoveLastDot(Notepad.content))
+    await UpdateNotepad(RemoveLastDot(Notepad.content).trim())
     setSaving(false)
   }, [Notepad, Saving])
 

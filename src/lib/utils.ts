@@ -46,7 +46,14 @@ export function dateToReadableRecent(unix: number) {
   yesterday.setDate(today.getDate() - 1)
   if (date.toLocaleDateString() === yesterday.toLocaleDateString())
     return 'Yesterday'
-  return getDate(unix)
+
+  const formattedDate = date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    day: 'numeric', 
+    month: 'long',  
+  });
+
+  return formattedDate
 }
 
 export function convertToRichtext(content: string | null) {
@@ -118,6 +125,22 @@ export const ViewPDF = async (file: string) => {
 
 export const RemoveLastDot = (str: string) => {
   return str.slice(-1) === '.' ? str.slice(0, -1) : str
+}
+
+
+export const isWithinThisWeek = (timestamp: number) => {
+  const date = new Date(timestamp)
+
+  const now = new Date()
+  const startOfWeek = new Date(now)
+  startOfWeek.setHours(0, 0, 0, 0)
+  startOfWeek.setDate(now.getDate() - now.getDay())
+
+  const endOfWeek = new Date(startOfWeek)
+  endOfWeek.setDate(startOfWeek.getDate() + 6)
+  endOfWeek.setHours(23, 59, 59, 999)
+
+  return date >= startOfWeek && date <= endOfWeek
 }
 
 /* export const getCurrentWeekRange = (meinDate: number | string) => {

@@ -8,12 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Settings } from 'lucide-react'
+import { SaveOnLocalStorage } from "@/lib/utils"
+import { Copy, Settings } from 'lucide-react'
+import { useEffect } from "react"
 import { CopyButton } from '../common'
 import { Button } from '../ui/button'
 import { useNotepadContext } from './NotepadContext'
-import { useEffect, useState } from "react"
-import { SaveOnLocalStorage } from "@/lib/utils"
 
 const MSKey = "manual-save"
 
@@ -30,23 +30,39 @@ export default function OptionsButton() {
     const state = !AutoSave
     SaveOnLocalStorage(MSKey, String(state))
     setAutoSave(state)
-    
+
     if (!state) return
-    setSaving(Date.now() + 1000)
+    console.log("!state")
+
+    Notepad && setSaving(Notepad?.timestamp)
     delayedCallback()
   }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="secondary"
-          className="flex gap-2"
+      <div className="flex gap-4">
+        <CopyButton
+          kind='generic'
+          textToCopy={Notepad?.content}
         >
-          <Settings size={20} />
-          Options
-        </Button>
-      </DropdownMenuTrigger>
+          <Button
+            variant="outline"
+            size="icon"
+            title="Copy content"
+          >
+            <Copy size={16} />
+          </Button>
+        </CopyButton>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="secondary"
+            className="flex gap-2"
+          >
+            <Settings size={20} />
+            Options
+          </Button>
+        </DropdownMenuTrigger>
+      </div>
       <DropdownMenuContent>
         <DropdownMenuLabel>Options</DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -55,14 +71,6 @@ export default function OptionsButton() {
         >
           Save manually
         </DropdownMenuItem>
-        <CopyButton
-          textToCopy={Notepad?.content}
-          kind="generic"
-        >
-          <DropdownMenuItem>
-            Copy note
-          </DropdownMenuItem>
-        </CopyButton>
         <DropdownMenuCheckboxItem
           checked={AutoSave}
           onCheckedChange={onManualSaveTrigger}
@@ -71,6 +79,5 @@ export default function OptionsButton() {
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
-
   )
 }

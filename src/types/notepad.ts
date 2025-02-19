@@ -1,3 +1,8 @@
+type NotepadWeeks = {
+  thisWeek: NotepadDoc[],
+  lastWeek: NotepadDoc[]
+}
+
 type NotepadDoc = {
   content: string
   timestamp: number
