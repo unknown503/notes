@@ -148,25 +148,26 @@ export const usePreventExit = (shouldWarn: boolean) => {
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (shouldWarn) {
-        event.preventDefault();
-        event.returnValue = "";
+        event.preventDefault()
+        event.returnValue = ""
       }
-    };
+    }
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [shouldWarn]);
-};
+    window.addEventListener("beforeunload", handleBeforeUnload)
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload)
+  }, [shouldWarn])
+}
 
-/* export const useIsMobile = (limit = 768) => {
-  const [isMobile, setIsMobile] = useState(false)
-
+export const useCtrlS = (callback: () => void) => {
   useEffect(() => {
-    const checkIsMobile = () => setIsMobile(window.innerWidth <= limit)
-    checkIsMobile()
-    window.addEventListener('resize', checkIsMobile)
-    return () => window.removeEventListener('resize', checkIsMobile)
-  }, [])
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key.toLowerCase() === "s") {
+        event.preventDefault()
+        callback()
+      }
+    }
 
-  return isMobile
-} */
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [callback])
+}

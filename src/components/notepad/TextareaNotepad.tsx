@@ -5,13 +5,15 @@ import { GetNotepadContent } from '@/lib/db'
 import { ChangeEvent, useEffect } from 'react'
 import TimeAgo from 'react-timeago'
 import { useNotepadContext } from './NotepadContext'
-import { usePreventExit } from '../common'
+import { useCtrlS, usePreventExit } from '../common'
 
 export type DelayType = { delay: number }
 
 export default function TextareaField({ delay }: DelayType) {
   const { Notepad, Saving, setNotepad, setSaving, delayedCallback, AutoSave } = useNotepadContext()
-  usePreventExit(!AutoSave || Saving!==false &&AutoSave)
+
+  usePreventExit(!AutoSave || Saving !== false && AutoSave)
+  useCtrlS(() => delayedCallback())
 
   useEffect(() => {
     GetNotepadContent().then(setNotepad)
@@ -52,7 +54,7 @@ export default function TextareaField({ delay }: DelayType) {
         </span>
         <span className={!AutoSave ? "text-red-600 font-bold" : ""}>
           {!AutoSave ? "Auto-save disabled" :
-            Saving!==false ? <>Saving in <TimeAgo date={Saving} minPeriod={1} /></> :
+            Saving !== false ? <>Saving in <TimeAgo date={Saving} minPeriod={1} /></> :
               Notepad ? <TimeAgo date={Notepad.timestamp} minPeriod={1} /> : "Loading..."
           }
         </span>
