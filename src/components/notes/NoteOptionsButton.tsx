@@ -14,10 +14,12 @@ import { MoreHorizontal } from "lucide-react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useState } from "react"
-import { CopyButton, useIsOffline, useUser } from "../common"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
+import { useUser } from "@/context/UserContext"
+import { useIsOffline } from "@/hooks/hooks"
+import { CopyButton } from "../lib/lib"
 
 export type NoteOptionsButtonProps = NoteDoc & {
   Hide: boolean
@@ -83,11 +85,10 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
     const res = SaveOnLocalStorage("note", content)
     if (res !== true) toast(customToast(res, true))
   }
-  console.log(files)
 
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
-      <DropdownMenu modal={false}>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"

@@ -16,13 +16,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import Indicator from "../Indicator"
-import { CopyButton } from "../common"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { useToast } from "../ui/use-toast"
+import { CopyButton } from "../lib/lib"
 
 const NoteOptionsButton = dynamic(() => import('@/components/notes/NoteOptionsButton'))
 
