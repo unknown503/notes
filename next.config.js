@@ -8,6 +8,7 @@ const nextConfig = {
       },
     ],
   },
+  reactStrictMode: false,
 }
 
 const withPWA = require('next-pwa')({

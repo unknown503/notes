@@ -1,4 +1,4 @@
-import { NoteDoc, UpdateNoteFields } from '@/types/notes'
+import { CategoriesDoc, NoteDoc, UpdateNoteFields } from '@/types/notes'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
@@ -6,11 +6,15 @@ import { auth, db, storage } from "./firebase"
 
 const maxHistoryRecords = 10
 const NOTES = "notes"
+const CATEGORIES = "notes-categories"
 const NOTEPAD = "notepad"
 
 const notesCollection = collection(db, NOTES)
 const notepadDoc = doc(db, NOTEPAD, "content")
+const categoriesDoc = doc(db, CATEGORIES, "categories")
 const historyDoc = doc(db, NOTEPAD, "history")
+
+/** NOTEPAD */
 
 export const GetNotepadContent = async () => {
   const notepadContent = await getDoc(notepadDoc)
@@ -84,6 +88,8 @@ export const UpdateNotepad = async (content: string, updateHistory = true) => {
     } as NotepadHistoryDoc)
   }
 }
+
+/** NOTES */
 
 export const UploadFile = async (file: File, isLoggedIn: boolean) => {
   const array = file.name.split(".")
@@ -204,9 +210,36 @@ export const SubscribeToNotes = (callback: (docs: NoteDoc[]) => void, isPublic?:
   return unsubscribe
 }
 
+/** LOGIN */
+
 export const SignInUser = async (email: string, password: string) => {
   const credentials = await signInWithEmailAndPassword(auth, email, password)
   return credentials.user
 }
 
 export const SignOutUser = async () => await signOut(auth)
+
+/** CATEGORIES */
+
+export const GetCategories = async () => {
+  const categoriesContent = await getDoc(categoriesDoc)
+  const exists = categoriesContent.exists()
+
+  if (exists) {
+    return categoriesContent.data() as CategoriesDoc
+  } else {
+    const data: CategoriesDoc = {
+      categories: [{
+        id: "critical",
+        content: "critical",
+        icon: "TriangleAlert"
+      }]
+    }
+    await setDoc(categoriesDoc, data)
+    return data
+  }
+}
+
+export const UpdateCategories = async (categories: CategoriesDoc) => {
+  await updateDoc(categoriesDoc, categories)
+}

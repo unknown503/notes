@@ -10,15 +10,17 @@ import {
 import { AddNote } from "@/lib/db"
 import { customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2, Plus, WifiOff } from "lucide-react"
+import { Cog, Loader2, Plus, WifiOff } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { useIsOffline, useUser } from "../common"
 import { Form, FormControl, FormField, FormItem } from "../ui/form"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
+import CategorySettings from "./categories/CategorySettings"
+import { useUser } from "@/context/UserContext"
+import { useIsOffline } from "@/hooks/hooks"
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -57,12 +59,23 @@ export default function NewNoteModal() {
 
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="default" aria-label="Create note">
-          <Plus size={20} className="mr-2" />
-          Create note
-        </Button>
-      </DialogTrigger>
+      <div className="flex gap-3">
+        <CategorySettings>
+          <Button
+            variant="outline"
+            size="icon"
+            title="Copy content"
+          >
+            <Cog size={20} />
+          </Button>
+        </CategorySettings>
+        <DialogTrigger asChild>
+          <Button variant="default" aria-label="Create note">
+            <Plus size={20} className="mr-2" />
+            Create note
+          </Button>
+        </DialogTrigger>
+      </div>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex gap-2">

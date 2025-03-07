@@ -4,8 +4,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { GetNotepadContent } from '@/lib/db'
 import { ChangeEvent, useEffect } from 'react'
 import TimeAgo from 'react-timeago'
-import { useNotepadContext } from './NotepadContext'
-import { useCtrlS, usePreventExit } from '../common'
+import { useNotepadContext } from '../../context/NotepadContext'
+import { usePreventExit, useCtrlS } from '@/hooks/hooks'
 
 export type DelayType = { delay: number }
 
@@ -54,7 +54,7 @@ export default function TextareaField({ delay }: DelayType) {
         </span>
         <span className={!AutoSave ? "text-red-600 font-bold" : ""}>
           {!AutoSave ? "Auto-save disabled" :
-            Saving !== false ? <>Saving in <TimeAgo date={Saving} minPeriod={1} /></> :
+            Saving !== false ? <span className='font-semibold'>Saving in <TimeAgo date={Saving} minPeriod={1} /></span> :
               Notepad ? <TimeAgo date={Notepad.timestamp} minPeriod={1} /> : "Loading..."
           }
         </span>

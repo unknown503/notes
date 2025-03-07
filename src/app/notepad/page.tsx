@@ -1,6 +1,6 @@
 import Heading from '@/components/Heading'
 import OptionsButton from '@/components/notepad/OptionsButton'
-import NotepadContext from '@/components/notepad/NotepadContext'
+import NotepadContext from '@/context/NotepadContext'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
 import dynamic from 'next/dynamic'

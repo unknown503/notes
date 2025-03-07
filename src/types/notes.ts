@@ -1,8 +1,8 @@
-import { ReactNode } from "react"
+import { Dispatch, SetStateAction } from "react"
 
 export type NoteDoc = {
   id: string
-  content: string,
+  content: string
   files: string[]
   isPublic: boolean
   timestamp: number
@@ -10,8 +10,22 @@ export type NoteDoc = {
 }
 
 export type UpdateNoteFields = {
-  content?: string,
+  content?: string
   files?: string[]
   isPublic?: boolean
   isCritical?: boolean
 }
+
+export type CategoriesDoc = {
+  categories: Category[]
+}
+
+export type Category = {
+  id: string
+  content: string
+  icon: string
+}
+
+export type CategoryComponentProps = {
+  setCategories: Dispatch<SetStateAction<Category[]>>
+} & CategoriesDoc

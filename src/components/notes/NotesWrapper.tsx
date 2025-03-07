@@ -2,8 +2,8 @@
 import { SubscribeToNotes } from '@/lib/db'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
-import { useNotesContext } from './NoteTabs'
 import NotesSkeleton from './NotesSkeleton'
+import { useNotesContext } from '@/context/NotesContext'
 
 export type NotesWrapperProps = {
   filter: string,

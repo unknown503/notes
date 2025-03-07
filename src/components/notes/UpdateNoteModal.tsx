@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { useToast } from "../ui/use-toast";
 import { customToast } from "@/lib/utils";
-import { useUser } from "../common";
+import { useUser } from "@/context/UserContext";
 
 const FormSchema = z.object({
   content: z.string().default(""),

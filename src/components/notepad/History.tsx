@@ -3,11 +3,11 @@ import { DeleteHistoryRecord, RecoverContentHistory, SubscribeToNotepadHistory }
 import { dateToReadableRecent, getDate, isWithinThisWeek } from "@/lib/utils"
 import { Copy, CornerDownLeft, Trash } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { CopyButton } from "../common"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
-import { useNotepadContext } from "./NotepadContext"
+import { useNotepadContext } from "../../context/NotepadContext"
+import { CopyButton } from "../lib/lib"
 
 function History() {
   const accordionRef = useRef<HTMLDivElement>(null)

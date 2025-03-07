@@ -6,10 +6,11 @@ import { LogOut, Menu, WifiOff } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
-import { useIsOffline, useUser } from "../common"
 import { Button } from "../ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { Skeleton } from "../ui/skeleton"
+import { useUser } from "@/context/UserContext"
+import { useIsOffline } from "@/hooks/hooks"
 
 const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn("pb-6 lg:pb-10 w-full", className)}>
@@ -125,15 +126,12 @@ function SidebarItems({ setOpen }: { setOpen?: (v: boolean) => void }) {
   )
 }
 
-const SidebarLoadingItems = ({ count }: { count: number }) => (
-  <>
-    {new Array(count).fill(0).map((_, i) =>
-      <Skeleton
-        className="w-full h-8 rounded-md"
-        key={i}
-      />
-    )}
-  </>
-)
+const SidebarLoadingItems = ({ count }: { count: number }) =>
+  new Array(count).fill(0).map((_, i) =>
+    <Skeleton
+      className="w-full h-8 rounded-md"
+      key={i}
+    />
+  )
 
 export default Sidebar

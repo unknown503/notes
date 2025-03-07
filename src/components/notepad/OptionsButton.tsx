@@ -11,9 +11,9 @@ import {
 import { SaveOnLocalStorage } from "@/lib/utils"
 import { Copy, Settings } from 'lucide-react'
 import { useEffect } from "react"
-import { CopyButton } from '../common'
 import { Button } from '../ui/button'
-import { useNotepadContext } from './NotepadContext'
+import { useNotepadContext } from '../../context/NotepadContext'
+import { CopyButton } from "../lib/lib"
 
 const MSKey = "manual-save"
 
@@ -32,7 +32,6 @@ export default function OptionsButton() {
     setAutoSave(state)
 
     if (!state) return
-    console.log("!state")
 
     Notepad && setSaving(Notepad?.timestamp)
     delayedCallback()
@@ -40,7 +39,7 @@ export default function OptionsButton() {
 
   return (
     <DropdownMenu>
-      <div className="flex gap-4">
+      <div className="flex gap-3">
         <CopyButton
           kind='generic'
           textToCopy={Notepad?.content}

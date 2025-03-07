@@ -1,12 +1,11 @@
 "use client"
 import Heading from '@/components/Heading'
-import { AuthExpecter, useUser } from '@/components/common'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import NotesProvider from '@/context/NotesContext'
+import { useUser } from '@/context/UserContext'
 import { availableTabs } from '@/lib/config'
-import { ChildrenReceptor } from '@/types/common'
-import { NoteDoc } from '@/types/notes'
 import dynamic from 'next/dynamic'
-import { Dispatch, SetStateAction, createContext, useContext, useState } from 'react'
+import { AuthExpecter } from '../lib/lib'
 
 const NotesWrapper = dynamic(() => import('@/components/notes/NotesWrapper'))
 const NewNoteModal = dynamic(() => import('@/components/notes/NewNoteModal'))
@@ -51,30 +50,5 @@ const NoteTabs = () => {
     </AuthExpecter>
   )
 }
-
-type NotesContextProps = {
-  Notes: NoteDoc[] | null,
-  setNotes: Dispatch<SetStateAction<NoteDoc[] | null>>
-}
-
-const NotesContext = createContext<NotesContextProps>({
-  Notes: null,
-  setNotes: () => { },
-})
-
-export function useNotesContext() {
-  return useContext(NotesContext)
-}
-
-const NotesProvider = ({ children }: ChildrenReceptor) => {
-  const [Notes, setNotes] = useState<NoteDoc[] | null>(null)
-
-  return (
-    <NotesContext.Provider value={{ Notes, setNotes }}>
-      {children}
-    </NotesContext.Provider>
-  )
-}
-
 
 export default NoteTabs

@@ -1,11 +1,11 @@
 import { ThemeProvider } from '@/components/ThemeProvider'
-import { UserProvider } from '@/components/common'
 import { Toaster } from '@/components/ui/toaster'
 import { AppConfig } from '@/lib/config'
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { UserProvider } from '@/context/UserContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
