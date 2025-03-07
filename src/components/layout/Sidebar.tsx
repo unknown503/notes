@@ -10,7 +10,6 @@ import { Button } from "../ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { Skeleton } from "../ui/skeleton"
 import { useUser } from "@/context/UserContext"
-import { useIsOffline } from "@/hooks/hooks"
 
 const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn("pb-6 lg:pb-10 w-full", className)}>
@@ -22,9 +21,6 @@ const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => (
               {AppConfig.title}
             </Link>
           </h2>
-          {useIsOffline() &&
-            <WifiOff size={20} color="red" />
-          }
         </div>
 
         <div className="flex flex-col justify-between h-full">
@@ -35,9 +31,6 @@ const Sidebar = ({ className }: React.HTMLAttributes<HTMLDivElement>) => (
     <div className="block lg:hidden">
       <div className="container pt-3 flex justify-between items-center">
         <MobileSidebar />
-        {useIsOffline() &&
-          <WifiOff size={20} color="red" />
-        }
       </div>
     </div>
   </div>

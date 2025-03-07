@@ -20,7 +20,6 @@ import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
 import CategorySettings from "./categories/CategorySettings"
 import { useUser } from "@/context/UserContext"
-import { useIsOffline } from "@/hooks/hooks"
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -32,7 +31,6 @@ export default function NewNoteModal() {
   const [Open, setOpen] = useState(false)
   const { isLoggedIn } = useUser()
   const { toast } = useToast()
-  const isOffline = useIsOffline()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -80,9 +78,6 @@ export default function NewNoteModal() {
         <DialogHeader>
           <DialogTitle className="flex gap-2">
             New note
-            {isOffline &&
-              <WifiOff size={20} color="red" />
-            }
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -104,12 +99,10 @@ export default function NewNoteModal() {
                   </FormItem>
                 )}
               />
-              {!isOffline &&
-                <Dropzone
-                  Files={Files}
-                  setFiles={setFiles}
-                />
-              }
+              <Dropzone
+                Files={Files}
+                setFiles={setFiles}
+              />
               <Button
                 className="w-full"
                 type="submit"

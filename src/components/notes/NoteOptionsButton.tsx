@@ -18,7 +18,6 @@ import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
 import { useUser } from "@/context/UserContext"
-import { useIsOffline } from "@/hooks/hooks"
 import { CopyButton } from "../lib/lib"
 
 export type NoteOptionsButtonProps = NoteDoc & {
@@ -34,7 +33,6 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
   const [Open, setOpen] = useState(false)
   const { toast, dismiss } = useToast()
   const { isLoggedIn } = useUser()
-  const isOffline = useIsOffline()
 
   const DownloadAll = () => {
     files.map(file => {
@@ -112,7 +110,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
               </DropdownMenuCheckboxItem>
             </CopyButton>
           }
-          {isLoggedIn && !isOffline &&
+          {isLoggedIn &&
             <>
               <DialogTrigger asChild>
                 <DropdownMenuCheckboxItem className="cursor-pointer">
@@ -151,7 +149,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
               </Link>
             </DropdownMenuCheckboxItem>
           }
-          {isLoggedIn && !isOffline &&
+          {isLoggedIn &&
             <DropdownMenuCheckboxItem
               className="cursor-pointer"
               onClick={RemoveNote}
