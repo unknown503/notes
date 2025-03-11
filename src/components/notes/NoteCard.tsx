@@ -7,29 +7,34 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useCategoriesContext } from "@/context/CategoriesContext"
 import { DownloadFile, GetFileName } from "@/lib/db"
 import { DecodeHtml, IsImage, IsPDF, ViewPDF, convertToRichtext, customToast, getDate } from "@/lib/utils"
 import { NoteDoc } from "@/types/notes"
-import { AlertCircle, Copy, Download, File, FileText, Image as ImageIcon } from "lucide-react"
+import { Copy, Download, File, FileText, Image as ImageIcon } from "lucide-react"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import Indicator from "../Indicator"
+import { CopyButton } from "../lib/lib"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet"
 import { useToast } from "../ui/use-toast"
-import { CopyButton } from "../lib/lib"
+import KeyIcon from "./categories/KeyIcon"
+import NoteFiles from "./NoteFiles"
 
 const NoteOptionsButton = dynamic(() => import('@/components/notes/NoteOptionsButton'))
 
 export default function NoteCard(props: NoteDoc) {
-  const { content, files, isPublic, timestamp, isCritical } = props
+  const { content, files, isPublic, timestamp, categoryId } = props
   const [Hide, setHide] = useState(false)
+  const { findBy } = useCategoriesContext()
   const { toast } = useToast()
+  const icon = findBy(categoryId)?.icon
 
   const DownloadAll = () => {
     files.map(file => {
@@ -50,8 +55,8 @@ export default function NoteCard(props: NoteDoc) {
               </Badge>
             </div>
             <div className="flex gap-2 items-center">
-              {isCritical &&
-                <AlertCircle color="red" size={25} />
+              {categoryId && categoryId !== "" &&
+                <KeyIcon name={icon} color={icon} />
               }
               <NoteOptionsButton
                 {...props}
@@ -160,7 +165,7 @@ export default function NoteCard(props: NoteDoc) {
                 </Button>
               }
             </div>
-            <Files
+            <NoteFiles
               files={files}
               onFileClick={DownloadFile}
             />
@@ -168,74 +173,6 @@ export default function NoteCard(props: NoteDoc) {
         </SheetHeader>
       </SheetContent>
     </Sheet>
-  )
-}
-
-type FilesProps = {
-  files: string[]
-  onFileClick: (url: string, name: string) => void
-}
-
-const Files = ({ files, onFileClick }: FilesProps) => {
-  const { toast } = useToast()
-
-  const DownloadSingleFile = (file: string, name: string) => {
-    onFileClick(file, name)
-    toast(customToast("File downloaded."))
-  }
-
-  return (
-    <div className='flex flex-col gap-1'>
-      {files.map(file => {
-        const name = GetFileName(file)
-        return (
-          <div className="flex flex-row items-center gap-1" key={file}>
-            <Button
-              variant="ghost"
-              className='flex flex-row justify-start gap-2 w-full'
-              onClick={() => DownloadSingleFile(file, name)}
-              title={name}
-            >
-              <span className="text-primary min-w-[1.125rem]">
-                <Download size={18} />
-              </span>
-              <span className='text-xs text-start word-break line-clamp-1'>
-                {name}
-              </span>
-            </Button>
-            {IsImage(name) &&
-              <Button
-                variant="secondary"
-                size="icon"
-                asChild
-                aria-label="View image"
-                title="View image"
-              >
-                <Link
-                  href={file}
-                  className="min-w-[1.125rem]"
-                  target="_blank"
-                >
-                  <ImageIcon size={16} />
-                </Link>
-              </Button>
-            }
-            {IsPDF(name) &&
-              <Button
-                variant="secondary"
-                size="icon"
-                aria-label="View pdf file"
-                title="View pdf file"
-                onClick={() => ViewPDF(file)}
-              >
-                <FileText size={16} />
-              </Button>
-            }
-          </div>
-        )
-      }
-      )}
-    </div>
   )
 }
 

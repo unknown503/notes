@@ -19,17 +19,16 @@ import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
 import { useUser } from "@/context/UserContext"
 import { CopyButton } from "../lib/lib"
+import { AppConfig } from "@/lib/config"
 
 export type NoteOptionsButtonProps = NoteDoc & {
   Hide: boolean
   setHide: (v: boolean) => void
 }
 
-const DELAY = 5000
-
 const UpdateNoteModal = dynamic(() => import('@/components/notes/UpdateNoteModal'))
 
-export default function NoteOptionsButton({ isPublic, files, id, content, setHide, Hide, isCritical }: NoteOptionsButtonProps) {
+export default function NoteOptionsButton({ isPublic, files, id, content, categoryId, setHide, Hide }: NoteOptionsButtonProps) {
   const [Open, setOpen] = useState(false)
   const { toast, dismiss } = useToast()
   const { isLoggedIn } = useUser()
@@ -47,11 +46,11 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
     const timeout = setTimeout(async () => {
       await DeleteNote(id, files)
       dismiss()
-    }, DELAY)
+    }, AppConfig.dismissNoteRemovalDelay)
 
     toast({
       ...customToast("Note removed."),
-      duration: DELAY,
+      duration: AppConfig.dismissNoteRemovalDelay,
       action:
         <ToastAction
           altText="Undo"
@@ -72,13 +71,6 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
     toast(customToast(`Note changed to ${!isPublic ? "public" : "private"}.`))
   }
 
-  const UpdateIsCritical = async () => {
-    await UpdateNote(id, {
-      isCritical: !isCritical
-    })
-    toast(customToast(`Note changed to ${isCritical ? "not " : ""}critical.`))
-  }
-
   const SaveNoteContent = () => {
     const res = SaveOnLocalStorage("note", content)
     if (res !== true) toast(customToast(res, true))
@@ -86,7 +78,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
 
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -123,12 +115,6 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
               >
                 Set to {!isPublic ? "public" : "private"}
               </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                className="cursor-pointer"
-                onClick={UpdateIsCritical}
-              >
-                Set to {isCritical ? "not " : ""}critical
-              </DropdownMenuCheckboxItem>
             </>
           }
           {files.length !== 0 &&
@@ -163,6 +149,8 @@ export default function NoteOptionsButton({ isPublic, files, id, content, setHid
         content={content}
         files={files}
         id={id}
+        categoryId={categoryId}
+        Open={Open}
         setOpen={setOpen}
       />
     </Dialog>

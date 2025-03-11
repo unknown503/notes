@@ -1,19 +1,17 @@
-import { Dispatch, SetStateAction } from "react"
-
 export type NoteDoc = {
   id: string
   content: string
   files: string[]
   isPublic: boolean
   timestamp: number
-  isCritical: boolean
+  categoryId: string
 }
 
 export type UpdateNoteFields = {
   content?: string
   files?: string[]
   isPublic?: boolean
-  isCritical?: boolean
+  categoryId?: string
 }
 
 export type CategoriesDoc = {
@@ -25,7 +23,3 @@ export type Category = {
   content: string
   icon: string
 }
-
-export type CategoryComponentProps = {
-  setCategories: Dispatch<SetStateAction<Category[]>>
-} & CategoriesDoc

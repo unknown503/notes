@@ -7,10 +7,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
+import { useCategoriesContext } from "@/context/CategoriesContext"
+import { useUser } from "@/context/UserContext"
 import { AddNote } from "@/lib/db"
 import { customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Cog, Loader2, Plus, WifiOff } from "lucide-react"
+import { } from "@radix-ui/react-select"
+import { Cog, Loader2, Plus } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -19,13 +29,15 @@ import { Textarea } from "../ui/textarea"
 import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
 import CategorySettings from "./categories/CategorySettings"
-import { useUser } from "@/context/UserContext"
+import KeyIcon from "./categories/KeyIcon"
 
 const FormSchema = z.object({
-  content: z.string().default(""),
+  content: z.string(),
+  category: z.string(),
 })
 
 export default function NewNoteModal() {
+  const { Categories } = useCategoriesContext()
   const [Files, setFiles] = useState<File[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
   const [Open, setOpen] = useState(false)
@@ -36,17 +48,18 @@ export default function NewNoteModal() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       content: "",
+      category: "",
     },
   })
 
-  const SaveNote = async ({ content }: z.infer<typeof FormSchema>) => {
+  const SaveNote = async ({ content, category }: z.infer<typeof FormSchema>) => {
     if (content === "" && Files.length === 0) {
       toast(customToast("Empty note.", true))
       return
     }
 
     setSaving(true)
-    await AddNote(content, Files, isLoggedIn)
+    await AddNote(content, Files, isLoggedIn, category)
 
     setOpen(false)
     toast(customToast("Note was saved."))
@@ -96,6 +109,34 @@ export default function NewNoteModal() {
                         onChange={field.onChange}
                       />
                     </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Categories.map(category => (
+                          <SelectItem value={category.id} key={category.id}>
+                            <div className="flex gap-3 items-center capitalize">
+                              <KeyIcon
+                                name={category.icon}
+                                color={category.icon}
+                              />
+                              <span>{category.content}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormItem>
                 )}
               />

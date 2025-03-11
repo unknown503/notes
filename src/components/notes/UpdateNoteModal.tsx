@@ -1,35 +1,45 @@
 "use client"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Loader2, Trash } from "lucide-react";
-import { Textarea } from "../ui/textarea";
-import Dropzone from "./Dropzone";
-import { useEffect, useState } from "react";
-import { GetFileName, UpdateCompleteNote } from "@/lib/db";
-import { Form, FormControl, FormField, FormItem } from "../ui/form";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { useToast } from "../ui/use-toast";
-import { customToast } from "@/lib/utils";
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { useCategoriesContext } from "@/context/CategoriesContext";
 import { useUser } from "@/context/UserContext";
+import { GetFileName, UpdateCompleteNote } from "@/lib/db";
+import { customToast } from "@/lib/utils";
+import { NoteDoc } from "@/types/notes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
+import { Textarea } from "../ui/textarea";
+import { useToast } from "../ui/use-toast";
+import Dropzone from "./Dropzone";
+import KeyIcon from "./categories/KeyIcon";
 
 const FormSchema = z.object({
   content: z.string().default(""),
+  category: z.string().default(""),
 })
 
 type UpdateNoteModalProps = {
-  id: string,
-  content: string,
-  files: string[]
-  setOpen: (v: boolean) => void
-}
+  Open: boolean,
+  setOpen: (v: boolean) => void,
+} & Omit<NoteDoc, "timestamp" | "isPublic">
 
-export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen }: UpdateNoteModalProps) {
+export default function UpdateNoteModal({ content, files: prevFiles, id, categoryId,Open, setOpen }: UpdateNoteModalProps) {
+  const { Categories } = useCategoriesContext()
   const [Files, setFiles] = useState<File[]>([])
   const [RemovedFiles, setRemovedFiles] = useState<string[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
@@ -38,19 +48,16 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      content,
-    },
   })
 
-  const SaveNote = async ({ content }: z.infer<typeof FormSchema>) => {
+  const SaveNote = async ({ content, category }: z.infer<typeof FormSchema>) => {
     if (content === "" && Files.length === 0 && RemovedFiles.length === 0) {
       toast(customToast("Nothing to update.", true))
       return
     }
 
     setSaving(true)
-    UpdateCompleteNote(id, content, RemovedFiles, prevFiles, Files, isLoggedIn)
+    UpdateCompleteNote(id, content, RemovedFiles, prevFiles, Files, isLoggedIn, category)
     toast(customToast("Note was updated."))
     setOpen(false)
     form.reset()
@@ -72,9 +79,9 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
   }
 
   useEffect(() => {
-    if (form.getValues("content") === content) return
     form.setValue("content", content)
-  }, [content])
+    form.setValue("category", categoryId)
+  }, [content, categoryId])
 
   return (
     <DialogContent className="sm:max-w-md">
@@ -98,6 +105,34 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, setOpen
                       onBlur={(e) => e.target.selectionStart = content.length}
                     />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Categories.map(category => (
+                        <SelectItem value={category.id} key={category.id}>
+                          <div className="flex gap-3 items-center capitalize">
+                            <KeyIcon
+                              name={category.icon}
+                              color={category.icon}
+                            />
+                            <span>{category.content}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />

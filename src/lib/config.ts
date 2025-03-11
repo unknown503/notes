@@ -5,6 +5,8 @@ export const GenericTitle = (generic: string) => `${generic} | ${AppConfig.title
 export const AppConfig = {
   title: process.env.NEXT_PUBLIC_TITLE,
   description: process.env.DESCRIPTION,
+  notepadAutoSaveDelay: 25,
+  dismissNoteRemovalDelay: 5,
 }
 
 export const sidebarItems = [
@@ -56,10 +58,8 @@ const tabs = [
   },
 ]
 
-const publicTabs = tabs.filter(tab => tab.global)
-
 export const availableTabs = (isLoggedIn: boolean) => {
-  const returnTabs = isLoggedIn ? tabs : publicTabs
+  const returnTabs = isLoggedIn ? tabs : tabs.filter(tab => tab.global)
   return returnTabs.map(tab => tab.label)
 }
 

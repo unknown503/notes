@@ -16,14 +16,14 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
+import { CategoriesContextProps } from "@/context/CategoriesContext"
 import { iconList } from "@/icons/categories"
+import { customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import KeyIcon from "./KeyIcon"
-import { CategoryComponentProps } from "@/types/notes"
-import { customToast } from "@/lib/utils"
 
 const formSchema = z.object({
   icon: z.string().min(1, {
@@ -34,7 +34,7 @@ const formSchema = z.object({
   })
 })
 
-export default function CategoryForm({ categories, setCategories }: CategoryComponentProps) {
+export default function CategoryForm({ setCategories }: Pick<CategoriesContextProps, "setCategories">) {
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,7 +58,7 @@ export default function CategoryForm({ categories, setCategories }: CategoryComp
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex gap-2 pt-3">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex gap-2 pt-3 pr-2">
         <FormField
           control={form.control}
           name="icon"
@@ -73,7 +73,7 @@ export default function CategoryForm({ categories, setCategories }: CategoryComp
                 <SelectContent>
                   {Object.entries(iconList).map(([key, color]) => (
                     <SelectItem value={key} key={key}>
-                      <KeyIcon name={key} color={color} />
+                      <KeyIcon name={key} color={color} hexColor/>
                     </SelectItem>
                   ))}
                 </SelectContent>

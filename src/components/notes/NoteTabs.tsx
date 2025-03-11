@@ -6,6 +6,7 @@ import { useUser } from '@/context/UserContext'
 import { availableTabs } from '@/lib/config'
 import dynamic from 'next/dynamic'
 import { AuthExpecter } from '../lib/lib'
+import CategoriesProvider from '@/context/CategoriesContext'
 
 const NotesWrapper = dynamic(() => import('@/components/notes/NotesWrapper'))
 const NewNoteModal = dynamic(() => import('@/components/notes/NewNoteModal'))
@@ -18,33 +19,35 @@ const NoteTabs = () => {
     <AuthExpecter>
       <NotesProvider>
         <Tabs defaultValue={tabs[0]}>
-          <Heading title="Notes" rightTitleSide={<NewNoteModal />}>
-            <TabsList isDefault>
+          <CategoriesProvider>
+            <Heading title="Notes" rightTitleSide={<NewNoteModal />}>
+              <TabsList isDefault>
+                {tabs.map(tab =>
+                  <TabsTrigger
+                    value={tab}
+                    key={tab}
+                    isDefault
+                  >
+                    {tab}
+                  </TabsTrigger>
+                )}
+              </TabsList>
+            </Heading>
+
+            <div className="container py-4 lg:py-6">
               {tabs.map(tab =>
-                <TabsTrigger
+                <TabsContent
                   value={tab}
                   key={tab}
                   isDefault
                 >
-                  {tab}
-                </TabsTrigger>
+                  <NotesWrapper
+                    filter={tab}
+                  />
+                </TabsContent>
               )}
-            </TabsList>
-          </Heading>
-
-          <div className="container py-4 lg:py-6">
-            {tabs.map(tab =>
-              <TabsContent
-                value={tab}
-                key={tab}
-                isDefault
-              >
-                <NotesWrapper
-                  filter={tab}
-                />
-              </TabsContent>
-            )}
-          </div>
+            </div>
+          </CategoriesProvider>
         </Tabs>
       </NotesProvider>
     </AuthExpecter>
