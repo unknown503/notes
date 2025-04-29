@@ -7,19 +7,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { useCategoriesContext } from "@/context/CategoriesContext"
-import { GetCategories } from "@/lib/db"
 import { ChildrenReceptor } from "@/types/common"
-import { useEffect } from "react"
 import { ScrollArea } from "../../ui/scroll-area"
 import CategoriesDnD from "./CategoriesDnD"
 import CategoryForm from "./CategoryForm"
 
 export default function CategorySettings({ children }: ChildrenReceptor) {
   const { Categories, setCategories } = useCategoriesContext()
-
-  useEffect(() => {
-    GetCategories().then(res => setCategories(res.categories))
-  }, [])
 
   return (
     <Dialog>

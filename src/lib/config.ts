@@ -6,7 +6,7 @@ export const AppConfig = {
   title: process.env.NEXT_PUBLIC_TITLE,
   description: process.env.DESCRIPTION,
   notepadAutoSaveDelay: 25,
-  dismissNoteRemovalDelay: 5,
+  dismissNoteRemovalDelay: 5000,
 }
 
 export const sidebarItems = [

@@ -36,7 +36,7 @@ export function CopyButton({ textToCopy, children, kind, onClick, ...props }: Co
 export function AuthExpecter({ children }: ChildrenReceptor) {
   const { user, isLoggedIn } = useUser()
 
-  const shouldShowSpinner = user === false && !isLoggedIn
+  const shouldShowSpinner = (user === false || user === null) && !isLoggedIn
 
   return (
     <>

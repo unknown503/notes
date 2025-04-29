@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 8000 --experimental-https",
+    "dev": "next dev --port 8181 --experimental-https",
     "build": "next build",
     "start": "next start --port 8000",
     "lint": "next lint"
@@ -25,7 +25,7 @@
     "clsx": "^2.0.0",
     "firebase": "^10.6.0",
     "lucide-react": "^0.476.0",
-    "next": "14.0.3",
+    "next": "14.2.25",
     "next-pwa": "^5.6.0",
     "next-themes": "^0.2.1",
     "react": "^18",

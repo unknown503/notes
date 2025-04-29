@@ -1,19 +1,10 @@
 "use client"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { SaveOnLocalStorage } from "@/lib/utils"
-import { Copy, Settings } from 'lucide-react'
+import { Check, Copy, Save } from 'lucide-react'
 import { useEffect } from "react"
-import { Button } from '../ui/button'
 import { useNotepadContext } from '../../context/NotepadContext'
 import { CopyButton } from "../lib/lib"
+import { Button } from '../ui/button'
 
 const MSKey = "manual-save"
 
@@ -38,45 +29,40 @@ export default function OptionsButton() {
   }
 
   return (
-    <DropdownMenu>
-      <div className="flex gap-3">
-        <CopyButton
-          kind='generic'
-          textToCopy={Notepad?.content}
+    <div className="flex gap-3">
+      <CopyButton
+        kind='generic'
+        textToCopy={Notepad?.content}
+      >
+        <Button
+          variant="outline"
+          size="icon"
+          title="Copy content"
         >
-          <Button
-            variant="outline"
-            size="icon"
-            title="Copy content"
-          >
-            <Copy size={16} />
-          </Button>
-        </CopyButton>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="secondary"
-            className="flex gap-2"
-          >
-            <Settings size={20} />
-            Options
-          </Button>
-        </DropdownMenuTrigger>
-      </div>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Options</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => delayedCallback()}
-        >
-          Save manually
-        </DropdownMenuItem>
-        <DropdownMenuCheckboxItem
-          checked={AutoSave}
-          onCheckedChange={onManualSaveTrigger}
-        >
-          Auto save
-        </DropdownMenuCheckboxItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <Copy size={16} />
+        </Button>
+      </CopyButton>
+      <Button
+        variant="outline"
+        size="icon"
+        title="Save manually"
+        onClick={() => delayedCallback()}
+      >
+        <Save size={16} />
+      </Button>
+      <Button
+        variant="outline"
+        title="Auto save"
+        className="flex gap-2"
+        onClick={onManualSaveTrigger}
+      >
+        <div className="size-4">
+          {AutoSave &&
+            <Check size={16} />
+          }
+        </div>
+        Auto save
+      </Button>
+    </div>
   )
 }

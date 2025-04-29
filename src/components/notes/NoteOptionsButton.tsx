@@ -78,7 +78,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
 
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
-      <DropdownMenu modal={false}>
+      <DropdownMenu modal>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -97,7 +97,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
               textToCopy={content}
               kind="generic"
             >
-              <DropdownMenuCheckboxItem className="cursor-pointer">
+              <DropdownMenuCheckboxItem>
                 Copy note
               </DropdownMenuCheckboxItem>
             </CopyButton>
@@ -105,12 +105,11 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
           {isLoggedIn &&
             <>
               <DialogTrigger asChild>
-                <DropdownMenuCheckboxItem className="cursor-pointer">
+                <DropdownMenuCheckboxItem>
                   Update note
                 </DropdownMenuCheckboxItem>
               </DialogTrigger>
               <DropdownMenuCheckboxItem
-                className="cursor-pointer"
                 onClick={UpdateIsPublic}
               >
                 Set to {!isPublic ? "public" : "private"}
@@ -119,14 +118,13 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
           }
           {files.length !== 0 &&
             <DropdownMenuCheckboxItem
-              className="cursor-pointer"
               onClick={DownloadAll}
             >
               Download All
             </DropdownMenuCheckboxItem>
           }
           {content !== "" &&
-            <DropdownMenuCheckboxItem className="cursor-pointer">
+            <DropdownMenuCheckboxItem>
               <Link
                 href="/case"
                 onClick={SaveNoteContent}
@@ -137,7 +135,6 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
           }
           {isLoggedIn &&
             <DropdownMenuCheckboxItem
-              className="cursor-pointer"
               onClick={RemoveNote}
             >
               Delete note

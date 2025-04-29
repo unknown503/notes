@@ -1,4 +1,5 @@
 import Heading from '@/components/Heading'
+import { AuthExpecter } from '@/components/lib/lib'
 import OptionsButton from '@/components/notepad/OptionsButton'
 import NotepadContext from '@/context/NotepadContext'
 import { AppConfig, GenericTitle } from '@/lib/config'
@@ -15,13 +16,15 @@ const History = dynamic(() => import('@/components/notepad/History'))
 export default function Home() {
 
   return (
-    <NotepadContext>
-      <Heading
-        title="Notepad"
-        rightTitleSide={<OptionsButton />}
-      />
-      <TextareaNotepad delay={AppConfig.notepadAutoSaveDelay * 1000} />
-      <History />
-    </NotepadContext>
+    <AuthExpecter>
+      <NotepadContext>
+        <Heading
+          title="Notepad"
+          rightTitleSide={<OptionsButton />}
+        />
+        <TextareaNotepad delay={AppConfig.notepadAutoSaveDelay * 1000} />
+        <History />
+      </NotepadContext>
+    </AuthExpecter>
   )
 }

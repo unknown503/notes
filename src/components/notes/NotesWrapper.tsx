@@ -1,5 +1,5 @@
 "use client"
-import { SubscribeToNotes } from '@/lib/db'
+import { GetCategories, SubscribeToNotes } from '@/lib/db'
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 import NotesSkeleton from './NotesSkeleton'
@@ -17,17 +17,18 @@ const NoteCard = dynamic(() => import('@/components/notes/NoteCard'), {
 
 export default function NotesWrapper({ filter }: NotesWrapperProps) {
   const { Notes, setNotes } = useNotesContext()
-  const { Categories } = useCategoriesContext()
+  const { Categories, setCategories } = useCategoriesContext()
+
+  useEffect(() => {
+    GetCategories().then(res => setCategories(res.categories))
+  }, [])
 
   useEffect(() => {
     if (Categories.length === 0) return
     const categoriesMap = new Map(
       Categories.map((category, index) => [category.id, index])
     )
-
-    const unsubscribe = SubscribeToNotes(docs => {
-      setNotes(docs)
-    }, categoriesMap, visibilityFilter(filter))
+    const unsubscribe = SubscribeToNotes(setNotes, categoriesMap, visibilityFilter(filter))
     return () => unsubscribe()
   }, [Categories])
 

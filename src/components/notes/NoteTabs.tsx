@@ -5,19 +5,18 @@ import NotesProvider from '@/context/NotesContext'
 import { useUser } from '@/context/UserContext'
 import { availableTabs } from '@/lib/config'
 import dynamic from 'next/dynamic'
-import { AuthExpecter } from '../lib/lib'
 import CategoriesProvider from '@/context/CategoriesContext'
 
 const NotesWrapper = dynamic(() => import('@/components/notes/NotesWrapper'))
 const NewNoteModal = dynamic(() => import('@/components/notes/NewNoteModal'))
 
 const NoteTabs = () => {
-  const { isLoggedIn } = useUser()
+  const { isLoggedIn, user } = useUser()
   const tabs = availableTabs(isLoggedIn)
 
   return (
-    <AuthExpecter>
-      <NotesProvider>
+    <NotesProvider>
+      {user !== false &&
         <Tabs defaultValue={tabs[0]}>
           <CategoriesProvider>
             <Heading title="Notes" rightTitleSide={<NewNoteModal />}>
@@ -49,8 +48,8 @@ const NoteTabs = () => {
             </div>
           </CategoriesProvider>
         </Tabs>
-      </NotesProvider>
-    </AuthExpecter>
+      }
+    </NotesProvider>
   )
 }
 

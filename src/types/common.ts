@@ -20,4 +20,4 @@ export type UserType = {
 }
 
 export type AuthWrapperProps = { onlyAuth: boolean }
-export type ChildrenReceptor = { children: ReactNode }
+export type ChildrenReceptor = { children?: ReactNode }

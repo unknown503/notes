@@ -71,15 +71,17 @@ export default function NewNoteModal() {
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
       <div className="flex gap-3">
-        <CategorySettings>
-          <Button
-            variant="outline"
-            size="icon"
-            title="Copy content"
-          >
-            <Cog size={20} />
-          </Button>
-        </CategorySettings>
+        {isLoggedIn &&
+          <CategorySettings>
+            <Button
+              variant="outline"
+              size="icon"
+              title="Copy content"
+            >
+              <Cog size={20} />
+            </Button>
+          </CategorySettings>
+        }
         <DialogTrigger asChild>
           <Button variant="default" aria-label="Create note">
             <Plus size={20} className="mr-2" />
@@ -112,34 +114,36 @@ export default function NewNoteModal() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {Categories.map(category => (
-                          <SelectItem value={category.id} key={category.id}>
-                            <div className="flex gap-3 items-center capitalize">
-                              <KeyIcon
-                                name={category.icon}
-                                color={category.icon}
-                              />
-                              <span>{category.content}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
+              {isLoggedIn &&
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {Categories.map(category => (
+                            <SelectItem value={category.id} key={category.id}>
+                              <div className="flex gap-3 items-center capitalize">
+                                <KeyIcon
+                                  name={category.icon}
+                                  color={category.icon}
+                                />
+                                <span>{category.content}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              }
               <Dropzone
                 Files={Files}
                 setFiles={setFiles}
