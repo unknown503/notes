@@ -1,8 +1,8 @@
 import Heading from '@/components/Heading'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
-import { TextareaFieldProvider } from '@/components/case/TextareaField'
 import TabsSection from '@/components/case/TabsSection'
+import { TextareaFieldProvider } from '@/context/TextareaContext'
 
 export const metadata: Metadata = {
   title: GenericTitle("Convert Case")

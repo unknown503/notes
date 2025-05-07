@@ -6,6 +6,7 @@ import { useUser } from '@/context/UserContext'
 import { availableTabs } from '@/lib/config'
 import dynamic from 'next/dynamic'
 import CategoriesProvider from '@/context/CategoriesContext'
+import CategoryFilters from './categories/CategoryFilters'
 
 const NotesWrapper = dynamic(() => import('@/components/notes/NotesWrapper'))
 const NewNoteModal = dynamic(() => import('@/components/notes/NewNoteModal'))
@@ -34,6 +35,7 @@ const NoteTabs = () => {
             </Heading>
 
             <div className="container py-4 lg:py-6">
+              {isLoggedIn && <CategoryFilters />}
               {tabs.map(tab =>
                 <TabsContent
                   value={tab}

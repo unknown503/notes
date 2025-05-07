@@ -1,3 +1,5 @@
+import { QueryFieldFilterConstraint, QueryOrderByConstraint } from "firebase/firestore"
+
 export type NoteDoc = {
   id: string
   content: string
@@ -23,3 +25,5 @@ export type Category = {
   content: string
   icon: string
 }
+
+export type QueryFilters = (QueryOrderByConstraint | QueryFieldFilterConstraint)[]

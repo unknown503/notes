@@ -76,8 +76,13 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
     if (res !== true) toast(customToast(res, true))
   }
 
+  const toggleDialog = (open: boolean) => {
+    setOpen(open)
+    setTimeout(() => document.body.style.pointerEvents = "", 300)
+  }
+
   return (
-    <Dialog open={Open} onOpenChange={setOpen}>
+    <Dialog open={Open} onOpenChange={toggleDialog} modal>
       <DropdownMenu modal>
         <DropdownMenuTrigger asChild>
           <Button
@@ -147,8 +152,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
         files={files}
         id={id}
         categoryId={categoryId}
-        Open={Open}
-        setOpen={setOpen}
+        setOpen={toggleDialog}
       />
     </Dialog>
   )

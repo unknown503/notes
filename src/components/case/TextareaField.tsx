@@ -1,9 +1,10 @@
 "use client"
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { useTextareaFieldState } from '@/context/TextareaContext'
 import { LineCount, LoadAndDeleteLocalStorage, WordCount } from '@/lib/utils'
 import { ChildrenReceptor } from '@/types/common'
-import { Children, Dispatch, SetStateAction, createContext, isValidElement, useContext, useEffect, useMemo, useState } from 'react'
+import { Children, isValidElement, useEffect, useMemo } from 'react'
 
 export default function TextareaField({ children }: ChildrenReceptor) {
   const { Text, setText } = useTextareaFieldState()
@@ -68,28 +69,3 @@ export default function TextareaField({ children }: ChildrenReceptor) {
 
 TextareaField.Right = ({ children }: ChildrenReceptor) => children
 TextareaField.Underneath = ({ children }: ChildrenReceptor) => children
-
-type TextContextProps = {
-  Text: string,
-  setText: Dispatch<SetStateAction<string>>
-
-}
-
-const TextContext = createContext<TextContextProps>({
-  Text: "",
-  setText: () => { },
-});
-
-export function useTextareaFieldState() {
-  return useContext(TextContext);
-}
-
-export const TextareaFieldProvider = ({ children }: ChildrenReceptor) => {
-  const [Text, setText] = useState<string>("");
-
-  return (
-    <TextContext.Provider value={{ Text, setText }}>
-      {children}
-    </TextContext.Provider>
-  );
-};

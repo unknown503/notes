@@ -34,11 +34,10 @@ const FormSchema = z.object({
 })
 
 type UpdateNoteModalProps = {
-  Open: boolean,
   setOpen: (v: boolean) => void,
 } & Omit<NoteDoc, "timestamp" | "isPublic">
 
-export default function UpdateNoteModal({ content, files: prevFiles, id, categoryId,Open, setOpen }: UpdateNoteModalProps) {
+export default function UpdateNoteModal({ content, files: prevFiles, id, categoryId, setOpen }: UpdateNoteModalProps) {
   const { Categories } = useCategoriesContext()
   const [Files, setFiles] = useState<File[]>([])
   const [RemovedFiles, setRemovedFiles] = useState<string[]>([])

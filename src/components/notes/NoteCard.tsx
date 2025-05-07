@@ -45,7 +45,7 @@ export default function NoteCard(props: NoteDoc) {
   }
 
   return (
-    <Sheet>
+    <Sheet modal={false}>
       <Card className={`h-full ${Hide ? "hidden" : ""}`}>
         <CardHeader>
           <CardTitle className="flex justify-between">
@@ -83,7 +83,7 @@ export default function NoteCard(props: NoteDoc) {
             <div>
               {files.length !== 0 &&
                 <Indicator text={files.length}>
-                  <Avatar className="w-[30px] h-[30px]">
+                  <Avatar className="size-[30px]">
                     <AvatarImage asChild src={files[0]}>
                       <Image
                         src={files[0]}

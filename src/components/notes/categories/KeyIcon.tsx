@@ -7,10 +7,11 @@ type KeyIconProps = {
   name: string | undefined
   color: string | undefined
   hexColor?: boolean
+  size?: number
 }
 
-export default function KeyIcon({ name, color, hexColor }: KeyIconProps) {
+export default function KeyIcon({ name, color, hexColor, size }: KeyIconProps) {
   const inferredColor = hexColor ? color : iconList[color as keyof typeof iconList]
   const Icon = LucideIcons[name] as ForwardRefExoticComponent<Omit<LucideIcons.LucideProps, "ref">>
-  return <Icon size={25} color={inferredColor} />
+  return <Icon size={size || 25} color={inferredColor} />
 }

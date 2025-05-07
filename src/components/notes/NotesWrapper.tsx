@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import NotesSkeleton from './NotesSkeleton'
 import { useNotesContext } from '@/context/NotesContext'
 import { useCategoriesContext } from '@/context/CategoriesContext'
+import { useSearchParams } from 'next/navigation'
 
 export type NotesWrapperProps = {
   filter: string,
@@ -16,8 +17,9 @@ const NoteCard = dynamic(() => import('@/components/notes/NoteCard'), {
 })
 
 export default function NotesWrapper({ filter }: NotesWrapperProps) {
-  const { Notes, setNotes } = useNotesContext()
   const { Categories, setCategories } = useCategoriesContext()
+  const { Notes, setNotes } = useNotesContext()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     GetCategories().then(res => setCategories(res.categories))
@@ -28,9 +30,13 @@ export default function NotesWrapper({ filter }: NotesWrapperProps) {
     const categoriesMap = new Map(
       Categories.map((category, index) => [category.id, index])
     )
-    const unsubscribe = SubscribeToNotes(setNotes, categoriesMap, visibilityFilter(filter))
+
+    const filterParam = searchParams.get("category") ?? ""
+    const filterId = Categories.find(cat => cat.content.toLowerCase() === filterParam)?.id
+
+    const unsubscribe = SubscribeToNotes(setNotes, categoriesMap, filterId ?? filterParam, visibilityFilter(filter))
     return () => unsubscribe()
-  }, [Categories])
+  }, [Categories, searchParams])
 
   return (
     <div className='grid md:grid-cols-2 xl:grid-cols-4 gap-4'>

@@ -2,8 +2,9 @@
 import { ReplaceAll } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import TextareaField, { useTextareaFieldState } from './TextareaField'
+import TextareaField from './TextareaField'
 import { useState } from 'react'
+import { useTextareaFieldState } from '@/context/TextareaContext'
 
 const CaseReplace = () => (
   <TextareaField>
@@ -14,9 +15,9 @@ const CaseReplace = () => (
 )
 
 const ReplaceInputs = () => {
+  const { Text, setText } = useTextareaFieldState()
   const [Search, setSearch] = useState("")
   const [Replace, setReplace] = useState("")
-  const { Text, setText } = useTextareaFieldState()
 
   const onReplaceAll = () => {
     const newThing = Text.replaceAll(Search, Replace)

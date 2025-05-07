@@ -1,8 +1,9 @@
-import { CategoriesDoc, Category, NoteDoc, UpdateNoteFields } from '@/types/notes'
+import { CategoriesDoc, Category, NoteDoc, QueryFilters, UpdateNoteFields } from '@/types/notes'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { auth, db, storage } from "./firebase"
+import { AppConfig } from './config'
 
 const maxHistoryRecords = 10
 const NOTES = "notes"
@@ -195,21 +196,29 @@ export const DeleteNote = async (id: string, files: string[]) => {
   await deleteDoc(noteRef)
 }
 
-export const SubscribeToNotes = (callback: (docs: NoteDoc[]) => void, categoriesMap: Map<string, number>, isPublic?: boolean) => {
-  const initialQuery = isPublic === undefined ?
-    query(notesCollection, orderBy("timestamp", "desc")) :
-    query(notesCollection, where("isPublic", "==", isPublic), orderBy("timestamp", "desc"))
+export const SubscribeToNotes = (callback: (docs: NoteDoc[]) => void, categoriesMap: Map<string, number>, categoryFilter: string, isPublic?: boolean) => {
+  const isPublicUnset = isPublic === undefined
+  const filters: QueryFilters = [orderBy("timestamp", "desc")];
 
+  if (isPublic !== undefined) 
+    filters.push(where("isPublic", "==", isPublic));
+  if (categoryFilter !== "all") 
+    filters.push(where("categoryId", "==", categoryFilter));
+
+  const initialQuery = query(notesCollection, ...filters);
   const unsubscribe = onSnapshot(initialQuery, (snapshot) => {
     const notes = snapshot.docs.map(doc => {
       const data = doc.data()
       return { ...data, id: doc.id } as NoteDoc
     })
 
-    const sortedNotes = notes.sort((a, b) =>
-      (categoriesMap.get(a.categoryId) ?? Infinity) - (categoriesMap.get(b.categoryId) ?? Infinity)
-    )
-    callback(sortedNotes)
+    let finalNotes = undefined
+    if ((isPublicUnset || !isPublic) && categoryFilter === AppConfig.allFilter(true)) {
+      finalNotes = notes.sort((a, b) =>
+        (categoriesMap.get(a.categoryId) ?? Infinity) - (categoriesMap.get(b.categoryId) ?? Infinity)
+      )
+    }
+    callback(finalNotes ?? notes)
   })
   return unsubscribe
 }
