@@ -200,10 +200,10 @@ export const SubscribeToNotes = (callback: (docs: NoteDoc[]) => void, categories
   const isPublicUnset = isPublic === undefined
   const filters: QueryFilters = [orderBy("timestamp", "desc")];
 
-  if (isPublic !== undefined) 
+  if (isPublic !== undefined)
     filters.push(where("isPublic", "==", isPublic));
-  if (categoryFilter !== "all") 
-    filters.push(where("categoryId", "==", categoryFilter));
+  if (categoryFilter !== "all")
+    filters.push(where("categoryId", "==", categoryFilter === AppConfig.defaultFilters(true, true) ? "" : categoryFilter));
 
   const initialQuery = query(notesCollection, ...filters);
   const unsubscribe = onSnapshot(initialQuery, (snapshot) => {
@@ -213,7 +213,7 @@ export const SubscribeToNotes = (callback: (docs: NoteDoc[]) => void, categories
     })
 
     let finalNotes = undefined
-    if ((isPublicUnset || !isPublic) && categoryFilter === AppConfig.allFilter(true)) {
+    if ((isPublicUnset || !isPublic) && categoryFilter === AppConfig.defaultFilters(true)) {
       finalNotes = notes.sort((a, b) =>
         (categoriesMap.get(a.categoryId) ?? Infinity) - (categoriesMap.get(b.categoryId) ?? Infinity)
       )

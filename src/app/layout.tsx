@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { UserProvider } from '@/context/UserContext'
+import ToTop from '@/components/ui/ToTop'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </div>
             </div>
           </UserProvider>
+          <ToTop />
           <Toaster />
         </ThemeProvider>
       </body>

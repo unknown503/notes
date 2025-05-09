@@ -12,7 +12,7 @@ export default function CategoryFilters() {
 
   useEffect(() => {
     if (searchParams.size === 0)
-      router.push(`?category=${AppConfig.allFilter(true)}`)
+      router.push(`?category=${AppConfig.defaultFilters(true)}`)
     setFilter(searchParams.get("category") ?? "")
   }, [searchParams])
 
@@ -25,8 +25,14 @@ export default function CategoryFilters() {
     <div className="flex flex-wrap gap-1.5 md:gap-3 mb-5">
       <FilterBadge
         type="custom"
-        label={AppConfig.allFilter()}
-        onClick={() => onBadgeClick(AppConfig.allFilter())}
+        label={AppConfig.defaultFilters()}
+        onClick={() => onBadgeClick(AppConfig.defaultFilters())}
+        selectedFilter={Filter}
+      />
+      <FilterBadge
+        type="custom"
+        label={AppConfig.defaultFilters(false, true)}
+        onClick={() => onBadgeClick(AppConfig.defaultFilters(false, true))}
         selectedFilter={Filter}
       />
       {Categories.map(cat => (

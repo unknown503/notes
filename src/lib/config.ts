@@ -7,7 +7,8 @@ export const AppConfig = {
   description: process.env.DESCRIPTION,
   notepadAutoSaveDelay: 25,
   dismissNoteRemovalDelay: 5000,
-  allFilter: (lower = false) => ((filter => lower ? filter.toLowerCase() : filter)("All"))
+  defaultFilters: (lower = false, unCat?: boolean) => ((filter => lower ? filter.toLowerCase() : filter)
+    (unCat ? "Uncategorized" : "All"))
 }
 
 export const sidebarItems = [
