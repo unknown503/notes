@@ -32,6 +32,7 @@ import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
 import CategorySettings from "./categories/CategorySettings"
 import KeyIcon from "./categories/KeyIcon"
+import { useCtrlSomething } from "@/hooks/hooks"
 
 const FormSchema = z.object({
   content: z.string(),
@@ -46,14 +47,6 @@ export default function NewNoteModal() {
   const [Open, setOpen] = useState(false)
   const { isLoggedIn } = useUser()
   const { toast } = useToast()
-
-  useEffect(() => {
-    if (searchParams.size === 0) return
-    const cat = searchParams.get("category") ?? ""
-    const isUnsetCat = [AppConfig.defaultFilters(true), AppConfig.defaultFilters(true, true)].includes(cat)
-    const catId = !isUnsetCat ? Categories.find(category => category.content.toLowerCase() === cat)?.id ?? "" : ""
-    form.setValue("category", isUnsetCat ? "" : catId)
-  }, [searchParams, Categories])
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -78,6 +71,16 @@ export default function NewNoteModal() {
     setFiles([])
     setSaving(false)
   }
+
+  useEffect(() => {
+    if (searchParams.size === 0) return
+    const cat = searchParams.get("category") ?? ""
+    const isUnsetCat = [AppConfig.defaultFilters(true), AppConfig.defaultFilters(true, true)].includes(cat)
+    const catId = !isUnsetCat ? Categories.find(category => category.content.toLowerCase() === cat)?.id ?? "" : ""
+    form.setValue("category", isUnsetCat ? "" : catId)
+  }, [searchParams, Categories])
+
+  useCtrlSomething(() => SaveNote(form.getValues()), "enter")
 
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
