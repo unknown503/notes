@@ -16,12 +16,14 @@ import {
 } from "@/components/ui/select"
 import { useCategoriesContext } from "@/context/CategoriesContext"
 import { useUser } from "@/context/UserContext"
+import { AppConfig } from "@/lib/config"
 import { AddNote } from "@/lib/db"
 import { customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { } from "@radix-ui/react-select"
 import { Cog, Loader2, Plus } from "lucide-react"
-import { useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Form, FormControl, FormField, FormItem } from "../ui/form"
@@ -37,12 +39,21 @@ const FormSchema = z.object({
 })
 
 export default function NewNoteModal() {
+  const searchParams = useSearchParams()
   const { Categories } = useCategoriesContext()
   const [Files, setFiles] = useState<File[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
   const [Open, setOpen] = useState(false)
   const { isLoggedIn } = useUser()
   const { toast } = useToast()
+
+  useEffect(() => {
+    if (searchParams.size === 0) return
+    const cat = searchParams.get("category") ?? ""
+    const isUnsetCat = [AppConfig.defaultFilters(true), AppConfig.defaultFilters(true, true)].includes(cat)
+    const catId = !isUnsetCat ? Categories.find(category => category.content.toLowerCase() === cat)?.id ?? "" : ""
+    form.setValue("category", isUnsetCat ? "" : catId)
+  }, [searchParams, Categories])
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

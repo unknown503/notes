@@ -16,7 +16,6 @@ export default function CategoryFilters() {
     setFilter(searchParams.get("category") ?? "")
   }, [searchParams])
 
-
   const onBadgeClick = (type: string) => {
     router.push(`?category=${type.toLowerCase()}`)
   }
