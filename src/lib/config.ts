@@ -11,7 +11,7 @@ export const AppConfig = {
     (unCat ? "Uncategorized" : "All"))
 }
 
-export const sidebarItems = [
+const sidebarItems = [
   {
     label: "Home",
     icon: Home,

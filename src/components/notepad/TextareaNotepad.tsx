@@ -1,19 +1,19 @@
 "use client"
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { useCtrlSomething, usePreventExit } from '@/hooks/hooks'
 import { GetNotepadContent } from '@/lib/db'
 import { ChangeEvent, useEffect } from 'react'
 import TimeAgo from 'react-timeago'
 import { useNotepadContext } from '../../context/NotepadContext'
-import { usePreventExit, useCtrlS } from '@/hooks/hooks'
 
-export type DelayType = { delay: number }
+type DelayType = { delay: number }
 
 export default function TextareaField({ delay }: DelayType) {
   const { Notepad, Saving, setNotepad, setSaving, delayedCallback, AutoSave } = useNotepadContext()
 
   usePreventExit(!AutoSave || Saving !== false && AutoSave)
-  useCtrlS(() => delayedCallback())
+  useCtrlSomething(() => delayedCallback())
 
   useEffect(() => {
     GetNotepadContent().then(setNotepad)

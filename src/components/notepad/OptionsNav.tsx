@@ -8,7 +8,7 @@ import { Button } from '../ui/button'
 
 const MSKey = "manual-save"
 
-export default function OptionsButton() {
+export default function OptionsNav() {
   const { Notepad, delayedCallback, setAutoSave, AutoSave, setSaving } = useNotepadContext()
 
   useEffect(() => {

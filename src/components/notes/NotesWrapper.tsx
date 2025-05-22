@@ -7,8 +7,8 @@ import { useNotesContext } from '@/context/NotesContext'
 import { useCategoriesContext } from '@/context/CategoriesContext'
 import { useSearchParams } from 'next/navigation'
 
-export type NotesWrapperProps = {
-  filter: string,
+type NotesWrapperProps = {
+  filter: string
 }
 
 const visibilityFilter = (filter: string) => filter === "all" ? undefined : filter === "public"

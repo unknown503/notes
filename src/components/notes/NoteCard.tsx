@@ -129,7 +129,7 @@ export default function NoteCard(props: NoteDoc) {
           </SheetDescription>
           <div className="flex flex-col gap-5">
             <div className="word-break pt-4">
-              <ScrollArea customClass="max-h-[600px]">
+              <ScrollArea customClass="max-h-[36.25rem]">
                 {content !== "" ?
                   <span
                     className="rich-text"

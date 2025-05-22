@@ -127,7 +127,6 @@ export const RemoveLastDot = (str: string) => {
   return str.slice(-1) === '.' ? str.slice(0, -1) : str
 }
 
-
 export const isWithinThisWeek = (timestamp: number) => {
   const date = new Date(timestamp)
 
@@ -142,48 +141,3 @@ export const isWithinThisWeek = (timestamp: number) => {
 
   return date >= startOfWeek && date <= endOfWeek
 }
-
-/* export const getCurrentWeekRange = (meinDate: number | string) => {
-  const date = new Date(meinDate)
-  const currentDay = date.getDay()
-
-  const daysUntilMonday = (currentDay + 6) % 7
-
-  const firstDayOfWeek = new Date(date)
-  firstDayOfWeek.setDate(date.getDate() - daysUntilMonday)
-
-  const lastDayOfWeek = new Date(firstDayOfWeek)
-  lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6)
-
-  return {
-    start: convertToLocalTime(firstDayOfWeek),
-    end: convertToLocalTime(lastDayOfWeek),
-    joined: convertToLocalTime(firstDayOfWeek) + " - " + convertToLocalTime(lastDayOfWeek)
-  }
-} */
-
-/* export const groupRecordsByWeek = (records: NotepadDoc[]) => {
-  const weeklyRecords: WeeklyRecordsType[] = []
-
-  records.forEach(doc => {
-    const { start, end } = getCurrentWeekRange(doc.timestamp)
-    const existingWeeklyRecord = weeklyRecords.find(weeklyRecord =>
-      weeklyRecord.range.from === start && weeklyRecord.range.to === end
-    )
-
-    if (existingWeeklyRecord) {
-      existingWeeklyRecord.records.push(doc)
-    } else {
-      weeklyRecords.unshift({
-        range: {
-          from: start,
-          to: end
-        },
-        records: [doc]
-      })
-    }
-  })
-
-  return weeklyRecords
-}
- */

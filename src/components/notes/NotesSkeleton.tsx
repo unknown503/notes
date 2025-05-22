@@ -4,7 +4,7 @@ import { Skeleton } from "../ui/skeleton"
 type NotesSkeletonProps = {
   count: number
 }
-export const NotesSkeleton = ({ count }: NotesSkeletonProps) => (
+const NotesSkeleton = ({ count }: NotesSkeletonProps) => (
   <>
     {new Array(count).fill(0).map((_, i) =>
       <Card key={i} className="h-[243px]">

@@ -2,11 +2,11 @@ import { ButtonProps } from "@/components/ui/button"
 import { User } from "firebase/auth"
 import { ButtonHTMLAttributes, ReactNode } from "react"
 
-export type ButtonType = {
+type ButtonType = {
   kind: "button"
 } & ButtonProps
 
-export type GenericType = {
+type GenericType = {
   kind: "generic"
 } & ButtonHTMLAttributes<HTMLButtonElement>
 

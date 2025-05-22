@@ -16,7 +16,7 @@ const tabs = [
   }
 ]
 
-export const TabsSection = () => (
+const TabsSection = () => (
   <Tabs defaultValue={tabs[0].label} >
     <div className="container mt-3">
       <TabsList>
