@@ -1,6 +1,7 @@
 import Heading from '@/components/Heading'
 import { AuthExpecter } from '@/components/lib/lib'
 import OptionsNav from '@/components/notepad/OptionsNav'
+import HistoryContext from '@/context/HistoryContext'
 import NotepadContext from '@/context/NotepadContext'
 import { AppConfig, GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
@@ -22,8 +23,10 @@ export default function Home() {
           title="Notepad"
           rightTitleSide={<OptionsNav />}
         />
-        <TextareaNotepad delay={AppConfig.notepadAutoSaveDelay * 1000} />
-        <History />
+        <HistoryContext>
+          <TextareaNotepad delay={AppConfig.notepadAutoSaveDelay * 1000} />
+          <History />
+        </HistoryContext>
       </NotepadContext>
     </AuthExpecter>
   )

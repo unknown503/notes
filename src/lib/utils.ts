@@ -35,6 +35,10 @@ export function getDate(unix: number, showTime = false) {
   return fullDate.replace(",", " ·")
 }
 
+export function getWeekDay(unix: number) {
+  return new Date(unix).toLocaleDateString('en-US', { weekday: 'long' });
+}
+
 export function dateToReadableRecent(unix: number) {
   const date = new Date(unix)
   const today = new Date()

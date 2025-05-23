@@ -1,21 +1,13 @@
-type NotepadWeeks = {
+export type NotepadWeeks = {
   thisWeek: NotepadDoc[],
   lastWeek: NotepadDoc[]
 }
 
-type NotepadDoc = {
+export type NotepadDoc = {
   content: string
   timestamp: number
 }
 
-type NotepadHistoryDoc = {
-  records: NotepadDoc[]
-}
-
-type WeeklyRecordsType = {
-  range: {
-    from: string,
-    to: string,
-  },
+export type NotepadHistoryDoc = {
   records: NotepadDoc[]
 }

@@ -61,7 +61,9 @@ export default function OptionsNav() {
             <Check size={16} />
           }
         </div>
-        Auto save
+        <span>
+          Auto <span className="hidden md:inline">save</span>
+        </span>
       </Button>
     </div>
   )

@@ -6,8 +6,10 @@ import { GetNotepadContent } from '@/lib/db'
 import { ChangeEvent, useEffect } from 'react'
 import TimeAgo from 'react-timeago'
 import { useNotepadContext } from '../../context/NotepadContext'
+import dynamic from 'next/dynamic'
 
 type DelayType = { delay: number }
+const AggregatedHistory = dynamic(() => import('@/components/notepad/AggregatedHistory'))
 
 export default function TextareaField({ delay }: DelayType) {
   const { Notepad, Saving, setNotepad, setSaving, delayedCallback, AutoSave } = useNotepadContext()
@@ -37,9 +39,12 @@ export default function TextareaField({ delay }: DelayType) {
 
   return (
     <div className="container py-4 lg:py-6 flex flex-col gap-4">
-      <Label htmlFor="content">
-        Notepad content
-      </Label>
+      <div className="flex items-center justify-between">
+        <Label htmlFor="content">
+          Notepad content
+        </Label>
+        <AggregatedHistory />
+      </div>
       <Textarea
         placeholder="Type or paste something"
         className="min-h-[18rem] h-40 max-h-60"

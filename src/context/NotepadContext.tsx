@@ -2,6 +2,7 @@
 import { UpdateNotepad } from "@/lib/db"
 import { RemoveLastDot } from "@/lib/utils"
 import { ChildrenReceptor } from "@/types/common"
+import { NotepadDoc } from "@/types/notepad"
 import { Dispatch, SetStateAction, createContext, useCallback, useContext, useMemo, useState } from "react"
 
 type ContextType = {

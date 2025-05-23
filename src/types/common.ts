@@ -12,6 +12,7 @@ type GenericType = {
 
 export type CopyButtonProps = (GenericType | ButtonType) & {
   textToCopy?: string
+  disableToast?: boolean
 }
 
 export type UserType = {

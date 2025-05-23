@@ -9,13 +9,13 @@ import { useEffect } from "react"
 import { useUser } from "@/context/UserContext"
 import { useRouter } from "next/navigation"
 
-export function CopyButton({ textToCopy, children, kind, onClick, ...props }: CopyButtonProps) {
+export function CopyButton({ textToCopy, children, kind, onClick, disableToast, ...props }: CopyButtonProps) {
   const { toast } = useToast()
 
   const CopyToClipboard = () => {
     if (textToCopy === "") return
     navigator.clipboard.writeText(textToCopy?.trim() ?? "")
-    toast(customToast("Content copied."))
+    !disableToast && toast(customToast("Content copied."))
   }
 
   const Comp = kind === "button" ? Button : Slot

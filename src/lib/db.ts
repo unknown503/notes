@@ -4,6 +4,7 @@ import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query,
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { auth, db, storage } from "./firebase"
 import { AppConfig } from './config'
+import { NotepadDoc, NotepadHistoryDoc } from '@/types/notepad'
 
 const maxHistoryRecords = 10
 const NOTES = "notes"
@@ -92,7 +93,7 @@ export const UpdateNotepad = async (content: string, updateHistory = true) => {
 
 /** NOTES */
 
-export const UploadFile = async (file: File, isLoggedIn: boolean) => {
+const UploadFile = async (file: File, isLoggedIn: boolean) => {
   const array = file.name.split(".")
   const ext = array.pop()
   const name = array.join(".")

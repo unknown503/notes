@@ -8,27 +8,18 @@ import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
 import { useNotepadContext } from "../../context/NotepadContext"
 import { CopyButton } from "../lib/lib"
+import { NotepadDoc, NotepadWeeks } from "@/types/notepad"
+import { useHistoryContext } from "@/context/HistoryContext"
 
 function History() {
   const accordionRef = useRef<HTMLDivElement>(null)
-  const [Records, setRecords] = useState<NotepadWeeks | null>(null)
   const { Notepad, setNotepad } = useNotepadContext()
+  const { Records } = useHistoryContext()
 
   useEffect(() => {
-    const unsubscribe = SubscribeToNotepadHistory(docs => {
-      const records = docs.records.sort((a, b) => b.timestamp - a.timestamp)
-      const weeks: NotepadWeeks = {
-        thisWeek: records.filter(record => isWithinThisWeek(record.timestamp)),
-        lastWeek: records.filter(record => !isWithinThisWeek(record.timestamp)),
-      }
-
-      setRecords(weeks)
-      setTimeout(() => {
-        expandAll()
-      }, 200);
-    })
-    return () => unsubscribe()
-  }, [])
+    if (!Records) return
+    setTimeout(() => expandAll(), 200);
+  }, [Records])
 
   const RecoverContent = async ({ content, timestamp }: NotepadDoc) => {
     if (!Records || !Notepad) return
@@ -52,9 +43,7 @@ function History() {
   const expandAll = () => {
     if (!accordionRef.current) return
     const items = accordionRef.current.querySelectorAll<HTMLButtonElement>("div[data-state='closed'] button")
-    items.forEach(item => {
-      item.click()
-    });
+    items.forEach(item => item.click());
   }
 
   const AccordionItemContent = (record: NotepadDoc) => (
