@@ -35,8 +35,12 @@ export function CopyButton({ textToCopy, children, kind, onClick, disableToast, 
 
 export function AuthExpecter({ children }: ChildrenReceptor) {
   const { user, isLoggedIn } = useUser()
-
   const shouldShowSpinner = (user === false || user === null) && !isLoggedIn
+  const router = useRouter()
+
+  useEffect(() => {
+    !isLoggedIn && user === null && router.replace("/")
+  }, [isLoggedIn, user])
 
   return (
     <>
