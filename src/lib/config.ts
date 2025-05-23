@@ -1,4 +1,4 @@
-import { BookText, CaseSensitive, Home, KeyRound, ScrollText } from "lucide-react";
+import { BookText, CaseSensitive, KeyRound, ScrollText } from "lucide-react";
 
 export const GenericTitle = (generic: string) => `${generic} | ${AppConfig.title}`
 
@@ -22,13 +22,6 @@ const sidebarItems = [
     label: "Convert case",
     icon: CaseSensitive,
     path: "/case",
-    authRequired: false
-  },
-  {
-    label: "Auth",
-    icon: KeyRound,
-    path: "/auth",
-    authRelated: true,
     authRequired: false
   },
   {
@@ -61,5 +54,5 @@ export const availableTabs = (isLoggedIn: boolean) => {
 
 export const availableSideItems = (isLoggedIn: boolean) =>
   sidebarItems.filter(item =>
-    item.authRelated ? !isLoggedIn : item.authRequired ? isLoggedIn : true
+    false ? !isLoggedIn : item.authRequired ? isLoggedIn : true
   )

@@ -65,7 +65,7 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       <div>
-        <SheetPrimitive.Close className={`absolute ${side === "right" ? "left-2 lg:left-4" : "right-2 lg:right-4"} top-4 lg:top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary`}>
+        <SheetPrimitive.Close className={`absolute ${side === "right" ? "left-2 lg:left-4" : "right-2 lg:right-4"} z-10 top-4 lg:top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary`}>
           <div className="h-6 w-6">
             {side === "right" ?
               <ChevronLeft />
