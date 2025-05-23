@@ -13,12 +13,6 @@ export const AppConfig = {
 
 const sidebarItems = [
   {
-    label: "Home",
-    icon: Home,
-    path: "/",
-    authRequired: false,
-  },
-  {
     label: "Notes",
     icon: BookText,
     path: "/notes",
