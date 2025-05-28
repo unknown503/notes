@@ -34,6 +34,7 @@ import Dropzone from "./Dropzone"
 import CategorySettings from "./categories/CategorySettings"
 import KeyIcon from "./categories/KeyIcon"
 import { useCtrlSomething } from "@/hooks/hooks"
+import { useIconsContext } from "@/context/IconsContext"
 
 const FormSchema = z.object({
   content: z.string(),
@@ -41,6 +42,7 @@ const FormSchema = z.object({
 })
 
 export default function NewNoteModal() {
+  const { findBy } = useIconsContext()
   const searchParams = useSearchParams()
   const { Categories } = useCategoriesContext()
   const [Files, setFiles] = useState<File[]>([])
@@ -150,7 +152,7 @@ export default function NewNoteModal() {
                               <div className="flex gap-3 items-center capitalize">
                                 <KeyIcon
                                   name={category.icon}
-                                  color={category.icon}
+                                  color={findBy(category.icon)?.color}
                                 />
                                 <span>{category.content}</span>
                               </div>

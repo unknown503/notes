@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { CategoriesContextProps } from "@/context/CategoriesContext"
-import { iconList } from "@/icons/categories"
 import { UpdateCategories } from "@/lib/db"
 import { customToast } from "@/lib/utils"
 import { X } from "lucide-react"
 import { useEffect, useRef } from "react"
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd'
 import KeyIcon from "./KeyIcon"
+import { useIconsContext } from "@/context/IconsContext"
 
 export default function CategoriesDnD({ Categories, setCategories }: Omit<CategoriesContextProps, "findBy">) {
   const initialRender = useRef(true);
+  const { findBy } = useIconsContext()
   const { toast } = useToast()
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function CategoriesDnD({ Categories, setCategories }: Omit<Catego
                       className="border border-gray-600 rounded-lg p-3.5 my-2 flex justify-between items-center capitalize"
                     >
                       <div className="flex gap-4">
-                        <KeyIcon name={item.icon} color={item.icon} />
+                        <KeyIcon name={item.icon} color={findBy(item.icon)?.color} />
                         {item.content}
                       </div>
                       <Button

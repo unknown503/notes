@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Category } from "@/types/notes";
 import KeyIcon from "./KeyIcon";
+import { useIconsContext } from "@/context/IconsContext";
 
 type Filter = {
   onClick?: () => void
@@ -20,6 +21,7 @@ type CustomVariant = {
 type FilterBadgeProps = CategoryVariant | CustomVariant
 
 export default function FilterBadge(props: FilterBadgeProps) {
+  const { findBy } = useIconsContext()
   //@ts-ignore
   const isFilterSelected = (props.category?.content ?? props.label).toLowerCase() === props.selectedFilter
 
@@ -34,7 +36,7 @@ export default function FilterBadge(props: FilterBadgeProps) {
         <>
           <KeyIcon
             name={props.category.icon}
-            color={props.category.icon}
+            color={findBy(props.category.icon)?.color}
             size={18}
           />
           {props.category.content}

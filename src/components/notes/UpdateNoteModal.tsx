@@ -28,6 +28,7 @@ import { Textarea } from "../ui/textarea";
 import { useToast } from "../ui/use-toast";
 import Dropzone from "./Dropzone";
 import KeyIcon from "./categories/KeyIcon";
+import { useIconsContext } from "@/context/IconsContext";
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -39,10 +40,11 @@ type UpdateNoteModalProps = {
 } & Omit<NoteDoc, "timestamp" | "isPublic">
 
 export default function UpdateNoteModal({ content, files: prevFiles, id, categoryId, setOpen }: UpdateNoteModalProps) {
-  const { Categories } = useCategoriesContext()
   const [Files, setFiles] = useState<File[]>([])
   const [RemovedFiles, setRemovedFiles] = useState<string[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
+  const { Categories } = useCategoriesContext()
+  const { findBy } = useIconsContext()
   const { isLoggedIn } = useUser()
   const { toast } = useToast()
 
@@ -51,7 +53,7 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, categor
   })
 
   const SaveNote = async ({ content, category }: z.infer<typeof FormSchema>) => {
-    if (content === "" && Files.length === 0 && RemovedFiles.length === 0) {
+    if (content === "" && Files.length === 0 && RemovedFiles.length === 0 && category === categoryId) {
       toast(customToast("Nothing to update.", true))
       return
     }
@@ -128,7 +130,7 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, categor
                           <div className="flex gap-3 items-center capitalize">
                             <KeyIcon
                               name={category.icon}
-                              color={category.icon}
+                              color={findBy(category.icon)?.color}
                             />
                             <span>{category.content}</span>
                           </div>

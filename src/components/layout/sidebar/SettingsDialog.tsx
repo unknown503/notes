@@ -15,14 +15,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { useIconsContext } from "@/context/IconsContext"
-import { Plus, Trash } from "lucide-react"
-import { FormEvent, MouseEvent, useState } from "react"
-
 import { useToast } from "@/components/ui/use-toast"
+import { useIconsContext } from "@/context/IconsContext"
 import { DEFAULT_ICON, UpdateIcons } from "@/lib/db"
 import { customToast } from "@/lib/utils"
 import { Icon } from "@/types/icons"
+import { Plus, Trash } from "lucide-react"
+import { FormEvent, MouseEvent, useState } from "react"
 
 const INITIAL_COLOR = '#fff'
 
@@ -55,18 +54,13 @@ export function SettingsDialog() {
     setName("")
   }
 
-  /**
-   * @todo Note check to see if the icons is being used somewhere
-   */
-  const removeIcon = async (name: string, e: MouseEvent<HTMLButtonElement>) => {
+  const removeIcon = async (name: string) => {
     if (DEFAULT_ICON === name) {
       toast(customToast("Cant remove that one", true))
       return
     }
     const filtered = Icons.filter(icon => icon.name !== name);
     await UpdateIcons({ icons: filtered })
-    const btn = e.target as HTMLButtonElement
-    btn.disabled = true
     toast(customToast("Icon removed"))
     setIcons(filtered)
   }
@@ -119,7 +113,7 @@ export function SettingsDialog() {
   )
 }
 
-type PopoverIconProps = { removeIcon: (name: string, e: any) => void } & Icon
+type PopoverIconProps = { removeIcon: (name: string) => void } & Icon
 const PopoverIcon = ({ color, name, removeIcon }: PopoverIconProps) => {
   return (
     <TooltipProvider>
@@ -133,7 +127,6 @@ const PopoverIcon = ({ color, name, removeIcon }: PopoverIconProps) => {
             <KeyIcon
               name={name}
               color={color}
-              hexColor
               size={36}
             />
           </Button>
@@ -143,7 +136,7 @@ const PopoverIcon = ({ color, name, removeIcon }: PopoverIconProps) => {
             variant="ghost"
             size="icon"
             title="Remove icon"
-            onClick={(e) => removeIcon(name, e)}
+            onClick={() => removeIcon(name)}
           >
             <Trash />
           </Button>

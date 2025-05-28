@@ -26,6 +26,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import { useToast } from "../ui/use-toast"
 import KeyIcon from "./categories/KeyIcon"
 import NoteFiles from "./NoteFiles"
+import { useIconsContext } from "@/context/IconsContext"
 
 const NoteOptionsButton = dynamic(() => import('@/components/notes/NoteOptionsButton'))
 
@@ -33,6 +34,7 @@ export default function NoteCard(props: NoteDoc) {
   const { content, files, isPublic, timestamp, categoryId } = props
   const [Hide, setHide] = useState(false)
   const { findBy } = useCategoriesContext()
+  const { findBy: findIconBy } = useIconsContext()
   const { toast } = useToast()
   const icon = findBy(categoryId)?.icon
 
@@ -56,7 +58,7 @@ export default function NoteCard(props: NoteDoc) {
             </div>
             <div className="flex gap-2 items-center">
               {categoryId && categoryId !== "" &&
-                <KeyIcon name={icon} color={icon} />
+                <KeyIcon name={icon} color={findIconBy(icon)?.color} />
               }
               <NoteOptionsButton
                 {...props}

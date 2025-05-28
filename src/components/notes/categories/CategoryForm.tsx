@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
 import { CategoriesContextProps } from "@/context/CategoriesContext"
-import { iconList } from "@/icons/categories"
+import { useIconsContext } from "@/context/IconsContext"
 import { customToast } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
@@ -35,6 +35,7 @@ const formSchema = z.object({
 })
 
 export default function CategoryForm({ setCategories }: Pick<CategoriesContextProps, "setCategories">) {
+  const { Icons } = useIconsContext()
   const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,9 +72,9 @@ export default function CategoryForm({ setCategories }: Pick<CategoriesContextPr
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {Object.entries(iconList).map(([key, color]) => (
-                    <SelectItem value={key} key={key}>
-                      <KeyIcon name={key} color={color} hexColor/>
+                  {Icons.map(icon => (
+                    <SelectItem value={icon.name} key={icon.name}>
+                      <KeyIcon name={icon.name} color={icon.color} />
                     </SelectItem>
                   ))}
                 </SelectContent>

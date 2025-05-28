@@ -6,7 +6,7 @@ import { createContext, Dispatch, SetStateAction, useContext, useState } from "r
 export type IconsContextProps = {
   Icons: Icon[],
   setIcons: Dispatch<SetStateAction<Icon[]>>,
-  findBy: (name: string) => Omit<Icon,"color"> | undefined
+  findBy: (name: string | undefined) => Omit<Icon, "name"> | undefined
 }
 
 const IconsContext = createContext<IconsContextProps>({
@@ -22,7 +22,7 @@ export function useIconsContext() {
 const IconsProvider = ({ children }: ChildrenReceptor) => {
   const [Icons, setIcons] = useState<Icon[]>([])
 
-  const findBy = (name: string) =>
+  const findBy = (name: string | undefined) =>
     Icons?.find(icon => icon.name === name);
 
   return (

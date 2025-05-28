@@ -11,7 +11,7 @@ type ContextType = {
 
 const Context = createContext<ContextType>({ Records: null })
 
-function HistoryContext({ children }: ChildrenReceptor) {
+function HistoryProvider({ children }: ChildrenReceptor) {
   const [Records, setRecords] = useState<NotepadWeeks | null>(null)
 
   useEffect(() => {
@@ -35,4 +35,4 @@ function HistoryContext({ children }: ChildrenReceptor) {
 }
 
 export const useHistoryContext = () => useContext(Context)
-export default HistoryContext
+export default HistoryProvider
