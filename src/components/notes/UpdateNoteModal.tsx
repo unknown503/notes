@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -87,6 +88,9 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, categor
       <DialogHeader>
         <DialogTitle>Update note</DialogTitle>
       </DialogHeader>
+      <DialogDescription className="sr-only">
+        Update note
+      </DialogDescription>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(SaveNote)} className="flex items-center space-x-2">
           <div className="grid w-full gap-4">

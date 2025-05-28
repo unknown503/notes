@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -90,7 +91,7 @@ export default function NewNoteModal() {
             <Button
               variant="outline"
               size="icon"
-              title="Copy content"
+              title="Category Settings"
             >
               <Cog size={20} />
             </Button>
@@ -108,6 +109,9 @@ export default function NewNoteModal() {
           <DialogTitle className="flex gap-2">
             New note
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            New note
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(SaveNote)} className="flex items-center space-x-2">

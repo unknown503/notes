@@ -5,16 +5,21 @@ import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "fire
 import { auth, db, storage } from "./firebase"
 import { AppConfig } from './config'
 import { NotepadDoc, NotepadHistoryDoc } from '@/types/notepad'
+import { IconsDoc } from '@/types/icons'
 
 const maxHistoryRecords = 10
 const NOTES = "notes"
 const CATEGORIES = "notes-categories"
 const NOTEPAD = "notepad"
+const ICONS = "notepad"
+
+export const DEFAULT_ICON = "TriangleAlert"
 
 const notesCollection = collection(db, NOTES)
 const notepadDoc = doc(db, NOTEPAD, "content")
 const categoriesDoc = doc(db, CATEGORIES, "categories")
 const historyDoc = doc(db, NOTEPAD, "history")
+const iconsDoc = doc(db, ICONS, "icons")
 
 /** NOTEPAD */
 
@@ -246,7 +251,7 @@ export const GetCategories = async () => {
       categories: [{
         id: "critical",
         content: "critical",
-        icon: "TriangleAlert"
+        icon: DEFAULT_ICON
       }]
     }
     await setDoc(categoriesDoc, data)
@@ -256,4 +261,28 @@ export const GetCategories = async () => {
 
 export const UpdateCategories = async (categories: CategoriesDoc) => {
   await updateDoc(categoriesDoc, categories)
+}
+
+/** ICONS */
+
+export const GetIcons = async () => {
+  const icons = await getDoc(iconsDoc)
+  const exists = icons.exists()
+
+  if (exists) {
+    return icons.data() as IconsDoc
+  } else {
+    const data: IconsDoc = {
+      icons: [{
+        name: DEFAULT_ICON,
+        color: "#ff3838"
+      }]
+    }
+    await setDoc(iconsDoc, data)
+    return data
+  }
+}
+
+export const UpdateIcons = async (icons: IconsDoc) => {
+  await updateDoc(iconsDoc, icons)
 }

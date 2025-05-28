@@ -12,6 +12,7 @@ type KeyIconProps = {
 
 export default function KeyIcon({ name, color, hexColor, size }: KeyIconProps) {
   const inferredColor = hexColor ? color : iconList[color as keyof typeof iconList]
-  const Icon = LucideIcons[name] as ForwardRefExoticComponent<Omit<LucideIcons.LucideProps, "ref">>
+  let Icon = LucideIcons[name] as ForwardRefExoticComponent<Omit<LucideIcons.LucideProps, "ref">>
+  if (!Icon) Icon = LucideIcons["Squirrel"]
   return <Icon size={size || 25} color={inferredColor} />
 }

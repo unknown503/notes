@@ -2,6 +2,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -17,16 +18,17 @@ export default function CategorySettings({ children }: ChildrenReceptor) {
 
   return (
     <Dialog>
-      <div className="flex gap-3">
-        <DialogTrigger asChild>
-          {children}
-        </DialogTrigger>
-      </div>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex gap-2">
             Categories
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Categories
+          </DialogDescription>
           <CategoryForm
             setCategories={setCategories}
           />

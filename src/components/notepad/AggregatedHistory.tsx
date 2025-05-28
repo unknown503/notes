@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -28,6 +29,9 @@ export default function AggregatedHistory() {
         <DialogHeader>
           <DialogTitle>Aggregated Week</DialogTitle>
         </DialogHeader>
+        <DialogDescription className="sr-only">
+          Aggregated Week
+        </DialogDescription>
         <ScrollArea customClass="max-h-[36.25rem]" className="space-y-4 mt-4">
           {Records && Records.thisWeek.reverse().map((record, i) => (
             <div key={record.timestamp}>
