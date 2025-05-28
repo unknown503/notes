@@ -82,8 +82,8 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
   }
 
   return (
-    <Dialog open={Open} onOpenChange={toggleDialog} modal>
-      <DropdownMenu modal>
+    <Dialog open={Open} onOpenChange={toggleDialog}>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -103,7 +103,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
               kind="generic"
             >
               <DropdownMenuCheckboxItem>
-                Copy note
+                Copy content
               </DropdownMenuCheckboxItem>
             </CopyButton>
           }
