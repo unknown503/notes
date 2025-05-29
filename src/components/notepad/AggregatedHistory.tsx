@@ -59,7 +59,7 @@ export default function AggregatedHistory() {
                 <Separator className="mt-4" />
               </div>
             }
-            {Records && Records.thisWeek.reverse().map((record, i) => (
+            {Records && Records.thisWeek.toReversed().map((record, i) => (
               <div key={record.timestamp}>
                 <div className="flex gap-4 items-center">
                   <span>{i + 1}</span>
