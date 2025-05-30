@@ -13,13 +13,14 @@ export const usePreventExit = (shouldWarn: boolean) => {
   }, [shouldWarn])
 }
 
-export const useCtrlSomething = (callback: () => void, something = "s") => {
+export const useCtrlSomething = (callback: () => void, something = "s", condition: boolean, skipCtrl = false) => {
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key.toLowerCase() === something) {
-        event.preventDefault()
-        callback()
-      }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      const shouldTrigger = skipCtrl ? key === something : e.ctrlKey && key === something;
+      if (!shouldTrigger || !condition) return;
+      e.preventDefault()
+      callback()
     }
 
     window.addEventListener("keydown", handleKeyDown)

@@ -83,7 +83,8 @@ export default function NewNoteModal() {
     form.setValue("category", isUnsetCat ? "" : catId)
   }, [searchParams, Categories])
 
-  useCtrlSomething(() => SaveNote(form.getValues()), "enter")
+  useCtrlSomething(() => setOpen(true), "n", !Open, true)
+  useCtrlSomething(() => SaveNote(form.getValues()), "enter", Open)
 
   return (
     <Dialog open={Open} onOpenChange={setOpen}>
