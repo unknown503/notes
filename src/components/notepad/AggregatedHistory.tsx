@@ -39,7 +39,7 @@ export default function AggregatedHistory() {
             {Notepad &&
               <div>
                 <div className="flex gap-4 items-center">
-                  <span>{1}</span>
+                  <span>1</span>
                   <div>
                     <span className="text-sm text-gray-500">{getWeekDay(Notepad.timestamp)}</span>
                     <div className="flex gap-3">
@@ -59,10 +59,10 @@ export default function AggregatedHistory() {
                 <Separator className="mt-4" />
               </div>
             }
-            {Records && Records.thisWeek.toReversed().map((record, i) => (
+            {Records && Records.thisWeek.map((record, i) => (
               <div key={record.timestamp}>
                 <div className="flex gap-4 items-center">
-                  <span>{i + 1}</span>
+                  <span>{i + 2}</span>
                   <div>
                     <span className="text-sm text-gray-500">{getWeekDay(record.timestamp)}</span>
                     <div className="flex gap-3">
