@@ -13,7 +13,7 @@ export const usePreventExit = (shouldWarn: boolean) => {
   }, [shouldWarn])
 }
 
-export const useCtrlSomething = (callback: () => void, something = "s", condition: boolean, skipCtrl = false) => {
+export const useCtrlSomething = (callback: () => void, something = "s", condition?: boolean, skipCtrl = false) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
