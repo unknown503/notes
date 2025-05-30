@@ -17,11 +17,11 @@ import {
 } from "@/components/ui/tooltip"
 import { useToast } from "@/components/ui/use-toast"
 import { useIconsContext } from "@/context/IconsContext"
-import { DEFAULT_ICON, UpdateIcons } from "@/lib/db"
+import { DEFAULT_ICON, GetIcons, UpdateIcons } from "@/lib/db"
 import { customToast } from "@/lib/utils"
 import { Icon } from "@/types/icons"
 import { Plus, Trash } from "lucide-react"
-import { FormEvent, MouseEvent, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 
 const INITIAL_COLOR = '#fff'
 
@@ -30,6 +30,10 @@ export function SettingsDialog() {
   const [Color, setColor] = useState(INITIAL_COLOR);
   const [Name, setName] = useState("")
   const { toast } = useToast()
+
+  useEffect(() => {
+    GetIcons().then(res => setIcons(res.icons))
+  }, [])
 
   const saveIcon = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

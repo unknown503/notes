@@ -1,12 +1,11 @@
 "use client"
-import { GetCategories, GetIcons, SubscribeToNotes } from '@/lib/db'
+import { useCategoriesContext } from '@/context/CategoriesContext'
+import { useNotesContext } from '@/context/NotesContext'
+import { GetCategories, SubscribeToNotes } from '@/lib/db'
 import dynamic from 'next/dynamic'
+import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import NotesSkeleton from './NotesSkeleton'
-import { useNotesContext } from '@/context/NotesContext'
-import { useCategoriesContext } from '@/context/CategoriesContext'
-import { useSearchParams } from 'next/navigation'
-import { useIconsContext } from '@/context/IconsContext'
 
 type NotesWrapperProps = {
   filter: string
@@ -20,12 +19,10 @@ const NoteCard = dynamic(() => import('@/components/notes/NoteCard'), {
 export default function NotesWrapper({ filter }: NotesWrapperProps) {
   const { Categories, setCategories } = useCategoriesContext()
   const { Notes, setNotes } = useNotesContext()
-  const { setIcons } = useIconsContext()
   const searchParams = useSearchParams()
 
   useEffect(() => {
     GetCategories().then(res => setCategories(res.categories))
-    GetIcons().then(res => setIcons(res.icons))
   }, [])
 
   useEffect(() => {
