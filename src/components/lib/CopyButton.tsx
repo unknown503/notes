@@ -1,3 +1,4 @@
+"use client"
 import { customToast } from '@/lib/utils'
 import { CopyButtonProps } from '@/types/common'
 import { Slot } from '@radix-ui/react-slot'

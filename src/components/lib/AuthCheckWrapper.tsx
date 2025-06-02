@@ -1,3 +1,4 @@
+"use client"
 import { useUser } from "@/context/UserContext"
 import { AuthWrapperProps, ChildrenReceptor } from "@/types/common"
 import { Loader2 } from "lucide-react"

@@ -1,3 +1,4 @@
+"use client"
 import { useUser } from "@/context/UserContext"
 import { ChildrenReceptor } from "@/types/common"
 import { useRouter } from "next/navigation"
