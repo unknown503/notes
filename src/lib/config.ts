@@ -1,4 +1,4 @@
-import { BookText, CaseSensitive, KeyRound, ScrollText } from "lucide-react";
+import { BookText, CaseSensitive, ScrollText } from "lucide-react";
 
 export const GenericTitle = (generic: string) => `${generic} | ${AppConfig.title}`
 

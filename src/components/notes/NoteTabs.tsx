@@ -20,7 +20,7 @@ const NoteTabs = () => {
       {user !== false &&
         <Tabs defaultValue={tabs[0]}>
           <CategoriesProvider>
-            <Heading title="Notes" rightTitleSide={<NewNoteModal />}>
+            <Heading title="Notes" right={<NewNoteModal />}>
               <TabsList isDefault>
                 {tabs.map(tab =>
                   <TabsTrigger

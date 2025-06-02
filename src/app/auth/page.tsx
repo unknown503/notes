@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading'
-import { AuthCheckWrapper } from '@/components/lib/lib'
+import AuthCheckWrapper from '@/components/lib/AuthCheckWrapper'
 import { Card, CardContent } from '@/components/ui/card'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'

@@ -7,9 +7,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
 import { useNotepadContext } from "../../context/NotepadContext"
-import { CopyButton } from "../lib/lib"
 import { NotepadDoc, NotepadWeeks } from "@/types/notepad"
 import { useHistoryContext } from "@/context/HistoryContext"
+import CopyButton from "../lib/CopyButton"
 
 function History() {
   const accordionRef = useRef<HTMLDivElement>(null)

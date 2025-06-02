@@ -18,8 +18,8 @@ import { Dialog, DialogTrigger } from "../ui/dialog"
 import { ToastAction } from "../ui/toast"
 import { useToast } from "../ui/use-toast"
 import { useUser } from "@/context/UserContext"
-import { CopyButton } from "../lib/lib"
 import { AppConfig } from "@/lib/config"
+import CopyButton from "../lib/CopyButton"
 
 export type NoteOptionsButtonProps = NoteDoc & {
   Hide: boolean

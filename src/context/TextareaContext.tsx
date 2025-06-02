@@ -12,9 +12,7 @@ const TextContext = createContext<TextContextProps>({
   setText: () => { },
 });
 
-export function useTextareaFieldState() {
-  return useContext(TextContext);
-}
+export const useTextareaFieldState = () => useContext(TextContext)
 
 export const TextareaFieldProvider = ({ children }: ChildrenReceptor) => {
   const [Text, setText] = useState("");

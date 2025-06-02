@@ -1,10 +1,10 @@
 "use client"
 import { CapitalizedCase, SentenceCase } from '@/lib/utils'
 import { Baseline, CaseLower, CaseSensitive, CaseUpper, Clipboard, Copy, Eraser, LucideIcon, Scissors } from 'lucide-react'
-import { CopyButton } from '../lib/lib'
 import { Button, ButtonProps } from '../ui/button'
 import TextareaField from './TextareaField'
 import { useTextareaFieldState } from '@/context/TextareaContext'
+import CopyButton from '../lib/CopyButton'
 
 const CaseTab = () => (
   <TextareaField>

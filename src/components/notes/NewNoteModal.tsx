@@ -33,8 +33,8 @@ import { useToast } from "../ui/use-toast"
 import Dropzone from "./Dropzone"
 import CategorySettings from "./categories/CategorySettings"
 import KeyIcon from "./categories/KeyIcon"
-import { useCtrlSomething } from "@/hooks/hooks"
 import { useIconsContext } from "@/context/IconsContext"
+import useCtrlSomething from "@/hooks/useCtrlSomething"
 
 const FormSchema = z.object({
   content: z.string(),

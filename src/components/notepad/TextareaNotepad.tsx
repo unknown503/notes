@@ -1,12 +1,13 @@
 "use client"
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { useCtrlSomething, usePreventExit } from '@/hooks/hooks'
 import { GetNotepadContent } from '@/lib/db'
 import { ChangeEvent, useEffect } from 'react'
 import TimeAgo from 'react-timeago'
 import { useNotepadContext } from '../../context/NotepadContext'
 import dynamic from 'next/dynamic'
+import useCtrlSomething from '@/hooks/useCtrlSomething'
+import usePreventExit from '@/hooks/usePreventExit'
 
 type DelayType = { delay: number }
 const AggregatedHistory = dynamic(() => import('@/components/notepad/AggregatedHistory'))

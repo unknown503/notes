@@ -14,10 +14,6 @@ const NotesContext = createContext<NotesContextProps>({
   setNotes: () => { },
 })
 
-export function useNotesContext() {
-  return useContext(NotesContext)
-}
-
 const NotesProvider = ({ children }: ChildrenReceptor) => {
   const [Notes, setNotes] = useState<NoteDoc[] | null>(null)
 
@@ -28,4 +24,5 @@ const NotesProvider = ({ children }: ChildrenReceptor) => {
   )
 }
 
+export const useNotesContext = () => useContext(NotesContext)
 export default NotesProvider

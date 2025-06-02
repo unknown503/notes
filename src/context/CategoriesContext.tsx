@@ -15,10 +15,6 @@ const CategoriesContext = createContext<CategoriesContextProps>({
   findBy: () => undefined,
 })
 
-export function useCategoriesContext() {
-  return useContext(CategoriesContext)
-}
-
 const CategoriesProvider = ({ children }: ChildrenReceptor) => {
   const [Categories, setCategories] = useState<Category[]>([])
 
@@ -32,4 +28,5 @@ const CategoriesProvider = ({ children }: ChildrenReceptor) => {
   )
 }
 
+export const useCategoriesContext = () => useContext(CategoriesContext)
 export default CategoriesProvider

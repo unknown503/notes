@@ -1,7 +1,6 @@
 import { DownloadFile, GetFileName } from "@/lib/db";
 import { convertToRichtext, customToast, DecodeHtml, getDate } from "@/lib/utils";
 import { Copy, Download } from "lucide-react";
-import { CopyButton } from "../lib/lib";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { SheetContent, SheetDescription, SheetHeader, SheetTitle } from "../ui/sheet";
@@ -9,6 +8,7 @@ import { useToast } from "../ui/use-toast";
 import { RightSideComponent } from "./NoteCard";
 import NoteFiles from "./NoteFiles";
 import { NoteOptionsButtonProps } from "./NoteOptionsButton";
+import CopyButton from "../lib/CopyButton";
 
 export default function NoteExpanded({ Hide, setHide, ...props }: NoteOptionsButtonProps) {
   const { content, files, timestamp } = props

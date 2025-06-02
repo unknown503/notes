@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading'
-import { AuthUserDefaultRedirect } from '@/components/lib/lib'
+import AuthUserDefaultRedirect from '@/components/lib/AuthUserDefaultRedirect'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
 

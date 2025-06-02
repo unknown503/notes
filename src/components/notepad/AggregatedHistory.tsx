@@ -12,11 +12,11 @@ import {
 import { useHistoryContext } from "@/context/HistoryContext"
 import { getWeekDay } from "@/lib/utils"
 import { Copy } from "lucide-react"
-import { CopyButton } from "../lib/lib"
 import { Separator } from "../ui/separator"
 import { Toggle } from "../ui/toggle"
 import { ScrollArea } from "../ui/scroll-area"
 import { useNotepadContext } from "@/context/NotepadContext"
+import CopyButton from "../lib/CopyButton"
 
 export default function AggregatedHistory() {
   const { Notepad } = useNotepadContext()
@@ -46,7 +46,6 @@ export default function AggregatedHistory() {
                       <p>{Notepad.content}</p>
                       <CopyButton
                         kind='generic'
-                        disableToast
                         textToCopy={Notepad.content}
                       >
                         <Toggle variant="outline">

@@ -3,8 +3,8 @@ import { SaveOnLocalStorage } from "@/lib/utils"
 import { Check, Copy, Save } from 'lucide-react'
 import { useEffect } from "react"
 import { useNotepadContext } from '../../context/NotepadContext'
-import { CopyButton } from "../lib/lib"
 import { Button } from '../ui/button'
+import CopyButton from "../lib/CopyButton"
 
 const MSKey = "manual-save"
 

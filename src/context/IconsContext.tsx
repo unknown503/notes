@@ -3,7 +3,7 @@ import { ChildrenReceptor } from "@/types/common"
 import { Icon } from "@/types/icons"
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react"
 
-export type IconsContextProps = {
+type IconsContextProps = {
   Icons: Icon[],
   setIcons: Dispatch<SetStateAction<Icon[]>>,
   findBy: (name: string | undefined) => Omit<Icon, "name"> | undefined

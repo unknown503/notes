@@ -56,5 +56,4 @@ function NotepadContext({ children }: ChildrenReceptor) {
 }
 
 export const useNotepadContext = () => useContext(Context)
-
 export default NotepadContext
