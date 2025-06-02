@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "alias": [
-    "my-domain.com",
-    "my-alias"
-  ]
+  "github": {
+    "autoAlias": false
+  }
 }
