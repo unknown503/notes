@@ -84,7 +84,9 @@ export default function Footer() {
                 }
               </DropdownMenuContent>
             </DropdownMenu>
-            <SettingsDialog />
+            {isLoggedIn &&
+              <SettingsDialog />
+            }
           </Dialog>
         </SidebarMenuItem>
       </SidebarMenu>

@@ -19,7 +19,7 @@ import Header from "./sidebar/Header"
 const SidebarMenuSkeleton = dynamic(() => import('@/components/ui/sidebar').then((m) => m.SidebarMenuSkeleton))
 
 export function NewSidebar() {
-  const { isLoggedIn } = useUser()
+  const { user, isLoggedIn } = useUser()
   const pathname = usePathname()
   return (
     <Sidebar>
@@ -29,7 +29,7 @@ export function NewSidebar() {
           <SidebarGroupLabel>Pages</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {!isLoggedIn ?
+              {user === false ?
                 Array.from({ length: 3 }).map((_, index) =>
                   <SidebarMenuItem key={index}>
                     <SidebarMenuSkeleton />
