@@ -20,7 +20,6 @@ const SidebarMenuSkeleton = dynamic(() => import('@/components/ui/sidebar').then
 
 export function NewSidebar() {
   const { user, isLoggedIn } = useUser()
-  console.log({ user, isLoggedIn })
   const pathname = usePathname()
   return (
     <Sidebar>

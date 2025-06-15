@@ -17,6 +17,7 @@ import { Toggle } from "../ui/toggle"
 import { ScrollArea } from "../ui/scroll-area"
 import { useNotepadContext } from "@/context/NotepadContext"
 import CopyButton from "../lib/CopyButton"
+import { NotepadDoc } from "@/types/notepad"
 
 export default function AggregatedHistory() {
   const { Notepad } = useNotepadContext()
@@ -36,51 +37,20 @@ export default function AggregatedHistory() {
         </DialogDescription>
         <ScrollArea customClass="max-h-[36.25rem]">
           <div className="space-y-4 mt-4 mr-2.5">
-            {Notepad &&
-              <div>
-                <div className="flex gap-4 items-center">
-                  <span>1</span>
-                  <div>
-                    <span className="text-sm text-gray-500">{getWeekDay(Notepad.timestamp)}</span>
-                    <div className="flex gap-3">
-                      <p>{Notepad.content}</p>
-                      <CopyButton
-                        kind='generic'
-                        textToCopy={Notepad.content}
-                      >
-                        <Toggle variant="outline">
-                          <Copy size={16} />
-                        </Toggle>
-                      </CopyButton>
-                    </div>
-                  </div>
-                </div>
-                <Separator className="mt-4" />
-              </div>
-            }
             {Records && Records.thisWeek.map((record, i) => (
-              <div key={record.timestamp}>
-                <div className="flex gap-4 items-center">
-                  <span>{i + 2}</span>
-                  <div>
-                    <span className="text-sm text-gray-500">{getWeekDay(record.timestamp)}</span>
-                    <div className="flex gap-3">
-                      <p>{record.content}</p>
-                      <CopyButton
-                        kind='generic'
-                        disableToast
-                        textToCopy={record.content}
-                      >
-                        <Toggle variant="outline">
-                          <Copy size={16} />
-                        </Toggle>
-                      </CopyButton>
-                    </div>
-                  </div>
-                </div>
-                {i !== Records.thisWeek.length - 1 && <Separator className="mt-4" />}
-              </div>
+              <HistoryItem
+                count={i + 1}
+                record={record}
+                showSeparation
+                key={record.timestamp}
+              />
             ))}
+            {Notepad && Records &&
+              <HistoryItem
+                count={Records?.thisWeek.length + 1}
+                record={Notepad}
+              />
+            }
           </div>
         </ScrollArea>
         <DialogFooter>
@@ -92,5 +62,37 @@ export default function AggregatedHistory() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  )
+}
+
+type HistoryItem = {
+  record: NotepadDoc | NotepadDoc
+  count: number
+  showSeparation?: boolean
+}
+
+const HistoryItem = ({ record, count, showSeparation }: HistoryItem) => {
+  return (
+    <div key={record.timestamp}>
+      <div className="flex gap-4 items-center">
+        <span>{count}</span>
+        <div className="w-full">
+          <span className="text-sm text-gray-500">{getWeekDay(record.timestamp)}</span>
+          <div className="flex gap-3 justify-between">
+            <p className="word-break">{record.content}</p>
+            <CopyButton
+              kind='generic'
+              disableToast
+              textToCopy={record.content}
+            >
+              <Toggle variant="outline">
+                <Copy size={16} />
+              </Toggle>
+            </CopyButton>
+          </div>
+        </div>
+      </div>
+      {showSeparation && <Separator className="mt-4" />}
+    </div>
   )
 }

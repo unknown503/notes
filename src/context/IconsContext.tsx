@@ -21,7 +21,6 @@ export function useIconsContext() {
 
 const IconsProvider = ({ children }: ChildrenReceptor) => {
   const [Icons, setIcons] = useState<Icon[]>([])
-  console.log({ Icons })
 
   const findBy = (name: string | undefined) =>
     Icons?.find(icon => icon.name === name);

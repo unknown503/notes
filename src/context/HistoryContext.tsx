@@ -16,10 +16,9 @@ function HistoryProvider({ children }: ChildrenReceptor) {
 
   useEffect(() => {
     const unsubscribe = SubscribeToNotepadHistory(docs => {
-      const records = docs.records.sort((a, b) => b.timestamp - a.timestamp)
       const weeks: NotepadWeeks = {
-        thisWeek: records.filter(record => isWithinThisWeek(record.timestamp)),
-        lastWeek: records.filter(record => !isWithinThisWeek(record.timestamp)),
+        thisWeek: docs.records.filter(record => isWithinThisWeek(record.timestamp)),
+        lastWeek: docs.records.filter(record => !isWithinThisWeek(record.timestamp)),
       }
 
       setRecords(weeks)
