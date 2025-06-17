@@ -29,6 +29,7 @@ import { useToast } from "../ui/use-toast";
 import Dropzone from "./Dropzone";
 import KeyIcon from "./categories/KeyIcon";
 import { useIconsContext } from "@/context/IconsContext";
+import useCtrlSomething from "@/hooks/useCtrlSomething";
 
 const FormSchema = z.object({
   content: z.string().default(""),
@@ -36,10 +37,11 @@ const FormSchema = z.object({
 })
 
 type UpdateNoteModalProps = {
+  Open: boolean
   setOpen: (v: boolean) => void,
 } & Omit<NoteDoc, "timestamp" | "isPublic">
 
-export default function UpdateNoteModal({ content, files: prevFiles, id, categoryId, setOpen }: UpdateNoteModalProps) {
+export default function UpdateNoteModal({ content, files: prevFiles, id, categoryId, setOpen, Open }: UpdateNoteModalProps) {
   const [Files, setFiles] = useState<File[]>([])
   const [RemovedFiles, setRemovedFiles] = useState<string[]>([])
   const [Saving, setSaving] = useState<boolean>(false)
@@ -84,6 +86,8 @@ export default function UpdateNoteModal({ content, files: prevFiles, id, categor
     form.setValue("content", content)
     form.setValue("category", categoryId)
   }, [content, categoryId])
+
+  useCtrlSomething(() => SaveNote(form.getValues()), "enter", Open)
 
   return (
     <DialogContent className="sm:max-w-md">

@@ -152,6 +152,7 @@ export default function NoteOptionsButton({ isPublic, files, id, content, catego
         files={files}
         id={id}
         categoryId={categoryId}
+        Open={Open}
         setOpen={toggleDialog}
       />
     </Dialog>
