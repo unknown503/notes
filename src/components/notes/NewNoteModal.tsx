@@ -83,7 +83,10 @@ export default function NewNoteModal() {
     form.setValue("category", isUnsetCat ? "" : catId)
   }, [searchParams, Categories])
 
-  useCtrlSomething(() => setOpen(true), "n", !Open, true)
+  const isModalOpen = () =>
+    document.body.dataset.scrollLocked === "1"
+
+  useCtrlSomething(() => setOpen(true), "n", !Open && !isModalOpen(), true)
   useCtrlSomething(() => SaveNote(form.getValues()), "enter", Open)
 
   return (
