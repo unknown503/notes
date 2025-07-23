@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import { db } from '@/lib/firebase-admin';
 import { signToken } from '@/lib/auth';
 
-export const COLLECTION = "secure"
-export const DOC = "passkey"
+const COLLECTION = "secure"
+const DOC = "passkey"
 
 export async function PUT(req: Request) {
   try {
