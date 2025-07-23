@@ -2,6 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Category } from "@/types/notes";
 import KeyIcon from "./KeyIcon";
 import { useIconsContext } from "@/context/IconsContext";
+import { useEffect } from "react";
+import { GetIcons } from "@/lib/db";
 
 type Filter = {
   onClick?: () => void
@@ -21,9 +23,14 @@ type CustomVariant = {
 type FilterBadgeProps = CategoryVariant | CustomVariant
 
 export default function FilterBadge(props: FilterBadgeProps) {
-  const { findBy } = useIconsContext()
+  const { findBy, Icons, setIcons } = useIconsContext()
   //@ts-ignore
   const isFilterSelected = (props.category?.content ?? props.label).toLowerCase() === props.selectedFilter
+
+  useEffect(() => {
+    if (Icons.length) return
+    GetIcons().then(res => setIcons(res.icons))
+  }, [Icons])
 
   return (
     <Badge
