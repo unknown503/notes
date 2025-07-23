@@ -48,7 +48,7 @@ export default function PasskeyForm({ onSubmit }: Props) {
 
     } catch (error: any) {
       console.error(error)
-      toast(customToast("Error.", true))
+      toast(customToast("Error", true))
     }
   }
 
