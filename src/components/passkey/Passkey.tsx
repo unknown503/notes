@@ -17,7 +17,7 @@ export default function Passkey() {
     const json = await res.json()
 
     if (!json.success) {
-      toast(customToast("Invalid", true))
+      toast(customToast(json.error, true))
       return
     }
     router.push("/notes")

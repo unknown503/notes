@@ -10,14 +10,14 @@ export async function PUT(req: Request) {
   try {
     const { passkey } = await req.json();
     if (!passkey)
-      return NextResponse.json({ error: 'Missing credential' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'Missing passkey' }, { status: 400 });
 
     const hash = await bcrypt.hash(passkey, 10);
     await db.collection(COLLECTION).doc(DOC).set({ hash });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json(null, { status: 401 });
+    return NextResponse.json({ success: false, error: 'Issue changing passkey' }, { status: 401 });
   }
 }
 
@@ -25,11 +25,11 @@ export async function POST(req: Request) {
   try {
     const { passkey } = await req.json();
     if (!passkey)
-      return NextResponse.json({ error: 'Missing passkey' }, { status: 400 });
+      return NextResponse.json({ success: false, error: 'Missing passkey' }, { status: 400 });
 
     const doc = await db.collection(COLLECTION).doc(DOC).get();
     if (!doc.exists)
-      return NextResponse.json({ error: 'No stored passkey' }, { status: 404 });
+      return NextResponse.json({ success: false, error: 'No stored passkey' }, { status: 404 });
 
     const { hash } = doc.data() as { hash: string };
     const match = await bcrypt.compare(passkey, hash);
@@ -49,9 +49,9 @@ export async function POST(req: Request) {
       });
       return res
     } else {
-      return NextResponse.json({ success: false }, { status: 401 });
+      return NextResponse.json({ error: "Wrong passkey", success: false }, { status: 401 });
     }
   } catch (error) {
-    return NextResponse.json(null, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized", success: false }, { status: 401 });
   }
 }
