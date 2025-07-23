@@ -1,11 +1,11 @@
-import { CategoriesDoc, Category, NoteDoc, QueryFilters, UpdateNoteFields } from '@/types/notes'
+import { IconsDoc } from '@/types/icons'
+import { NotepadDoc, NotepadHistoryDoc } from '@/types/notepad'
+import { CategoriesDoc, NoteDoc, QueryFilters, UpdateNoteFields } from '@/types/notes'
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
-import { auth, db, storage } from "./firebase"
 import { AppConfig } from './config'
-import { NotepadDoc, NotepadHistoryDoc } from '@/types/notepad'
-import { IconsDoc } from '@/types/icons'
+import { auth, db, storage } from "./firebase"
 
 const maxHistoryRecords = 10
 const NOTES = "notes"

@@ -1,5 +1,4 @@
 import { ToasterToast } from "@/components/ui/use-toast"
-import { NoteDoc } from "@/types/notes"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -53,8 +52,8 @@ export function dateToReadableRecent(unix: number) {
 
   const formattedDate = date.toLocaleDateString('en-US', {
     weekday: 'long',
-    day: 'numeric', 
-    month: 'long',  
+    day: 'numeric',
+    month: 'long',
   });
 
   return formattedDate

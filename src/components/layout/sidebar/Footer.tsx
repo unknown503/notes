@@ -17,18 +17,24 @@ import {
 } from "@/components/ui/sidebar"
 import { useUser } from "@/context/UserContext"
 import { SignOutUser } from "@/lib/db"
-import { Ellipsis, LogIn, LogOut, Settings } from "lucide-react"
+import { Ellipsis, Lock, LogIn, LogOut, Settings } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { SettingsDialog } from "./SettingsDialog"
+import { PasskeyDialog } from "./PasskeyDialog"
+import { useState } from "react"
 
 export default function Footer() {
   const { isMobile, setOpenMobile } = useSidebar()
+  const [DialogToggle, setDialogToggle] = useState("")
   const { isLoggedIn } = useUser()
   const router = useRouter()
 
-  const logOut = () => {
+  const logOut = async () => {
     setOpenMobile(false)
-    SignOutUser()
+    await fetch('/api/logout', {
+      method: 'POST',
+    });
+    await SignOutUser()
     router.push("/")
   }
 
@@ -57,12 +63,20 @@ export default function Footer() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup >
                   {isLoggedIn &&
-                    <DialogTrigger asChild>
-                      <DropdownMenuItem>
-                        <Settings />
-                        Settings
-                      </DropdownMenuItem>
-                    </DialogTrigger>
+                    <>
+                      <DialogTrigger asChild onClick={() => setDialogToggle("passkey")}>
+                        <DropdownMenuItem>
+                          <Lock />
+                          Passkey
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                      <DialogTrigger asChild onClick={() => setDialogToggle("settings")}>
+                        <DropdownMenuItem>
+                          <Settings />
+                          Settings
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    </>
                   }
                 </DropdownMenuGroup>
                 {isLoggedIn ?
@@ -85,7 +99,10 @@ export default function Footer() {
               </DropdownMenuContent>
             </DropdownMenu>
             {isLoggedIn &&
-              <SettingsDialog />
+              <>
+                {DialogToggle === "settings" && <SettingsDialog />}
+                {DialogToggle === "passkey" && <PasskeyDialog />}
+              </>
             }
           </Dialog>
         </SidebarMenuItem>

@@ -1,6 +1,7 @@
 import { SidebarHeader, SidebarMenu, SidebarMenuItem } from '@/components/ui/sidebar'
 import { AppConfig } from '@/lib/config'
 import { StickyNote } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Header() {
   return (
@@ -11,9 +12,9 @@ export default function Header() {
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
               <StickyNote className="size-4" color='white' />
             </div>
-            <span className="font-semibold text-sm leading-tight">
+            <Link href="/" className="font-semibold text-sm leading-tight">
               {AppConfig.title}
-            </span>
+            </Link>
           </div>
         </SidebarMenuItem>
       </SidebarMenu>

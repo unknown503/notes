@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { useToast } from "../ui/use-toast"
+import { Loader2 } from "lucide-react"
 
 const formSchema = z.object({
   email: z.string().email("Invalid email.").min(10, {
@@ -40,13 +41,24 @@ export default function AuthForm() {
 
   const onSubmit = async ({ email, password }: z.infer<typeof formSchema>) => {
     try {
-      await SignInUser(email, password)
-      toast(customToast("Auth successful."))
-      setTimeout(() => router.push("/notes"), 50)
+      const user = await SignInUser(email, password)
+      const token = await user.getIdToken()
+      const res = await fetch('/api/sign-user-token', {
+        method: 'POST',
+        body: JSON.stringify({ token }),
+      });
 
+      const json = await res.json()
+
+      if (json.success) {
+        toast(customToast("Auth successful."))
+        setTimeout(() => router.push("/notes"), 50)
+      } else {
+        toast(customToast("Invalid", true))
+      }
     } catch (error: any) {
       const errorCode = error.code
-      console.error(errorCode)
+      console.error(error)
 
       if (errorCode === "auth/invalid-login-credentials") {
         toast(customToast("Invalid credentials.", true))
@@ -96,9 +108,10 @@ export default function AuthForm() {
         <Button
           type="submit"
           variant="default"
-          className="w-full"
+          className="w-full gap-1"
+          disabled={form.formState.isSubmitting}
         >
-          Sign-in
+          {form.formState.isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />} Sign-in
         </Button>
       </form>
     </Form>

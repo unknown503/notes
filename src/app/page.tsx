@@ -1,5 +1,6 @@
 import Heading from '@/components/Heading'
-import AuthUserDefaultRedirect from '@/components/lib/AuthUserDefaultRedirect'
+import AuthCheckWrapper from '@/components/lib/AuthCheckWrapper'
+import Passkey from '@/components/passkey/Passkey'
 import { GenericTitle } from '@/lib/config'
 import { Metadata } from 'next'
 
@@ -8,9 +9,10 @@ export const metadata: Metadata = {
 }
 
 const Home = () => (
-  <AuthUserDefaultRedirect>
+  <AuthCheckWrapper onlyAuth={false}>
     <Heading title="Home" />
-  </AuthUserDefaultRedirect>
+    <Passkey />
+  </AuthCheckWrapper>
 )
 
 export default Home

@@ -1,18 +1,22 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { verifyToken } from '@/lib/auth';
 
-export default function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+const protectedRoutes = ['/notes', '/notepad']
 
-  if (pathname === '/') {
-    const url = request.nextUrl.clone()
-    url.pathname = '/notes'
-    return NextResponse.redirect(url)
-  }
+export async function middleware(req: NextRequest) {
+  const token = req.cookies.get('session')?.value;
+  if (req.nextUrl.pathname === "/" && token)
+    return NextResponse.redirect(new URL('/notes', req.url));
 
-  return NextResponse.next()
+  const valid = token && await verifyToken(token);
+
+  if (!valid && protectedRoutes.includes(req.nextUrl.pathname))
+    return NextResponse.redirect(new URL('/', req.url));
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: '/',
-}
+  matcher: ["/:path*"],
+};
