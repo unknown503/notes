@@ -1,5 +1,6 @@
 "use client"
 import { useUser } from "@/context/UserContext"
+import { CheckSignedInUserAndSign } from "@/lib/db"
 import { AuthWrapperProps, ChildrenReceptor } from "@/types/common"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -14,8 +15,12 @@ export default function AuthCheckWrapper({ children, onlyAuth }: AuthWrapperProp
       if (user === null && isLoggedIn === false)
         router.replace("/auth")
     } else {
-      if (user !== null && isLoggedIn === true)
-        router.replace("/")
+      if (user !== null && isLoggedIn === true) {
+        CheckSignedInUserAndSign().then(() => {
+          router.replace("/")
+          router.refresh()
+        })
+      }
     }
   }, [user, isLoggedIn])
 

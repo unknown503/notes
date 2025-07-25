@@ -238,6 +238,31 @@ export const SignInUser = async (email: string, password: string) => {
 
 export const SignOutUser = async () => await signOut(auth)
 
+export const CheckSignedInUserAndSign = async () => {
+  try {
+    const user = auth.currentUser;
+    const token = await user?.getIdToken();
+
+    const resCheck = await fetch('/api/check-cookie');
+    const cookieCheck = await resCheck.json()
+
+    if (!cookieCheck.authenticated && token) {
+      const res = await fetch('/api/sign-user-token', {
+        method: 'POST',
+        body: JSON.stringify({ token }),
+      });
+      const passkey = await res.json()
+      if (passkey.success) {
+        console.log("Valid")
+      } else {
+        console.error("Invalid")
+      }
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 /** CATEGORIES */
 
 export const GetCategories = async () => {
